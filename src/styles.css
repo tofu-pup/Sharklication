@@ -52,7 +52,7 @@
 .fact-number{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;background:#d4ece6;color:#286a60;font-size:.85rem;font-weight:800}
 .shark-story .wildlife-note{font-size:.85rem;padding:16px;border-left:3px solid #d4a633;background:#fff9e7}
 .fact-sources{border-top:1px solid var(--line);padding-top:22px;margin-top:24px;font-size:.85rem}
-.fact-sources h3{font-size:1.2rem}.fact-sources a{display:inline-block;padding:10px 0;min-height:44px}
+.fact-sources h3{font-size:1.2rem}.fact-sources a{display:inline-block;padding:10px 0;margin-right:16px;min-height:44px}
 @keyframes scene-arrive{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 @keyframes question-arrive{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @keyframes bubble-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
@@ -100,7 +100,13 @@
 .activity-card.waiting .activity-action{font-size:.75rem}
 .activity-habitat{padding:18px;margin-top:auto;border-top:1px solid var(--line)}
 .growing-reef{margin:0;min-width:0;width:100%}
-.growing-reef>svg{display:block;width:100%;height:auto;border-radius:16px}
+.aquarium-window{max-height:360px;overflow:auto;overscroll-behavior:contain;border-radius:16px}
+.aquarium-window>svg{display:block;width:100%;height:auto}
+.aquarium-window:focus-visible{outline:3px solid #168593;outline-offset:3px}
+.new-friend{max-width:480px;margin:24px auto;padding:24px;background:#fff9e6;border:1px solid #ead29a;border-radius:22px;animation:reward-arrive .7s ease-out both}
+.new-friend>svg{width:200px;max-width:100%;margin:auto;display:block}
+.new-friend h2{font-size:1.8rem;color:#216575}
+.new-friend p{font-size:.9rem;line-height:1.7}
 .growing-reef figcaption{display:flex;flex-direction:column;gap:5px;padding:12px 0 0;color:#245b69;text-align:center}
 .growing-reef figcaption strong{font-size:.95rem}.growing-reef figcaption span{font-size:.73rem;line-height:1.5}
 .hint-card>.growing-reef{grid-column:1/-1;border-top:1px solid var(--line);margin-top:16px;padding-top:18px}

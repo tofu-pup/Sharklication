@@ -1,78 +1,90 @@
 import { describe, expect, it } from "vitest";
-import { advance, createInitialSave, currentQuestion, getRun, localDateKey, markHint, seededRandom, solvedToday, startActivity, startExtra, submitAnswer } from "./domain";
-import { parseBackup } from "./validation";
+import { ACTIVITY_IDS, advance, createInitialSave, currentQuestion, getRun, seededRandom, startActivity, startExtra, submitAnswer, type ActivityId, type SaveEnvelope } from "./domain";
+import { migrateSave, parseBackup, validateBackup } from "./validation";
 
-const now = new Date("2026-10-20T12:00:00Z");
-const date = "2026-10-20";
-const initial = () => startActivity(createInitialSave(now, seededRandom(4)), date, "dive", "daily", seededRandom(9));
-
-describe("daily reef counters", () => {
-  it("counts a solved question once, including supported answers and review, but never mistakes", () => {
+const now = new Date("2026-10-21T12:00:00Z"), date = "2026-10-21";
+const initial = () => createInitialSave(now, seededRandom(4));
+function finish(save: SaveEnvelope, activity: ActivityId, extra = false, id = `${activity}-${save.attempts.length}`) {
+  save = extra ? startExtra(save, date, "mixed", id, seededRandom(5), activity) : startActivity(save, date, activity, id, seededRandom(5));
+  while (!getRun(save, date, activity, extra)!.complete) {
+    const q = currentQuestion(getRun(save, date, activity, extra)!)!;
+    save = submitAnswer(save, date, activity, q.id, q.a * q.b, now, extra);
+    save = advance(save, date, activity, now, extra, q.id);
+  }
+  return save;
+}
+describe("one bonus neighbour per completed extra set", () => {
+  it("daily completion unlocks empty aquariums without awarding animals", () => {
     let save = initial();
-    const q = currentQuestion(getRun(save, date, "dive")!)!;
-    expect(solvedToday(save, date)).toEqual({ reef: 0, feeding: 0, dive: 0 });
-    save = submitAnswer(save, date, "dive", q.id, 0, now);
-    expect(solvedToday(save, date).dive).toBe(0);
-    save = submitAnswer(save, date, "dive", q.id, q.a * q.b, now);
-    expect(save.attempts.at(-1)?.independent).toBe(false);
-    expect(solvedToday(save, date).dive).toBe(1);
-    const resolved = save;
-    save = submitAnswer(save, date, "dive", q.id, q.a * q.b, now);
-    expect(save).toBe(resolved);
-    expect(solvedToday(save, date).dive).toBe(1);
-    // Even a repeated correct attempt record must not add a second resident.
-    expect(solvedToday({ ...save, attempts: [...save.attempts, { ...save.attempts.at(-1)!, id: `${q.id}:99` }] }, date).dive).toBe(1);
-    while (!save.days[date].tasks.dive!.complete) {
-      const current = currentQuestion(save.days[date].tasks.dive!)!;
-      save = submitAnswer(save, date, "dive", current.id, current.a * current.b, now);
-      save = advance(save, date, "dive", now, false, current.id);
-    }
-    expect(solvedToday(save, date).dive).toBe(11);
-    expect(save.collection).toHaveLength(0);
-    expect(save.days[date].completedAt).toBeUndefined();
+    for (const activity of ACTIVITY_IDS) save = finish(save, activity);
+    expect(save.bonusCompletions).toBeUndefined();
+    expect(save.collection).toHaveLength(1);
+    expect(parseBackup(JSON.stringify(save))).toEqual(save);
   });
-
-  it("retains all extra sessions and separate activity totals across backup/reload without affecting rewards", () => {
-    let save = initial();
-    for (const activity of ["reef", "feeding", "dive", "feeding"] as const) {
-      save = startExtra(save, date, "mixed", `extra-${activity}-${save.attempts.length}`, seededRandom(5), activity);
+  it.each(ACTIVITY_IDS)("awards one %s friend atomically with the final checkpoint, never for partial work", (activity) => {
+    let save = startExtra(initial(), date, "mixed", "bonus", seededRandom(9), activity);
+    const run = save.extra!.run;
+    for (let i = 0; i < run.questions.length; i++) {
       const q = currentQuestion(save.extra!.run)!;
-      save = markHint(save, date, activity, true);
       save = submitAnswer(save, date, activity, q.id, q.a * q.b, now, true);
+      expect(save.bonusCompletions ?? []).toHaveLength(0);
+      save = advance(save, date, activity, now, true, q.id);
     }
-    expect(solvedToday(save, date)).toEqual({ reef: 1, feeding: 2, dive: 1 });
+    expect(save.extra!.run.complete).toBe(true);
+    expect(save.bonusCompletions).toEqual([{ runId: "bonus", date, activity, completedAt: now.toISOString() }]);
+    expect(advance(save, date, activity, now, true)).toBe(save);
+    expect(parseBackup(JSON.stringify(save))).toEqual(save);
+    expect(save.days).toEqual({});
+    expect(save.collection).toHaveLength(0);
+  });
+  it("requires dive corrections too and does not add a friend for each answer", () => {
+    let save = startExtra(initial(), date, "mixed", "review", seededRandom(2));
+    const first = currentQuestion(save.extra!.run)!;
+    save = submitAnswer(save, date, "dive", first.id, 0, now, true);
+    while (!save.extra!.run.complete) {
+      const q = currentQuestion(save.extra!.run)!;
+      save = submitAnswer(save, date, "dive", q.id, q.a * q.b, now, true);
+      expect(save.bonusCompletions ?? []).toHaveLength(0);
+      save = advance(save, date, "dive", now, true, q.id);
+    }
+    expect(save.extra!.run.questions).toHaveLength(11);
+    expect(save.bonusCompletions).toHaveLength(1);
+    expect(parseBackup(JSON.stringify(save))).toEqual(save);
+    const invalid = structuredClone(save);
+    invalid.attempts = invalid.attempts.filter((attempt) => !attempt.correction);
+    expect(() => validateBackup(invalid)).toThrow(/inconsistent/);
+  });
+  it("preserves more than twelve friends across replaced checkpoints, backup and new-day filtering", () => {
+    let save = initial();
+    for (let i = 0; i < 20; i++) save = finish(save, "feeding", true, `bonus-${i}`);
+    expect(save.bonusCompletions).toHaveLength(20);
+    save = finish(save, "reef", true, "other-habitat");
     const restored = parseBackup(JSON.stringify(save));
-    expect(solvedToday(restored, date)).toEqual(solvedToday(save, date));
-    expect(restored.days[date].tasks.dive!.index).toBe(0);
+    expect(restored.bonusCompletions).toHaveLength(21);
+    expect(restored.bonusCompletions!.filter((entry) => entry.date === date && entry.activity === "feeding")).toHaveLength(20);
+    expect(restored.bonusCompletions!.filter((entry) => entry.date === "2026-10-22")).toHaveLength(0);
     expect(restored.collection).toHaveLength(0);
-    expect(restored.facts[`${save.attempts.at(-1)!.a}x${save.attempts.at(-1)!.b}`].state).not.toBe("Secure");
   });
-
-  it("uses saved home-date keys, including midnight and DST boundaries, without erasing earlier reefs", () => {
-    let save = initial();
-    const q = currentQuestion(save.days[date].tasks.dive!)!;
-    save = submitAnswer(save, date, "dive", q.id, q.a * q.b, now);
-    const midnight = localDateKey(new Date("2026-10-20T22:01:00Z"), "Europe/Oslo");
-    expect(solvedToday(save, midnight)).toEqual({ reef: 0, feeding: 0, dive: 0 });
-    expect(solvedToday(save, date).dive).toBe(1);
-    const before = localDateKey(new Date("2026-10-25T00:30:00Z"), "Europe/Oslo");
-    const after = localDateKey(new Date("2026-10-25T01:30:00Z"), "Europe/Oslo");
-    expect(before).toBe(after);
-    save = startActivity(save, before, "feeding", "dst", seededRandom(2));
-    const dstQuestion = currentQuestion(save.days[before].tasks.feeding!)!;
-    save = submitAnswer(save, before, "feeding", dstQuestion.id, dstQuestion.a * dstQuestion.b, new Date("2026-10-25T00:30:00Z"));
-    expect(solvedToday(save, after).feeding).toBe(1);
+  it("keeps legacy progress without inventing animals from old daily or extra attempts", () => {
+    let legacy = finish(initial(), "feeding", true);
+    delete legacy.bonusCompletions;
+    expect(migrateSave(legacy)).toEqual(legacy);
+    expect(migrateSave(legacy).bonusCompletions).toBeUndefined();
   });
-
-  it("rejects stale manual/automatic next events even when the following question is also resolved", () => {
-    let save = initial();
-    const first = currentQuestion(save.days[date].tasks.dive!)!;
-    save = submitAnswer(save, date, "dive", first.id, first.a * first.b, now);
-    save = advance(save, date, "dive", now, false, first.id);
-    const second = currentQuestion(save.days[date].tasks.dive!)!;
-    save = submitAnswer(save, date, "dive", second.id, second.a * second.b, now);
-    expect(advance(save, date, "dive", now, false, first.id)).toBe(save);
-    expect(save.days[date].tasks.dive!.index).toBe(1);
-    expect(advance(save, date, "dive", now, false, second.id).days[date].tasks.dive!.index).toBe(2);
+  it("rejects duplicate, forged, daily-task and incomplete rewards in backups", () => {
+    const valid = finish(initial(), "feeding", true, "bonus");
+    const duplicate = structuredClone(valid);
+    duplicate.bonusCompletions!.push(duplicate.bonusCompletions![0]);
+    expect(() => validateBackup(duplicate)).toThrow();
+    const forged = structuredClone(valid);
+    forged.bonusCompletions![0].runId = "missing";
+    expect(() => validateBackup(forged)).toThrow();
+    const daily = finish(initial(), "feeding");
+    daily.bonusCompletions = [{ runId: daily.days[date].tasks.feeding!.id, date, activity: "feeding", completedAt: now.toISOString() }];
+    expect(() => validateBackup(daily)).toThrow();
+    const unfinished = structuredClone(valid);
+    unfinished.extra!.run.complete = false;
+    unfinished.extra!.run.index--;
+    expect(() => validateBackup(unfinished)).toThrow();
   });
 });

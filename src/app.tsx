@@ -3,7 +3,7 @@ import { useRegisterSW } from "virtual:pwa-register/react";
 import {
   ACTIVITY_IDS, ACTIVITY_INFO, advance, catalogEntry, createInitialSave, currentQuestion,
   effectiveTables, getRun, hintFor, isDayComplete, localDateKey, markHint, sequenceFor,
-  solvedToday, startActivity, startExtra, streakForDays, submitAnswer, summary, workedFor,
+  startActivity, startExtra, streakForDays, submitAnswer, summary, workedFor,
   type ActivityId, type SaveEnvelope, type TaskRun,
 } from "./domain";
 import { CATALOG, type Shark } from "./catalog";
@@ -14,7 +14,7 @@ import { checkOfflineReady } from "./offline";
 import { canApplyUpdate, watchForControllerChange, watchForUpdates } from "./updates";
 import { FeedingGroups } from "./feeding-art";
 import { NavIcon } from "./nav-icon";
-import { GrowingReef } from "./growing-reef";
+import { GrowingReef, NewFriend } from "./growing-reef";
 import { SUCCESS_DELAY, SUPPORTED_SUCCESS_DELAY, useAutoAdvance } from "./use-auto-advance";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
@@ -188,7 +188,7 @@ export function App() {
   const doneCount = ACTIVITY_IDS.filter((a) => today?.tasks[a]?.complete).length;
   const run = active && getRun(save, active.date, active.activity, active.extra);
   const reduceMotion = save.settings.reducedMotion;
-  const solved = solvedToday(save, date);
+  const bonusFriends = (activity: ActivityId) => (save.bonusCompletions ?? []).filter((entry) => entry.date === date && entry.activity === activity);
   const reefSeed = `${save.profile.createdAt}:${date}`;
   return <div className={`app ${reduceMotion ? "reduce-motion" : ""}`}>
     <a className="skip-link" href="#main" onClick={(event) => { event.preventDefault(); document.getElementById("main")?.focus(); }}>Skip to content</a>
@@ -221,7 +221,7 @@ export function App() {
           </section>
           <section className="expedition">
             <div className="section-heading"><div><span className="eyebrow">{save.profile.name.toUpperCase()}'S DAILY CHALLENGE</span><h1 className="home-heading" ref={heading} id="expedition-heading" tabIndex={-1}>Today's expedition <span className="date-tag">{new Intl.DateTimeFormat("en", { day: "numeric", month: "short", timeZone: save.settings.homeTimezone }).format(now)}</span></h1></div><span className="stars" aria-label={`${doneCount} of 3 daily stars`}>{ACTIVITY_IDS.map((a) => <span key={a} className={today?.tasks[a]?.complete ? "earned" : ""}>★</span>)}</span></div>
-            <p className="section-intro">{doneCount === 3 ? "All three done! Your shark is saved. Do more of any activity to grow its ocean habitat." : "Gobfrey says: “Pick one, then tick off all three!” Finish today's checklist to discover a shark and unlock extra practice."}</p>
+            <p className="section-intro">{doneCount === 3 ? "All three done! Your shark is saved. Finish a bonus set to welcome one funny new friend to its aquarium." : "Gobfrey says: “Pick one, then tick off all three!” Finish today's checklist to discover a shark and unlock extra practice."}</p>
             <div className="activity-grid">{ACTIVITY_IDS.map((id, i) => {
               const info = ACTIVITY_INFO[id], task = today?.tasks[id];
               const waiting = !!task?.complete && doneCount < 3;
@@ -230,7 +230,7 @@ export function App() {
                   <div className="activity-art" aria-hidden="true"><span className="art-orbit" /><span className="art-emoji">{info.icon}</span><span className="art-spark">✦</span><span className="art-number">{task?.complete ? "✓" : `0${i + 1}`}</span></div>
                   <div className="activity-body"><span className="activity-tag">{info.tag}</span><h2>{info.title}</h2><p>{info.subtitle}</p><div className="activity-meta"><span>{task?.complete ? "✓ Completed today" : task ? `${task.index} of ${task.questions.length} resolved` : info.minutes}</span><span aria-hidden="true">{task?.complete ? "★" : "✧"}</span></div><span className="activity-action">{waiting ? "Done! Finish the other activities" : doneCount === 3 ? "Do more to grow your habitat" : task ? "Continue" : "Let's go"} {!waiting && <span aria-hidden="true">→</span>}</span></div>
                 </button>
-                {doneCount === 3 && <div className="activity-habitat"><GrowingReef solved={solved[id]} activity={id} seed={reefSeed} /></div>}
+                {doneCount === 3 && <div className="activity-habitat"><GrowingReef friends={bonusFriends(id).length} activity={id} seed={reefSeed} /></div>}
               </article>;
             })}</div>
           </section>
@@ -243,7 +243,7 @@ export function App() {
             return <button key={shark.id} className="friend" onClick={() => { setSelected(shark); go("collection"); setSelected(shark); }}><SharkImage shark={shark} /><strong>{shark.name}</strong><small>{shark.kind === "real" ? "Real species" : "Fantasy"}</small></button>;
           })}</div></section>}
         </>}
-        {screen === "play" && run && active && <Play key={run.id} run={run} activity={active.activity} extra={active.extra} busy={busy} hasError={!!error} solved={solved[active.activity]} reefSeed={reefSeed} onHint={hint} onSubmit={answer} onNext={next} onHome={() => go("home")} headingRef={heading} />}
+        {screen === "play" && run && active && <Play key={run.id} run={run} activity={active.activity} extra={active.extra} busy={busy} hasError={!!error} friends={bonusFriends(active.activity).length} newFriendIndex={bonusFriends(active.activity).findIndex((entry) => entry.runId === run.id)} reefSeed={reefSeed} onHint={hint} onSubmit={answer} onNext={next} onHome={() => go("home")} headingRef={heading} />}
         {screen === "collection" && <section className="section album">
           {selected ? <SharkDetail shark={selected} back={() => setSelected(undefined)} headingRef={heading} /> : <>
             <span className="eyebrow">YOUR OCEAN, ONE FRIEND AT A TIME</span><h1 ref={heading} tabIndex={-1}>The shark album<span className="heading-dot">.</span></h1><p className="section-intro">{save.collection.length} of {CATALOG.length} discovered. Every friend stays with you, even if you miss a day.</p>
@@ -303,13 +303,13 @@ function SharkDetail({ shark, back, headingRef }: { shark: Shark; back: () => vo
       <h2>{shark.kind === "real" ? `${shark.facts.length} amazing facts` : `${shark.facts.length} imaginary curiosities`}</h2>
       <ul className="shark-facts">{shark.facts.map((fact, i) => <li key={fact}><span className="fact-number" aria-hidden="true">{i + 1}</span><p>{fact}</p></li>)}</ul>
       {shark.kind === "real" && <p className="wildlife-note">Wild sharks are best admired from a respectful distance. Never chase, touch or feed a wild shark.</p>}
-      {shark.references.length > 0 && <div className="fact-sources"><h3>Explore the science</h3><p>Descriptions and facts are written for young explorers, using these species references. Source links need an internet connection.</p>{shark.references.map((reference) => <a key={reference} href={reference} target="_blank" rel="noreferrer">Florida Museum: {shark.name} ↗</a>)}</div>}
+      {shark.references.length > 0 && <div className="fact-sources"><h3>Explore the science</h3><p>Descriptions and facts are written for young explorers, using these species references. Source links need an internet connection.</p>{shark.references.map((reference) => <a key={reference} href={reference} target="_blank" rel="noreferrer">{reference.startsWith("https://www.fisheries.noaa.gov/") ? "NOAA Fisheries" : reference.startsWith("https://australian.museum/") ? "Australian Museum" : "Florida Museum"}: {shark.name} ↗</a>)}</div>}
     </section>
     <Attribution shark={shark} />
   </>;
 }
-function Play({ run, activity, extra, busy, hasError, solved, reefSeed, onHint, onSubmit, onNext, onHome, headingRef }: {
-  run: TaskRun; activity: ActivityId; extra: boolean; busy: boolean; hasError: boolean; solved: number; reefSeed: string;
+function Play({ run, activity, extra, busy, hasError, friends, newFriendIndex, reefSeed, onHint, onSubmit, onNext, onHome, headingRef }: {
+  run: TaskRun; activity: ActivityId; extra: boolean; busy: boolean; hasError: boolean; friends: number; newFriendIndex: number; reefSeed: string;
   onHint: () => Promise<void>; onSubmit: (id: string, answer: number) => Promise<boolean>;
   onNext: (questionId: string) => Promise<void>; onHome: () => void; headingRef: React.RefObject<HTMLHeadingElement | null>;
 }) {
@@ -324,7 +324,7 @@ function Play({ run, activity, extra, busy, hasError, solved, reefSeed, onHint, 
     (id) => { void onNext(id); });
   useEffect(() => { setAnswer(""); setArrayMode(false); input.current?.focus({ preventScroll: true }); }, [q?.id]);
   useEffect(() => { if (run.complete) headingRef.current?.focus(); }, [run.complete, headingRef]);
-  if (run.complete) return <section className="section activity-finished"><span className="big-symbol" aria-hidden="true">★</span><h1 ref={headingRef} tabIndex={-1}>{ACTIVITY_INFO[activity].title} {extra ? "extra practice" : "complete"}!</h1><p>{extra ? "Those facts are part of your learning story. Your habitat keeps growing!" : "Tick! Your daily star is saved. Finish the other activities to unlock extra practice."}</p>{extra && <GrowingReef solved={solved} activity={activity} seed={reefSeed} compact />}<button className="button primary" onClick={onHome}>Back to my ocean →</button></section>;
+  if (run.complete) return <section className="section activity-finished"><span className="big-symbol" aria-hidden="true">★</span><h1 ref={headingRef} tabIndex={-1}>{ACTIVITY_INFO[activity].title} {extra ? "extra practice" : "complete"}!</h1><p>{extra ? "A whole set complete! Your aquarium has room for everyone." : "Tick! Your daily star is saved. Finish the other activities to unlock extra practice."}</p>{extra && newFriendIndex >= 0 && <NewFriend activity={activity} seed={reefSeed} index={newFriendIndex} />}{extra && <GrowingReef friends={friends} activity={activity} seed={reefSeed} compact />}<button className="button primary" onClick={onHome}>Back to my ocean →</button></section>;
   if (!q) return null;
   const nextAttempted = autoAttempted || manualAttempt === q.id;
   const total = q.a * q.b;
@@ -352,7 +352,7 @@ function Play({ run, activity, extra, busy, hasError, solved, reefSeed, onHint, 
         <div id="answer-feedback" role="status" aria-atomic="true" className={`feedback ${q.resolved ? "correct" : ""}`}>{q.resolved ? <><span className="success-star" aria-hidden="true">★</span><strong>{q.hinted || q.attempts > 1 ? "You worked it out!" : ["Fin-tastic thinking!", "You nailed it, explorer!", "That's a brilliant discovery!", "Whale done!", "You're making waves!"][run.index % 5]}</strong><span className="success-equation">{workedFor(q)}</span></> : q.attempts >= 2 ? "Gobfrey says: Let's build it together. Use the worked example below." : q.attempts ? "Not quite yet. Gobfrey has another way to try." : "Gobfrey says: Take your time. You've got room to think."}</div>
         {q.resolved && <div className="auto-next"><p>{busy ? "Saving your next step…" : hasError || nextAttempted ? "Your answer is safe. Retry Next discovery to save your next step." : autoPaused ? "Auto-next paused. Take all the time you need." : "Next question follows automatically after your celebration."}</p>{!nextAttempted && !hasError && <button type="button" className="text-button" disabled={busy} aria-pressed={autoPaused} onClick={() => setAutoPaused(!autoPaused)}>{autoPaused ? "Resume auto-next" : "Pause auto-next"}</button>}</div>}
       </form>
-    </div><aside className={`hint-card ${q.resolved ? "guide-cheering" : ""}`} aria-label="Gobfrey's encouragement and hints"><GobfreyPortrait teacher /><h3>{q.resolved ? "Gobfrey says: Whale done!" : "A little help from Gobfrey?"}</h3><p>{q.resolved ? extra ? "“You kept thinking, and you found it! Look, a new ocean friend!”" : "“You kept thinking, and you found it! One step closer to your daily star.”" : "“No rush, no timer. We can try a different way together.”"}</p>{q.hinted ? <div className="hint-content"><h4>{q.attempts >= 2 ? "Let's put it together" : "Try splitting it"}</h4><p>{q.attempts >= 2 ? workedFor(q) : hintFor(q)}</p>{q.attempts >= 2 && !q.resolved && <button className="button soft" disabled={busy} onClick={() => { setAnswer(String(total)); input.current?.focus(); }}>Build the answer: {total}</button>}<small>Helped answers count for your expedition, not independent recall.</small></div> : <button className="button soft" disabled={busy || q.resolved} onClick={() => void onHint()}>Show me a strategy ✧</button>}<div className="hint-bottom">Mistakes never cost you a shark.</div>{extra && <GrowingReef solved={solved} activity={activity} seed={reefSeed} compact />}</aside></div>
+    </div><aside className={`hint-card ${q.resolved ? "guide-cheering" : ""}`} aria-label="Gobfrey's encouragement and hints"><GobfreyPortrait teacher /><h3>{q.resolved ? "Gobfrey says: Whale done!" : "A little help from Gobfrey?"}</h3><p>{q.resolved ? extra ? "“You kept thinking, and you found it! Finish this set to invite a new neighbour.”" : "“You kept thinking, and you found it! One step closer to your daily star.”" : "“No rush, no timer. We can try a different way together.”"}</p>{q.hinted ? <div className="hint-content"><h4>{q.attempts >= 2 ? "Let's put it together" : "Try splitting it"}</h4><p>{q.attempts >= 2 ? workedFor(q) : hintFor(q)}</p>{q.attempts >= 2 && !q.resolved && <button className="button soft" disabled={busy} onClick={() => { setAnswer(String(total)); input.current?.focus(); }}>Build the answer: {total}</button>}<small>Helped answers count for your expedition, not independent recall.</small></div> : <button className="button soft" disabled={busy || q.resolved} onClick={() => void onHint()}>Show me a strategy ✧</button>}<div className="hint-bottom">Mistakes never cost you a shark.</div>{extra && <GrowingReef friends={friends} activity={activity} seed={reefSeed} compact />}</aside></div>
   </section>;
 }
 

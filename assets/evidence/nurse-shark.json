@@ -1,0 +1,95 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "26209333": {
+        "pageid": 26209333,
+        "ns": 6,
+        "title": "File:Ginglymostoma cirratum utila.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Ginglymostoma_cirratum_utila.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Ginglymostoma_cirratum_utila.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=26209333",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2013-05-21 00:35:06",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Ginglymostoma cirratum utila",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Ginglymostoma cirratum|Taken with Canon PowerShot S90|Flickr images reviewed by FlickreviewR|Utila",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "Nurse shark (<i>Ginglymostoma cirratum</i>) at Utila, Honduras",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2013-05-01 11:23",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<a rel=\"mw:ExtLink nofollow\" href=\"https://www.flickr.com/photos/42032978@N08/8711887565/\" class=\"external text\">2nd nurse shark</a>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a rel=\"mw:ExtLink nofollow\" href=\"https://www.flickr.com/people/42032978@N08\" class=\"external text\">Ross Garner</a>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY 2.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution 2.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by/2.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-2.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

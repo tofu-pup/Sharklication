@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { readFileSync } from "node:fs";
 import type { ActivityId, SaveEnvelope } from "../src/domain";
 
 async function saved(page: Page): Promise<SaveEnvelope> {
@@ -26,17 +27,17 @@ async function begin(page: Page, name: string) {
   await card.getByRole("button").click();
   await expect(page.locator("#answer")).toBeVisible();
 }
-async function solveCurrent(page: Page, activity: ActivityId) {
+async function solveCurrent(page: Page, activity: ActivityId, extra = false) {
   await page.clock.pauseAt(await page.evaluate(() => new Date(Date.now() + 1000).toISOString()));
   const save = await saved(page);
   const date = Object.keys(save.days).sort().at(-1)!;
-  const run = save.days[date].tasks[activity]!;
+  const run = extra ? save.extra!.run : save.days[date].tasks[activity]!;
   const q = run.questions[run.index];
   await page.getByLabel("Your answer", { exact: true }).fill(String(q.a * q.b));
   await page.getByRole("button", { name: "Check my answer" }).click();
   await expect(page.locator("#answer-feedback")).toHaveClass(/correct/);
   await page.clock.fastForward(4000);
-  await expect.poll(async () => (await saved(page)).days[date].tasks[activity]!.index).toBe(run.index + 1);
+  await expect.poll(async () => { const next = await saved(page); return extra ? next.extra!.run.index : next.days[date].tasks[activity]!.index; }).toBe(run.index + 1);
 }
 async function finish(page: Page, activity: ActivityId, name: string) {
   await begin(page, name);
@@ -48,6 +49,66 @@ async function finishDay(page: Page) {
     await page.getByRole("button", { name: /^Back to my ocean/ }).click();
   }
 }
+test("expanded album preserves older discovery order and opens every new species offline", async ({ page, context }, testInfo) => {
+    test.slow();
+    await welcome(page);
+    await finishDay(page);
+    const content: Array<{ id: string; name: string; scientificName?: string }> = JSON.parse(readFileSync(new URL("../src/data/sharks.json", import.meta.url), "utf8"));
+    const original = await saved(page);
+    const legacyIds = new Set(content.slice(0, 18).map((shark) => shark.id));
+    const legacy = structuredClone(original);
+    legacy.rewardOrder = legacy.rewardOrder.filter((id) => legacyIds.has(id));
+    const restore = async (fixture: SaveEnvelope) => {
+      await page.getByRole("button", { name: "Open parent settings" }).click();
+      await page.locator('input[type="file"]').setInputFiles({ name: "album-fixture.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(fixture)) });
+      await page.getByRole("button", { name: "Confirm replacement" }).click();
+      await page.getByRole("button", { name: /My ocean/ }).click();
+    };
+    await restore(legacy);
+    const expanded = await saved(page);
+    expect(expanded.rewardOrder.slice(0, 18)).toEqual(legacy.rewardOrder);
+    expect(expanded.rewardOrder).toHaveLength(38);
+    expect(expanded.collection).toEqual(original.collection);
+    expect(expanded.attempts).toEqual(original.attempts);
+    const today = Object.keys(original.days)[0], additions = content.slice(18);
+    expect(additions).toHaveLength(20);
+    // Synthetic fixture unlocks the added pages without changing real player data.
+    additions.forEach((shark, i) => {
+      const instant = new Date(`${today}T12:00:00Z`);
+      instant.setUTCDate(instant.getUTCDate() - i - 1);
+      const date = instant.toISOString().slice(0, 10), timestamp = instant.toISOString();
+      const day = structuredClone(original.days[today]);
+      for (const activity of ["reef", "feeding", "dive"] as const) {
+        const run = day.tasks[activity]!, oldId = run.id;
+        run.id = `album-${shark.id}-${activity}`;
+        run.questions.forEach((question) => { question.id = question.id.replace(oldId, run.id); });
+        expanded.attempts.push(...original.attempts.filter((attempt) => attempt.activity === activity).map((attempt) => ({
+          ...attempt, id: attempt.id.replace(oldId, run.id), date, timestamp,
+        })));
+      }
+      expanded.days[date] = { ...day, rewardId: shark.id, completedAt: timestamp };
+      expanded.collection.push({ sharkId: shark.id, rewardDate: date, unlockedAt: timestamp });
+    });
+    await restore(expanded);
+    await expect(page.getByText("Offline ready", { exact: true })).toBeVisible({ timeout: 30_000 });
+    await context.setOffline(true);
+    await page.reload();
+    await page.getByRole("button", { name: /Shark album/ }).click();
+    await expect(page.locator(".catalog-notice")).toContainText("26 photographed real species + 12 illustrated fantasy sharks");
+    for (const shark of additions) {
+      await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: shark.name, exact: true }) }).click();
+      await expect(page.getByRole("heading", { name: `Meet ${shark.name}`, exact: true })).toBeVisible();
+      await expect(page.locator(".shark-facts li")).toHaveCount(15);
+      await expect(page.locator(".shark-story > p:not(.wildlife-note)")).toHaveCount(2);
+      const photo = page.getByRole("img", { name: `Photograph of ${shark.name} (${shark.scientificName})`, exact: true });
+      await expect.poll(() => photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
+      await expect(page.getByRole("link", { name: /Original source/ })).toBeVisible();
+      await expect(page.locator(".attribution")).toContainText(/CC BY|Public domain/);
+      if (shark.id === "zebra-shark" || shark.id === "great-white-shark") await page.screenshot({ path: testInfo.outputPath(`${shark.id}.png`), fullPage: true });
+      await page.getByRole("button", { name: /Shark album/ }).click();
+    }
+    expect((await saved(page)).collection).toHaveLength(21);
+});
 test("complete all activities in a chosen order, reload mid-task, and issue one durable reward", async ({ page }) => {
   test.slow();
   await welcome(page);
@@ -67,11 +128,7 @@ test("complete all activities in a chosen order, reload mid-task, and issue one 
   expect((await saved(page)).collection).toHaveLength(1);
   await page.reload();
   await expect(page.getByText("3 of 3 stars")).toBeVisible();
-  const swimmer = page.locator(".activity-habitat .reef-swimmer").first();
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  expect(await swimmer.evaluate((el) => getComputedStyle(el).animationName)).toBe("reef-swim");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  expect(await swimmer.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  await expect(page.locator(".activity-habitat [data-resident]")).toHaveCount(0);
   await page.getByRole("button", { name: /See today's discovery/ }).click();
   await expect(page.getByRole("heading", { name: "Whale shark", exact: true })).toBeVisible();
   expect((await saved(page)).collection).toHaveLength(1);
@@ -190,6 +247,46 @@ test("touch layouts avoid horizontal overflow, reduced motion persists, and runt
   await page.reload();
   await expect(page.getByLabel("Reduce motion (system preference is also respected)")).toBeChecked();
   expect(remote).toEqual([]);
+});
+
+test("populated aquariums retain all named animals and scroll without phone or tablet overflow", async ({ page }, testInfo) => {
+  test.slow();
+  await welcome(page);
+  await finishDay(page);
+  const fixture = await saved(page), date = Object.keys(fixture.days)[0];
+  fixture.bonusCompletions = [];
+  for (const activity of ["reef", "feeding", "dive"] as const) {
+    for (let i = 0; i < 73; i++) {
+      const runId = `bonus-${activity}-${i}`;
+      fixture.bonusCompletions.push({ runId, date, activity, completedAt: new Date().toISOString() });
+      for (let q = 0; q < { reef: 6, feeding: 3, dive: 10 }[activity]; q++) {
+        fixture.attempts.push({ id: `${runId}-${q}:0`, timestamp: new Date().toISOString(), date, activity, a: 2, b: 5, answer: 10,
+          correct: true, hinted: true, correction: false, firstAttempt: true, independent: false });
+      }
+    }
+  }
+  await page.getByRole("button", { name: "Open parent settings" }).click();
+  await page.locator('input[type="file"]').setInputFiles({ name: "populated.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(fixture)) });
+  await page.getByRole("button", { name: "Confirm replacement" }).click();
+  await page.getByRole("button", { name: /My ocean/ }).click();
+  for (const width of [375, 768, 1180]) {
+    await page.setViewportSize({ width, height: 1024 });
+    await expect(page.locator(".activity-habitat [data-resident]")).toHaveCount(219);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    for (const activity of ["reef", "feeding", "dive"]) {
+      const aquarium = page.locator(`.biotope-${activity} .aquarium-window`);
+      await aquarium.scrollIntoViewIfNeeded();
+      expect(await aquarium.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
+      await aquarium.evaluate((el) => { el.scrollTop = el.scrollHeight; });
+      await expect(aquarium.locator('[data-resident="72"]')).toBeInViewport();
+      await expect(aquarium.getByRole("img").first()).toHaveAccessibleName(/, /);
+      await aquarium.evaluate((el) => { el.scrollTop = 0; });
+    }
+    await page.screenshot({ path: testInfo.outputPath(`aquariums-${width}.png`), fullPage: true });
+  }
+  await page.reload();
+  await expect(page.locator(".activity-habitat [data-resident]")).toHaveCount(219);
+  expect((await saved(page)).bonusCompletions).toHaveLength(219);
 });
 
 test("correct answers celebrate once without blocking the next question; system and saved motion preferences work", async ({ page }) => {
@@ -367,7 +464,7 @@ test("auto-next can pause, cancels on navigation, resumes saved feedback and exp
   expect((await saved(page)).attempts).toHaveLength(1);
 });
 
-test("daily ecosystems grow with extra practice, persist through reload and change on a new day", async ({ page, context }) => {
+test("empty bonus aquariums award one named friend per full set, persist offline and reset on a new day", async ({ page, context }, testInfo) => {
   test.slow();
   await welcome(page);
   await expect(page.locator(".site-header nav .nav-icon")).toHaveCount(2);
@@ -376,38 +473,62 @@ test("daily ecosystems grow with extra practice, persist through reload and chan
   await expect(page.getByRole("heading", { name: /Today's expedition/, level: 1 })).toBeVisible();
   await finishDay(page);
   const reef = page.locator(".activity-card.feeding .activity-habitat");
-  await expect(reef).toContainText("3 solved today");
-  await expect(reef.locator("[data-resident]")).toHaveCount(3);
+  await expect(reef).toContainText("0 bonus friends today");
+  await expect(reef).toContainText("Solve a full set of 3 bonus puzzles");
+  await expect(page.locator(".activity-habitat [data-animal]")).toHaveCount(0);
+  await page.screenshot({ path: testInfo.outputPath("empty-aquariums.png"), fullPage: true });
   const before = await reef.locator("svg").evaluate((el) => el.outerHTML);
   await page.reload();
   expect(await reef.locator("svg").evaluate((el) => el.outerHTML)).toBe(before);
   await page.locator(".activity-card.feeding").getByRole("button").click();
-  const extra = (await saved(page)).extra!, q = extra.run.questions[0];
-  await page.getByLabel("Your answer", { exact: true }).fill(String(q.a * q.b));
-  await page.getByRole("button", { name: "Check my answer" }).click();
-  await expect(page.locator(".hint-card .growing-reef")).toContainText("4 solved today");
-  await page.clock.fastForward(2000);
+  await solveCurrent(page, "feeding", true);
+  await expect(page.locator(".hint-card .growing-reef")).toContainText("0 bonus friends today");
   await page.getByRole("button", { name: /Pause & return/ }).click();
-  await expect(reef.locator("[data-resident]")).toHaveCount(4);
+  await expect(reef.locator("[data-resident]")).toHaveCount(0);
+  await page.reload();
+  await page.locator(".activity-card.feeding").getByRole("button").click();
+  await expect(page.locator(".question-counter")).toContainText("2 / 3");
   expect((await saved(page)).collection).toHaveLength(1);
-  await page.getByRole("button", { name: /Shark album/ }).click();
-  await page.getByRole("button", { name: /My ocean/ }).click();
+  await expect(page.getByText("Offline ready", { exact: true })).toBeVisible({ timeout: 30_000 });
+  await context.setOffline(true);
+  const teacher = page.locator(".gobfrey-teacher");
+  await expect.poll(() => teacher.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth === 640)).toBe(true);
+  await solveCurrent(page, "feeding", true);
+  await expect(page.locator("[data-resident]")).toHaveCount(0);
+  await solveCurrent(page, "feeding", true);
+  await expect(page.getByRole("heading", { name: /Meet .*!/ })).toBeVisible();
+  const arrival = await page.locator(".new-friend h2").innerText();
+  const name = arrival.replace(/^Meet /, "").replace(/!$/, "");
+  await expect(page.locator(".new-friend")).toContainText("Your new neighbour is saved");
+  await page.screenshot({ path: testInfo.outputPath("new-neighbour.png"), fullPage: true });
+  expect((await saved(page)).bonusCompletions).toHaveLength(1);
+  const swimmer = page.locator(".growing-reef [data-animal]").first();
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  expect(await swimmer.evaluate((el) => getComputedStyle(el).animationName)).toBe("reef-swim");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  expect(await swimmer.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  await page.getByRole("button", { name: /^Back to my ocean/ }).click();
+  await expect(reef.locator("[data-resident]")).toHaveCount(1);
+  await expect(reef.locator("[data-animal] title")).toContainText(name);
+  const populated = await reef.locator("svg").evaluate((el) => el.outerHTML);
+  await page.reload();
+  expect(await reef.locator("svg").evaluate((el) => el.outerHTML)).toBe(populated);
+  expect((await saved(page)).bonusCompletions).toHaveLength(1);
   await expect(page.getByRole("button", { name: /Pause reef motion/ })).toHaveCount(0);
   await expect(page.locator(".biotope-reef")).toContainText("Coral reef");
   await expect(page.locator(".biotope-feeding")).toContainText("Seagrass meadow");
   await expect(page.locator(".biotope-dive")).toContainText("Kelp forest");
-  await expect(page.getByText("Offline ready", { exact: true })).toBeVisible({ timeout: 30_000 });
-  await context.setOffline(true);
   await page.locator(".activity-card.feeding").getByRole("button").click();
-  const teacher = page.locator(".gobfrey-teacher");
-  await expect.poll(() => teacher.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth === 640)).toBe(true);
+  await expect(page.locator(".question-counter")).toContainText("1 / 3");
+  await expect(page.locator(".new-friend")).toHaveCount(0);
   await page.getByRole("button", { name: /Pause & return/ }).click();
   await page.clock.setSystemTime(new Date(Date.now() + 24 * 60 * 60 * 1000));
   await page.reload();
   await expect(page.locator(".activity-habitat")).toHaveCount(0);
   await expect(page.getByText("0 of 3 stars")).toBeVisible();
   await expect(page.locator(".activity-card.feeding").getByRole("button")).toBeEnabled();
-  expect((await saved(page)).attempts.filter((a) => a.correct)).toHaveLength(20);
+  expect((await saved(page)).attempts.filter((a) => a.correct)).toHaveLength(22);
+  expect((await saved(page)).bonusCompletions).toHaveLength(1);
 });
 
 for (const viewport of [{ width: 375, height: 812 }, { width: 768, height: 1024 }, { width: 1180, height: 820 }]) {

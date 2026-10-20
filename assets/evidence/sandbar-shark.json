@@ -1,0 +1,98 @@
+{
+  "continue": {
+    "iistart": "2011-10-20T02:04:47Z",
+    "continue": "||"
+  },
+  "query": {
+    "pages": {
+      "17042869": {
+        "pageid": 17042869,
+        "ns": 6,
+        "title": "File:Carcharhinus plumbeus georgia.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Carcharhinus_plumbeus_georgia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Carcharhinus_plumbeus_georgia.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=17042869",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2011-10-20 02:23:48",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Carcharhinus plumbeus georgia",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Carcharhinus plumbeus|Flickr images reviewed by FlickreviewR|Photographs by Brian Gratwicke",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "Sandbar shark (<i>Carcharhinus plumbeus</i>) at the Georgia Aquarium",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2011-09-25 15:04",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<a rel=\"mw:ExtLink nofollow\" href=\"https://www.flickr.com/photos/briangratwicke/6181894773/\" class=\"external text\">sandbar shark, Carcharhinus plumbeus,</a>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a rel=\"mw:ExtLink nofollow\" href=\"https://www.flickr.com/people/19731486@N07\" class=\"external text\">Brian Gratwicke</a>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY 2.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution 2.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by/2.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-2.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

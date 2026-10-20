@@ -269,6 +269,28 @@ describe("backup validation and version boundaries", () => {
     expect(migrated.rewardOrder.slice(0, 3)).toEqual(save.rewardOrder);
     expect(migrated.rewardOrder).toHaveLength(CATALOG.length);
   });
+  it("extends an exhausted eighteen-shark album and keeps earned rewards, attempts and checkpoints", () => {
+    let legacy = initial();
+    const originalIds = new Set(CATALOG.slice(0, 18).map((shark) => shark.id));
+    legacy.rewardOrder = legacy.rewardOrder.filter((id) => originalIds.has(id));
+    for (let day = 0; day < 18; day++) {
+      for (const activity of ACTIVITY_IDS) legacy = finish(legacy, activity, addDays("2026-09-01", day));
+    }
+    expect(legacy.collection).toHaveLength(18);
+    const migrated = parseBackup(JSON.stringify(legacy));
+    expect(migrated.rewardOrder.slice(0, 18)).toEqual(legacy.rewardOrder);
+    expect(migrated.rewardOrder.slice(18)).toEqual(CATALOG.slice(18).map((shark) => shark.id));
+    expect(migrated.collection).toEqual(legacy.collection);
+    expect(migrated.attempts).toEqual(legacy.attempts);
+    expect(migrated.days).toEqual(legacy.days);
+    expect(migrated.facts).toEqual(legacy.facts);
+    expect(migrateSave(migrated)).toEqual(migrated);
+    let next = migrated;
+    for (const activity of ACTIVITY_IDS) next = finish(next, activity, "2026-09-19");
+    expect(next.collection).toHaveLength(19);
+    expect(next.collection.at(-1)?.sharkId).toBe("great-white-shark");
+    expect(validateBackup(next)).toEqual(next);
+  });
   it.each([
     (s: SaveEnvelope) => ({ ...s, schemaVersion: 999 }),
     (s: SaveEnvelope) => ({ ...s, settings: { ...s.settings, enabledTables: [] } }),

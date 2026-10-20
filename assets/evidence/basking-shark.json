@@ -1,0 +1,91 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "11891406": {
+        "pageid": 11891406,
+        "ns": 6,
+        "title": "File:Cetorhinus maximus by greg skomal.JPG",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Cetorhinus_maximus_by_greg_skomal.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Cetorhinus_maximus_by_greg_skomal.JPG",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=11891406",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2010-10-27 00:33:19",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Cetorhinus maximus by greg skomal",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Cetorhinus maximus|Featured pictures from the United States Government|PD US NOAA|Featured pictures on Wikipedia, Persian|Featured pictures taken underwater|Featured photographs in the public domain|Featured pictures on Wikipedia, Arabic|Cetorhinus maximus heads|Pictures of the Year/2014 (finalist)|Featured pictures of Chondrichthyes",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "featured|potd|poty",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "<a rel=\"mw:WikiLink/Interwiki\" href=\"https://en.wikipedia.org/wiki/Basking%20shark\" title=\"en:Basking shark\" class=\"extiw\">Basking shark</a> (<i>Cetorhinus maximus</i>).",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2011-06-28",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<a rel=\"mw:ExtLink nofollow\" href=\"http://www.nmfs.noaa.gov/gallery/images/photos/5880438737.html\" class=\"external text\">Basking Shark</a><span typeof=\"mw:Entity\"> </span><span style=\"font-size: 0.95em; font-weight: bold; color:#555; position: relative;\">(english)</span>.<span typeof=\"mw:Entity\"> </span><i><a rel=\"mw:ExtLink nofollow\" href=\"http://www.nmfs.noaa.gov/gallery/images/search/noaa_fisheries_service.html\" class=\"external text\">NOAA Fisheries Service</a></i>.<span typeof=\"mw:Entity\"> </span>National Oceanic and Atmospheric Administration.",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "Greg Skomal / NOAA Fisheries Service",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "Public domain",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Public domain",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "false",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Copyrighted": {
+                "value": "False",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "pd",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

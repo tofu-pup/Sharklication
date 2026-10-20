@@ -1,0 +1,95 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "1886708": {
+        "pageid": 1886708,
+        "ns": 6,
+        "title": "File:Carcharias taurus.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Carcharias_taurus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Carcharias_taurus.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=1886708",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2007-04-03 11:41:01",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Carcharias taurus",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Carcharias taurus|Taken with Canon Digital IXUS 500|Flickr images reviewed by FlickreviewR|Photographs by Richard Ling",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "Portrait of a Grey Nurse Shark (<i><a href=\"//commons.wikimedia.org/wiki/Carcharias_taurus\" title=\"Carcharias taurus\">Carcharias taurus</a></i>). Green Island, South West Rocks, NSW<br>181644577",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2005-10-03",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/rling/438040809/\">Flickr</a>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/people/rling/\">Richard Ling</a>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY-SA 2.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution-Share Alike 2.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by-sa/2.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-sa-2.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

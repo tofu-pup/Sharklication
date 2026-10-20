@@ -1,0 +1,96 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "1771581": {
+        "pageid": 1771581,
+        "ns": 6,
+        "title": "File:Carcharhinus limbatus - Caraibische zwartpunthaai.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Carcharhinus_limbatus_-_Caraibische_zwartpunthaai.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Carcharhinus_limbatus_-_Caraibische_zwartpunthaai.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=1771581",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2007-03-11 11:08:33",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Carcharhinus limbatus - Caraibische zwartpunthaai",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Carcharhinus limbatus|PD-user",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "<div class=\"hproduct commons-file-information-table\">\n<table class=\"fileinfotpl-type-information vevent\" dir=\"ltr\">\n\n<tbody><tr>\n<td id=\"fileinfotpl_desc\" class=\"fileinfo-paramfield\" lang=\"en\">Description<span class=\"summary fn\" style=\"display:none\">Carcharhinus limbatus - Caraibische zwartpunthaai.jpg</span></td>\n<td class=\"description\">\nCaraibische zwartpunthaai (Carcharhinus limbatus), Bahamas (Walkers Cay)</td>\n</tr>\n\n<tr>\n<td id=\"fileinfotpl_date\" class=\"fileinfo-paramfield\" lang=\"en\">Date</td>\n<td lang=\"en\">\n<time class=\"dtstart\" datetime=\"2000\" lang=\"en\" dir=\"ltr\" style=\"white-space:nowrap\">2000</time></td>\n</tr>\n\n<tr>\n<td id=\"fileinfotpl_src\" class=\"fileinfo-paramfield\" lang=\"en\">Source</td>\n<td>\n<span class=\"int-own-work\" lang=\"en\">Own work</span></td>\n</tr>\n\n<tr>\n<td id=\"fileinfotpl_aut\" class=\"fileinfo-paramfield\" lang=\"en\">Author</td>\n<td>\nAlbert Kok</td>\n</tr>\n\n<tr>\n<td id=\"fileinfotpl_perm\" class=\"fileinfo-paramfield\" lang=\"en\">Permission<br><small>(<a href=\"//commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia\" title=\"Commons:Reusing content outside Wikimedia\">Reusing this file</a>)</small></td>\n<td>\nPublic domain</td>\n</tr>\n\n\n</tbody></table>\n</div>",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2 March 2007 (original upload date)",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<bdi lang=\"en\" dir=\"ltr\">Transferred from <span class=\"plainlinks\"><a class=\"external text\" data-mw-original-href=\"//nl.wikipedia.org\" href=\"https://nl.wikipedia.org\">nl.wikipedia</a></span> to Commons.</bdi>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<p><a href=\"https://en.wikipedia.org/wiki/nl:User:Albert_Kok\" class=\"extiw\" title=\"w:nl:User:Albert Kok\">Albert Kok</a> at <a href=\"https://en.wikipedia.org/wiki/nl:\" class=\"extiw\" title=\"w:nl:\">Dutch Wikipedia</a>\n</p>\nLater versions were uploaded by <a href=\"https://nl.wikipedia.org/wiki/User:Siebrand\" class=\"extiw\" title=\"nl:User:Siebrand\">Siebrand</a> at <a class=\"external text\" data-mw-original-href=\"http://nl.wikipedia.org\" href=\"https://nl.wikipedia.org\">nl.wikipedia</a>.",
+                "source": "commons-desc-page"
+              },
+              "AuthorCount": {
+                "value": 2,
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseShortName": {
+                "value": "Public domain",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Public domain",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "false",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Copyrighted": {
+                "value": "False",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "pd",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

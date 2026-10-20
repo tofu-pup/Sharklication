@@ -1,0 +1,95 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "5963440": {
+        "pageid": 5963440,
+        "ns": 6,
+        "title": "File:Wikilemon Nbrevirostris1 TerryGoss.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/4/42/Wikilemon_Nbrevirostris1_TerryGoss.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Wikilemon_Nbrevirostris1_TerryGoss.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=5963440",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2009-02-16 02:48:04",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Wikilemon Nbrevirostris1 TerryGoss",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Negaprion brevirostris|GFDL|Taken with Nikon D300|License migration redundant|Fish of the Bahamas|Self-published work",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "solitary lemon shark (<i><a href=\"//commons.wikimedia.org/wiki/Negaprion_brevirostris\" title=\"Negaprion brevirostris\">Negaprion brevirostris</a></i>) at Tiger Beach, Bahamas; shot February 2, 2009 by Terry Goss, with a Nikon D300/Nikkor 12-24mm in Aquatica AD300 housing with dual Sea &amp; Sea YS90 strobes.",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2009-02-02",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Pterantula&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Pterantula (page does not exist)\">Pterantula</a>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY-SA 3.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution-Share Alike 3.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by-sa/3.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-sa-3.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

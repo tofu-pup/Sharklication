@@ -61,6 +61,7 @@ const backupSchema = z.object({
   collection: z.array(z.object({ sharkId: id, unlockedAt: timestamp, rewardDate: dateKey }).strict()).max(CATALOG.length),
   rewardOrder: z.array(id).min(1).max(CATALOG.length),
   extra: z.object({ date: dateKey, run: task }).strict().optional(),
+  bonusCompletions: z.array(z.object({ runId: id, date: dateKey, activity, completedAt: timestamp }).strict()).optional(),
 }).strict();
 
 export function validateBackup(value: unknown): SaveEnvelope {
@@ -72,6 +73,30 @@ export function validateBackup(value: unknown): SaveEnvelope {
   if (new Set(save.rewardOrder).size !== save.rewardOrder.length || save.rewardOrder.some((id) => !ids.has(id))) fail();
   if (Object.keys(save.days).length > 30_000 || Object.keys(save.facts).length > 144) fail();
   if (new Set(save.attempts.map((a) => a.id)).size !== save.attempts.length) fail();
+  if (save.bonusCompletions) {
+    if (new Set(save.bonusCompletions.map((entry) => entry.runId)).size !== save.bonusCompletions.length) fail();
+    const correct = new Set(save.attempts.filter((attempt) => attempt.correct).map((attempt) => `${attempt.date}/${attempt.activity}/${attempt.id.slice(0, attempt.id.lastIndexOf(":"))}`));
+    const requiredReviews = new Map<string, string[]>();
+    for (const attempt of save.attempts) {
+      if (attempt.activity !== "dive" || attempt.correct || !attempt.firstAttempt || attempt.correction) continue;
+      const questionId = attempt.id.slice(0, attempt.id.lastIndexOf(":"));
+      const runId = questionId.slice(0, questionId.lastIndexOf("-"));
+      const key = `${attempt.date}/${attempt.activity}/${runId}`;
+      const reviews = requiredReviews.get(key) ?? [];
+      if (reviews.length < RULES.maxCorrections) reviews.push(questionId);
+      requiredReviews.set(key, reviews);
+    }
+    for (const entry of save.bonusCompletions) {
+      const prefix = `${entry.date}/${entry.activity}/`;
+      // Every primary question needs a durable correct answer before its set can earn a friend.
+      for (let i = 0; i < RULES[entry.activity]; i++) {
+        if (!correct.has(`${prefix}${entry.runId}-${i}`)) fail();
+      }
+      if ((requiredReviews.get(`${prefix}${entry.runId}`) ?? []).some((questionId) => !correct.has(`${prefix}${questionId}-review`))) fail();
+      if (save.days[entry.date] && Object.values(save.days[entry.date].tasks).some((run) => run?.id === entry.runId)) fail();
+      if (save.extra?.run.id === entry.runId && (!save.extra.run.complete || save.extra.date !== entry.date || save.extra.run.questions[0].activity !== entry.activity)) fail();
+    }
+  }
   if (save.attempts.some((a) => a.correct !== (a.answer === a.a * a.b) || (a.independent && (a.activity !== "dive" || !a.firstAttempt || a.hinted || a.correction)))) fail();
   if (new Set(save.collection.map((c) => c.sharkId)).size !== save.collection.length
     || new Set(save.collection.map((c) => c.rewardDate)).size !== save.collection.length) fail();

@@ -1,68 +1,53 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it } from "vitest";
-import { BIOTOPES, GrowingReef, reefGrowth, reefRandom } from "./growing-reef";
+import { GrowingReef, NewFriend } from "./growing-reef";
+import { BIOTOPES, oceanFriend } from "./ocean-friends";
 
-describe("growing ecosystems", () => {
-  afterEach(cleanup);
-  it("starts fresh, keeps a completed reef visible and grows more reefs without limiting the daily total", () => {
-    expect(reefGrowth(0)).toEqual({ reef: 1, friends: 0 });
-    expect(reefGrowth(1)).toEqual({ reef: 1, friends: 1 });
-    expect(reefGrowth(12)).toEqual({ reef: 1, friends: 12 });
-    expect(reefGrowth(13)).toEqual({ reef: 2, friends: 1 });
-    expect(reefGrowth(1200)).toEqual({ reef: 100, friends: 12 });
-  });
-  it("randomizes by local day, explorer, activity and reef, not render or reload", () => {
-    const sequence = (seed: string, activity: "reef" | "feeding", reef = 1) => {
-      const random = reefRandom(seed, activity, reef);
-      return Array.from({ length: 12 }, () => random());
-    };
-    const first = sequence("explorer:2026-10-20", "reef");
-    expect(sequence("explorer:2026-10-20", "reef")).toEqual(first);
-    expect(sequence("explorer:2026-10-21", "reef")).not.toEqual(first);
-    expect(sequence("other:2026-10-20", "reef")).not.toEqual(first);
-    expect(sequence("explorer:2026-10-20", "feeding")).not.toEqual(first);
-    expect(sequence("explorer:2026-10-20", "reef", 2)).not.toEqual(first);
-  });
-  it("adds exactly one stable resident per puzzle and bounds the scene size", () => {
-    let previous: string[] = [];
-    for (let solved = 0; solved <= 12; solved++) {
-      const { container, unmount } = render(<GrowingReef seed="2026-10-20" activity="reef" solved={solved} />);
-      const residents = [...container.querySelectorAll("[data-resident]")].map((el) => el.getAttribute("data-resident")!);
-      expect(residents).toHaveLength(solved);
-      expect(residents.slice(0, previous.length)).toEqual(previous);
-      previous = residents;
-      unmount();
-    }
-    const props = { seed: "2026-10-20", activity: "reef", solved: 1200 } as const;
-    const markup = renderToStaticMarkup(<GrowingReef {...props} />);
-    expect(renderToStaticMarkup(<GrowingReef {...props} />)).toBe(markup);
-    expect(renderToStaticMarkup(<GrowingReef {...props} seed="2026-10-21" />)).not.toBe(markup);
-    expect((markup.match(/data-resident=/g) ?? []).length).toBe(12);
-  });
-  it("labels the biotope without extra motion controls", () => {
-    render(<GrowingReef seed="2026-10-20" activity="feeding" solved={12} />);
-    expect(screen.getByRole("figure")).toHaveAccessibleName(/Feeding Time: 12 puzzles solved today/);
-    expect(screen.getByRole("img")).toHaveAccessibleName(/Illustrated seagrass meadow/);
+afterEach(cleanup);
+describe("bonus aquariums", () => {
+  it.each(["reef", "feeding", "dive"] as const)("starts %s with no animals, including no decorative living coral", (activity) => {
+    const { container } = render(<GrowingReef seed="today" activity={activity} friends={0} />);
+    expect(container.querySelectorAll("[data-resident], [data-animal]")).toHaveLength(0);
+    expect(screen.getByText("It's quiet in here...")).toBeVisible();
+    expect(screen.getByText(/Solve a full set/)).toBeVisible();
+    expect(screen.getByRole("figure")).toHaveAccessibleName(/0 bonus friends today/);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
-  it("uses distinct plants, scenery and visitors for each ocean biotope", () => {
-    const scenes = (["reef", "feeding", "dive"] as const).map((activity) => {
-      const { container, unmount } = render(<GrowingReef seed="same-day" activity={activity} solved={12} />);
-      expect(screen.getByRole("img")).toHaveAccessibleName(new RegExp(BIOTOPES[activity].name, "i"));
-      expect(screen.getByText(BIOTOPES[activity].name)).toBeInTheDocument();
-      expect(container.querySelectorAll("[data-resident]")).toHaveLength(12);
-      const flora = { reef: "coral", feeding: "seagrass", dive: "kelp" }[activity];
-      expect(container.querySelectorAll(`.habitat-${flora}`).length).toBeGreaterThan(3);
-      for (const other of ["coral", "seagrass", "kelp"].filter((kind) => kind !== flora)) {
-        expect(container.querySelector(`.habitat-${other}`)).toBeNull();
-      }
-      expect(container.querySelector(".habitat-turtle") !== null).toBe(activity === "feeding");
-      expect(container.querySelector(".habitat-jellyfish") !== null).toBe(activity === "dive");
-      const markup = container.innerHTML;
-      unmount();
-      return markup;
-    });
-    expect(new Set(scenes).size).toBe(3);
+  it.each(["reef", "feeding", "dive"] as const)("has a varied habitat-specific animal cycle in %s", (activity) => {
+    const friends = Array.from({ length: BIOTOPES[activity].animals.length }, (_, index) => oceanFriend("day", activity, index));
+    expect(new Set(friends.map((friend) => friend.kind))).toEqual(new Set(BIOTOPES[activity].animals));
+    expect(new Set(friends.map((friend) => friend.name)).size).toBeGreaterThan(5);
+    const { container } = render(<GrowingReef seed="day" activity={activity} friends={friends.length} />);
+    expect(container.querySelectorAll("[data-animal]")).toHaveLength(friends.length);
+    for (const kind of BIOTOPES[activity].animals) expect(container.querySelector(`[data-animal="${kind}"]`)).not.toBeNull();
+  });
+  it("keeps all neighbours past twelve, with stable positions and an expanding scrollable aquarium", () => {
+    const { container, rerender } = render(<GrowingReef seed="day" activity="reef" friends={12} />);
+    const first = container.querySelector("[data-resident]")!.outerHTML;
+    rerender(<GrowingReef seed="day" activity="reef" friends={73} />);
+    expect(container.querySelectorAll("[data-resident]")).toHaveLength(73);
+    expect(container.querySelector("[data-resident]")!.outerHTML).toBe(first);
+    expect(container.querySelector("svg")).toHaveAttribute("viewBox", "0 0 330 844");
+    expect(screen.getByText("73 bonus friends today")).toBeVisible();
+    expect(screen.getByRole("region")).toHaveAttribute("tabindex", "0");
+    rerender(<GrowingReef seed="day" activity="reef" friends={300} />);
+    expect(container.querySelectorAll("[data-resident]")).toHaveLength(300);
+  });
+  it("is stable through rerenders/reloads and varies by day, activity and neighbour index", () => {
+    const first = oceanFriend("day-1", "reef", 0);
+    expect(oceanFriend("day-1", "reef", 0)).toEqual(first);
+    expect(oceanFriend("day-2", "reef", 0)).not.toEqual(first);
+    expect(oceanFriend("day-1", "feeding", 0)).not.toEqual(first);
+    expect(oceanFriend("day-1", "reef", 1)).not.toEqual(first);
+    const props = { seed: "day-1", activity: "reef", friends: 15 } as const;
+    expect(renderToStaticMarkup(<GrowingReef {...props} />)).toBe(renderToStaticMarkup(<GrowingReef {...props} />));
+  });
+  it("celebrates the same named animal that appears in the aquarium", () => {
+    const friend = oceanFriend("day", "feeding", 3);
+    render(<NewFriend seed="day" activity="feeding" index={3} />);
+    expect(screen.getByRole("heading", { name: `Meet ${friend.name}!` })).toBeVisible();
+    expect(screen.getByRole("img")).toHaveAccessibleName(new RegExp(friend.name));
+    expect(screen.getByText(/Your new neighbour is saved/)).toBeVisible();
   });
 });

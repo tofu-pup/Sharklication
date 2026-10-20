@@ -1,0 +1,103 @@
+{
+  "continue": {
+    "iistart": "2021-08-10T16:54:11Z",
+    "continue": "||"
+  },
+  "query": {
+    "pages": {
+      "108259636": {
+        "pageid": 108259636,
+        "ns": 6,
+        "title": "File:Tiburón azul (Prionace glauca), canal Fayal-Pico, islas Azores, Portugal, 2020-07-27, DD 14.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/7/71/Tibur%C3%B3n_azul_%28Prionace_glauca%29%2C_canal_Fayal-Pico%2C_islas_Azores%2C_Portugal%2C_2020-07-27%2C_DD_14.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Tibur%C3%B3n_azul_(Prionace_glauca),_canal_Fayal-Pico,_islas_Azores,_Portugal,_2020-07-27,_DD_14.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=108259636",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2021-11-01 19:02:16",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Tiburón azul (Prionace glauca), canal Fayal-Pico, islas Azores, Portugal, 2020-07-27, DD 14",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Prionace glauca|Taken with Canon EOS 5DS R|Self-published work|Images of Portugal by User:Poco a poco|Featured pictures of the Atlantic Ocean|Featured pictures on Wikipedia, Vietnamese|Featured pictures by User:Poco a poco|Images by User:Poco a poco|Featured pictures of Portugal by User:Poco a poco|Featured pictures from Wiki Loves Earth by User:Poco a poco|Featured pictures on Commons by User:Poco a poco|Featured pictures taken underwater by User:Poco a poco|Underwater photographs in Portugal|Portugal photographs taken on 2020-07-27|2020 in the Azores|Featured pictures of the Azores|Images from Wiki Loves Earth 2021 in Portugal|Images from Wiki Loves Earth 2021|Featured pictures from Wiki Loves Earth 2021 in Portugal|Sharks in the Azores|Nature in July 2020|Featured pictures taken underwater|Images from Wiki Loves Earth missing SDC location of creation|Sites indexed in the WDPA in Portugal with known IDs|Images from Wiki Loves Earth 2021 in Portugal to check|Images from Wiki Loves Earth missing SDC creator|Underwater photographs of fish|Underwater photographs of sharks|Images from Wiki Loves Earth by User:Poco a poco|Featured pictures in Vietnamese language Wikipedia by User:Poco a poco|Images by User:Poco a poco taken in 2020|Featured pictures of Chondrichthyes",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "quality|featured|potd",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "Blue shark (<i>Prionace glauca</i>), Faial-Pico Channel, Azores Islands, Portugal. The blue shark is a species of <a href=\"https://en.wikipedia.org/wiki/requiem_shark\" class=\"extiw\" title=\"en:requiem shark\">requiem shark</a>, in the family Carcharhinidae, that inhabits deep waters (images taken though between 5 and 10 meter below water) averaging around 3.1 m (10 ft) and preferring cooler waters. They can live up to 20 years, can move very quickly and feed primarily on small <a href=\"//commons.wikimedia.org/wiki/Fish\" title=\"Fish\">fish</a> and <a href=\"//commons.wikimedia.org/wiki/Squid\" class=\"mw-redirect\" title=\"Squid\">squid</a>, although they can take larger prey.",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2020-07-27 15:15:25",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<bdi><a href=\"https://www.wikidata.org/wiki/Q28147777\" class=\"extiw\" title=\"d:Q28147777\"><span title=\"Spanish photographer\">Diego Delso</span></a></bdi>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY-SA 4.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution-Share Alike 4.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Attribution": {
+                "value": "Diego Delso",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by-sa/4.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-sa-4.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -72,6 +72,7 @@ export interface SaveEnvelope {
   collection: Array<{ sharkId: string; unlockedAt: string; rewardDate: string }>;
   rewardOrder: string[];
   extra?: { date: string; run: TaskRun };
+  bonusCompletions?: Array<{ runId: string; date: string; activity: ActivityId; completedAt: string }>;
 }
 
 export function seededRandom(seed: number): () => number {
@@ -305,7 +306,13 @@ export function advance(save: SaveEnvelope, date: string, activity: ActivityId, 
   run.index++;
   if (run.index < run.questions.length) return next;
   run.complete = true;
-  if (extra) return next;
+  if (extra) {
+    next.bonusCompletions ??= [];
+    if (!next.bonusCompletions.some((entry) => entry.runId === run.id)) {
+      next.bonusCompletions.push({ runId: run.id, date, activity, completedAt: now.toISOString() });
+    }
+    return next;
+  }
   const day = next.days[date];
   if (isDayComplete(day) && !day.completedAt) {
     day.completedAt = now.toISOString();
@@ -328,17 +335,6 @@ export function summary(save: SaveEnvelope, today: string) {
   };
 }
 export function catalogEntry(id: string) { return CATALOG.find((s) => s.id === id); }
-
-export function solvedToday(save: SaveEnvelope, date: string): Record<ActivityId, number> {
-  const solved: Record<ActivityId, Set<string>> = { reef: new Set(), feeding: new Set(), dive: new Set() };
-  for (const attempt of save.attempts) {
-    if (attempt.date === date && attempt.correct) {
-      // Attempt IDs end in a retry number; one question grows the reef only once.
-      solved[attempt.activity].add(attempt.id.slice(0, attempt.id.lastIndexOf(":")));
-    }
-  }
-  return { reef: solved.reef.size, feeding: solved.feeding.size, dive: solved.dive.size };
-}
 
 export function upgradeSampling(save: SaveEnvelope): SaveEnvelope {
   if (save.samplingVersion === 2) return save;

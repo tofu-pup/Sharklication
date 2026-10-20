@@ -6,6 +6,8 @@ const root = new URL("../", import.meta.url);
 const manifest = JSON.parse(await readFile(new URL("src/data/asset-manifest.json", root), "utf8"));
 const content = JSON.parse(await readFile(new URL("src/data/sharks.json", root), "utf8"));
 assert.equal(new Set(content.map((s) => s.id)).size, content.length, "Catalog IDs must be unique");
+assert.equal(new Set(manifest.map((s) => s.sharkId)).size, manifest.length, "Photo IDs must be unique");
+assert.equal(manifest.length, content.filter((s) => s.kind === "real").length, "Every real species needs exactly one photo");
 for (const shark of content) {
   assert.ok(["real", "fantasy"].includes(shark.kind));
   assert.ok(shark.name && shark.habitat && shark.size && shark.facts.length >= 2);
@@ -20,11 +22,17 @@ for (const asset of manifest) {
   for (const field of ["sharkId", "scientificName", "sourcePageUrl", "originalFileUrl", "creator", "creditLine", "licenseId", "licenseUrl", "rightsEvidence", "accessedDate", "modifications", "identificationReference", "sha256"]) assert.ok(asset[field], `${asset.sharkId} missing ${field}`);
   assert.equal(asset.verificationStatus, "agent-reviewed");
   assert.ok(content.some((s) => s.id === asset.sharkId && s.kind === "real"));
-  assert.match(asset.licenseId, /^(CC BY(?:-SA)? [234]\.0|CC BY-SA 2\.5|CC0|Public domain)$/);
+  assert.match(asset.licenseId, /^(CC BY(?:-SA)? (?:[234]\.0|2\.5)|CC0|Public domain)$/);
   assert.match(asset.localPath, /^sharks\/[a-z-]+\.webp$/);
   const bytes = await readFile(new URL(`public/${asset.localPath}`, root));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), asset.sha256);
-  await access(new URL(asset.rightsEvidence, root));
+  const evidence = JSON.parse(await readFile(new URL(asset.rightsEvidence, root), "utf8"));
+  const info = Object.values(evidence.query.pages)[0].imageinfo[0];
+  assert.equal(info.extmetadata.LicenseShortName.value, asset.licenseId, `${asset.sharkId} license must match retained source evidence`);
+  assert.equal(info.url.split("?")[0], asset.originalFileUrl, `${asset.sharkId} photo must match retained source evidence`);
+  const dimensions = await sharp(bytes).metadata();
+  assert.equal(dimensions.width, asset.width);
+  assert.equal(dimensions.height, asset.height);
   await access(new URL(`dist/${asset.localPath}`, root));
 }
 for (const [name, size] of [["icon-192.png", 192], ["icon-512.png", 512], ["icon-maskable.png", 512], ["apple-touch-icon-v2.png", 180], ["apple-touch-icon-ipad-167.png", 167], ["apple-touch-icon-ipad-152.png", 152]]) {

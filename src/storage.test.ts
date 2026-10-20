@@ -1,6 +1,6 @@
 import { IDBFactory } from "fake-indexeddb";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createInitialSave, startActivity, submitAnswer, currentQuestion, getRun } from "./domain";
+import { advance, createInitialSave, startActivity, startExtra, submitAnswer, currentQuestion, getRun } from "./domain";
 import { storage } from "./storage";
 
 beforeEach(() => vi.stubGlobal("indexedDB", new IDBFactory()));
@@ -32,5 +32,25 @@ describe("transactional IndexedDB storage", () => {
     await expect(storage.save(saved, saved.revision)).rejects.toThrow(/Quota/);
     open.mockRestore();
     expect(await storage.load()).toEqual(saved);
+  });
+  it("commits a bonus friend and completed checkpoint together, or neither on failure", async () => {
+    const date = "2026-10-20", now = new Date(`${date}T12:00:00Z`);
+    let save = startExtra(createInitialSave(now), date, "mixed", "bonus", undefined, "feeding");
+    for (let i = 0; i < 3; i++) {
+      const q = currentQuestion(save.extra!.run)!;
+      save = submitAnswer(save, date, "feeding", q.id, q.a * q.b, now, true);
+      if (i < 2) save = advance(save, date, "feeding", now, true, q.id);
+    }
+    const saved = await storage.save(save, 0);
+    const complete = advance(saved, date, "feeding", now, true);
+    const open = vi.spyOn(indexedDB, "open").mockImplementation(() => { throw new DOMException("Quota", "QuotaExceededError"); });
+    await expect(storage.save(complete, saved.revision)).rejects.toThrow(/Quota/);
+    open.mockRestore();
+    expect((await storage.load()).bonusCompletions).toBeUndefined();
+    expect((await storage.load()).extra!.run.complete).toBe(false);
+    const persisted = await storage.save(complete, saved.revision);
+    expect((await storage.load()).bonusCompletions).toHaveLength(1);
+    expect((await storage.load()).extra!.run.complete).toBe(true);
+    expect(advance(persisted, date, "feeding", now, true)).toBe(persisted);
   });
 });

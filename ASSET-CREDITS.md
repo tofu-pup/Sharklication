@@ -10,7 +10,7 @@ The Home Screen/PWA icon is a separate owner-supplied illustration (`assets/app-
 
 The transparent home-link wordmark was supplied by the owner (`assets/header-logo-source.png`) and resized to WebP after trimming transparent margins, without redesign. Gobfrey is the owner's chosen name for the illustrated whale-shark guide; no third-party toy artwork or affiliation is claimed. Feeding Time's cartoon sharks and fish are original SVG illustrations in `src/feeding-art.tsx`, not wildlife photographs.
 
-Teacher Gobfrey was supplied by the owner (`assets/gobfrey-teacher-source.png`). `npm run teacher` trims only transparent margins and resizes to a 640-pixel-wide WebP for offline help sidebars, without redesign. Owner-supplied use is assumed; original authorship/reuse terms were not independently established. The growing reef and navigation icons are original SVG illustrations in `src/growing-reef.tsx` and `src/nav-icon.tsx`, not photographs or accurate species identifications.
+Teacher Gobfrey was supplied by the owner (`assets/gobfrey-teacher-source.png`). `npm run teacher` trims only transparent margins and resizes to a 640-pixel-wide WebP for offline help sidebars, without redesign. Owner-supplied use is assumed; original authorship/reuse terms were not independently established. The growing aquariums, named ocean animals and navigation icons are original SVG illustrations in `src/growing-reef.tsx`, `src/ocean-animal.tsx` and `src/nav-icon.tsx`, not photographs or accurate species identifications.
 
 ## Rhincodon typus
 
@@ -89,3 +89,263 @@ Teacher Gobfrey was supplied by the owner (`assets/gobfrey-teacher-source.png`).
 - Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
 - Evidence: `assets/evidence/leopard-shark.json`, accessed 2026-10-20
 - SHA-256: `6e316fc47699b3dba9b43b7fc02f4329d50d644f9e878f7485aa791680c98731`
+
+## Carcharodon carcharias
+
+- Local file: `public/sharks/great-white-shark.webp` (909 × 663)
+- Credit: Hermanus Backpackers / CC BY 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Great_white_shark_south_africa.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/3/31/Great_white_shark_south_africa.jpg
+- License: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/white-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/great-white-shark.json`, accessed 2026-10-20
+- SHA-256: `700c48966cb2cd4ccb62a36500e7b34e4dbdfd940dace2b2e946f614e18b6399`
+
+## Galeocerdo cuvier
+
+- Local file: `public/sharks/tiger-shark.webp` (1000 × 742)
+- Credit: Albert Kok / CC BY-SA 3.0
+- Source: https://commons.wikimedia.org/wiki/File:Tiger_shark.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/3/39/Tiger_shark.jpg
+- License: [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 3.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/tiger-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/tiger-shark.json`, accessed 2026-10-20
+- SHA-256: `b131c78c2dd4dd7353cb2e46a7669b54129dbb53d11c534ff9051b3dfe7a30c8`
+
+## Carcharhinus leucas
+
+- Local file: `public/sharks/bull-shark.webp` (567 × 400)
+- Credit: Terry Goss / CC BY 2.5
+- Source: https://commons.wikimedia.org/wiki/File:Bullshark_Beqa_Fiji_2007.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/8/8f/Bullshark_Beqa_Fiji_2007.jpg
+- License: [CC BY 2.5](https://creativecommons.org/licenses/by/2.5)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY 2.5 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/bull-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/bull-shark.json`, accessed 2026-10-20
+- SHA-256: `61a9b6af69cc4ecf28b846a603e3f706cd14e09348a36dcfc00d14c903c8a2a5`
+
+## Sphyrna mokarran
+
+- Local file: `public/sharks/great-hammerhead.webp` (1000 × 665)
+- Credit: Jake Mohan / CC BY 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Great_hammerhead_georgia.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/d/d7/Great_hammerhead_georgia.jpg
+- License: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/great-hammerhead/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/great-hammerhead.json`, accessed 2026-10-20
+- SHA-256: `6d7940bb12602f4e03b7c6888be32f710c6d6b427ac1a8defa4655feea361dbc`
+
+## Sphyrna lewini
+
+- Local file: `public/sharks/scalloped-hammerhead.webp` (1000 × 614)
+- Credit: Kris-Mikael Krister / CC BY 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Scalloped_hammerhead_shark_(Sphyrna_lewini)_Costa_Rica_(cropped).jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/3/36/Scalloped_hammerhead_shark_%28Sphyrna_lewini%29_Costa_Rica_%28cropped%29.jpg
+- License: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/scalloped-hammerhead/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/scalloped-hammerhead.json`, accessed 2026-10-20
+- SHA-256: `c2560756e5f783b3d9447506841752670f97a9259bc89abac90725c62255af8e`
+
+## Sphyrna zygaena
+
+- Local file: `public/sharks/smooth-hammerhead.webp` (1000 × 760)
+- Credit: Globetrotteur17... Ici, là-bas ou ailleurs... / CC BY-SA 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Sphyrna_zygaena,_Aquarium_de_La_Rochelle.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/e/e9/Sphyrna_zygaena%2C_Aquarium_de_La_Rochelle.jpg
+- License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/smooth-hammerhead/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/smooth-hammerhead.json`, accessed 2026-10-20
+- SHA-256: `8195b844f1d02fe9886fa1f91d60b9d33a7c8288eab0a8f28661017097bfb1f1`
+
+## Isurus oxyrinchus
+
+- Local file: `public/sharks/shortfin-mako.webp` (893 × 595)
+- Credit: Mark Conlin, SWFSC Large Pelagics Program / Public domain
+- Source: https://commons.wikimedia.org/wiki/File:Isurus_oxyrinchus_by_mark_conlin.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/7/74/Isurus_oxyrinchus_by_mark_conlin.jpg
+- License: [Public domain](https://commons.wikimedia.org/wiki/Commons:Public_domain)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Source photograph is public domain.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/shortfin-mako/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/shortfin-mako.json`, accessed 2026-10-20
+- SHA-256: `71199adf29f2240f3a481a68a59f8bc2929936eedc726113c159fc4b1b811f4d`
+
+## Prionace glauca
+
+- Local file: `public/sharks/blue-shark.webp` (1000 × 667)
+- Credit: Diego Delso / CC BY-SA 4.0
+- Source: https://commons.wikimedia.org/wiki/File:Tibur%C3%B3n_azul_(Prionace_glauca),_canal_Fayal-Pico,_islas_Azores,_Portugal,_2020-07-27,_DD_14.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/7/71/Tibur%C3%B3n_azul_%28Prionace_glauca%29%2C_canal_Fayal-Pico%2C_islas_Azores%2C_Portugal%2C_2020-07-27%2C_DD_14.jpg
+- License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 4.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/blue-shark.json`, accessed 2026-10-20
+- SHA-256: `69d93e7f3ad1c427f02e6aed965b8cc37f5ea8043b53c7a5242f3c79740e6730`
+
+## Cetorhinus maximus
+
+- Local file: `public/sharks/basking-shark.webp` (1000 × 1053)
+- Credit: Greg Skomal / NOAA Fisheries Service / Public domain
+- Source: https://commons.wikimedia.org/wiki/File:Cetorhinus_maximus_by_greg_skomal.JPG
+- Original: https://upload.wikimedia.org/wikipedia/commons/0/0b/Cetorhinus_maximus_by_greg_skomal.JPG
+- License: [Public domain](https://commons.wikimedia.org/wiki/Commons:Public_domain)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Source photograph is public domain.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/basking-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/basking-shark.json`, accessed 2026-10-20
+- SHA-256: `b0f512182dc48c2f53edc2dce1b69144e359246f7b75d1dae720a82a5f50fbc4`
+
+## Carcharias taurus
+
+- Local file: `public/sharks/sand-tiger-shark.webp` (1000 × 719)
+- Credit: Richard Ling / CC BY-SA 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Carcharias_taurus.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/9/9d/Carcharias_taurus.jpg
+- License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/sand-tiger-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/sand-tiger-shark.json`, accessed 2026-10-20
+- SHA-256: `fbd973db6d7cfe502998651955986b3a12a7289b92c6ce6ab17a31a5cf14d888`
+
+## Ginglymostoma cirratum
+
+- Local file: `public/sharks/nurse-shark.webp` (1000 × 750)
+- Credit: Ross Garner / CC BY 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Ginglymostoma_cirratum_utila.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/9/9c/Ginglymostoma_cirratum_utila.jpg
+- License: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/nurse-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/nurse-shark.json`, accessed 2026-10-20
+- SHA-256: `e60351b4f84f691db6f6ef894a55c59e886d1562205e7765cb4d8efe75cb54d9`
+
+## Negaprion brevirostris
+
+- Local file: `public/sharks/lemon-shark.webp` (1000 × 664)
+- Credit: Terry Goss / CC BY-SA 3.0
+- Source: https://commons.wikimedia.org/wiki/File:Wikilemon_Nbrevirostris1_TerryGoss.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/4/42/Wikilemon_Nbrevirostris1_TerryGoss.jpg
+- License: [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 3.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/lemon-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/lemon-shark.json`, accessed 2026-10-20
+- SHA-256: `c61b8fd5340d17e9383c2a264c7a639b4b0d26f4aa4f7df2363072e22cfa7259`
+
+## Carcharhinus plumbeus
+
+- Local file: `public/sharks/sandbar-shark.webp` (1000 × 562)
+- Credit: Brian Gratwicke / CC BY 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Carcharhinus_plumbeus_georgia.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/6/6e/Carcharhinus_plumbeus_georgia.jpg
+- License: [CC BY 2.0](https://creativecommons.org/licenses/by/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/sandbar-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/sandbar-shark.json`, accessed 2026-10-20
+- SHA-256: `eeb660f5836124b8e619bc9c9c6f28c0095810d06caac3af298bd5d2b4699aac`
+
+## Carcharhinus obscurus
+
+- Local file: `public/sharks/dusky-shark.webp` (1000 × 750)
+- Credit: Happy Little Nomad / CC BY-SA 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Carcharhinus_obscurus_at_Seaworld.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/d/d3/Carcharhinus_obscurus_at_Seaworld.jpg
+- License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/dusky-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/dusky-shark.json`, accessed 2026-10-20
+- SHA-256: `3abec3e4767a8ef1a8afcb6a7c36b33d343f375164cefd46eb23bc1d6c7f637e`
+
+## Carcharhinus amblyrhynchos
+
+- Local file: `public/sharks/grey-reef-shark.webp` (1000 × 750)
+- Credit: Richard Ling / CC BY-SA 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Carcharhinus_amblyrhynchos_papua_new_guinea.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/7/76/Carcharhinus_amblyrhynchos_papua_new_guinea.jpg
+- License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/grey-reef-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/grey-reef-shark.json`, accessed 2026-10-20
+- SHA-256: `5cc513aa660ee5897536243ba4e08e4e52ca4a507611ce1636163ccc14d50e81`
+
+## Carcharhinus limbatus
+
+- Local file: `public/sharks/blacktip-shark.webp` (1000 × 571)
+- Credit: Albert Kok / Public domain
+- Source: https://commons.wikimedia.org/wiki/File:Carcharhinus_limbatus_-_Caraibische_zwartpunthaai.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/c/cb/Carcharhinus_limbatus_-_Caraibische_zwartpunthaai.jpg
+- License: [Public domain](https://commons.wikimedia.org/wiki/Commons:Public_domain)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Source photograph is public domain.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blacktip-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/blacktip-shark.json`, accessed 2026-10-20
+- SHA-256: `bf3b7a30146a8bdc8d0ad7a49a7e879aeafde178920c43ca9926767a96995d97`
+
+## Stegostoma tigrinum
+
+- Local file: `public/sharks/zebra-shark.webp` (1000 × 752)
+- Credit: Julien Bidet / CC BY-SA 4.0
+- Source: https://commons.wikimedia.org/wiki/File:Stegostoma_fasciatum.JPG
+- Original: https://upload.wikimedia.org/wikipedia/commons/5/55/Stegostoma_fasciatum.JPG
+- License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 4.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/zebra-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/zebra-shark.json`, accessed 2026-10-20
+- SHA-256: `247d6c6818d9758ca39963629cc3768a2bca9a27c0feed30df9a78143ee589ef`
+
+## Nebrius ferrugineus
+
+- Local file: `public/sharks/tawny-nurse-shark.webp` (1000 × 750)
+- Credit: David Burdick / Public domain
+- Source: https://commons.wikimedia.org/wiki/File:Nebrius_ferrugineus.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/4/4e/Nebrius_ferrugineus.jpg
+- License: [Public domain](https://commons.wikimedia.org/wiki/Commons:Public_domain)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Source photograph is public domain.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/tawny-nurse-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/tawny-nurse-shark.json`, accessed 2026-10-20
+- SHA-256: `06e73af0c115bb30b958556f56aae43417bddfd12c060eb735b85873ca3f545b`
+
+## Orectolobus maculatus
+
+- Local file: `public/sharks/spotted-wobbegong.webp` (1000 × 750)
+- Credit: K McLean / CC BY-SA 2.0
+- Source: https://commons.wikimedia.org/wiki/File:Orectolobus_maculatus_2.jpg
+- Original: https://upload.wikimedia.org/wikipedia/commons/6/68/Orectolobus_maculatus_2.jpg
+- License: [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 2.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/spotted-wobbegong/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/spotted-wobbegong.json`, accessed 2026-10-20
+- SHA-256: `d697328591b5402671e2e978ec4ecf219dc3dc66647e727518d922b6e6d3c382`
+
+## Heterodontus portusjacksoni
+
+- Local file: `public/sharks/port-jackson-shark.webp` (1000 × 582)
+- Credit: Felix Frost-Savage / CC BY-SA 4.0
+- Source: https://commons.wikimedia.org/wiki/File:Port_Jackson_Shark_pictured_at_SEA_LIFE_Sydney_Aquarium.png
+- Original: https://upload.wikimedia.org/wikipedia/commons/1/14/Port_Jackson_Shark_pictured_at_SEA_LIFE_Sydney_Aquarium.png
+- License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0)
+- Changes: Resized to at most 1000 px wide and re-encoded as WebP; no new crop. Reuse remains subject to the source CC BY-SA 4.0 license.
+- Identification reference: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/port-jackson-shark/
+- Review: Agent review of file-specific description, license metadata, and visual diagnostic features against Florida Museum. Not a human taxonomic certification.
+- Evidence: `assets/evidence/port-jackson-shark.json`, accessed 2026-10-20
+- SHA-256: `26013d6142a25a8516321fd201ba19537ed739af275a06cb16be4522e31db421`
