@@ -143,6 +143,10 @@ export function App() {
   }
   async function begin(activity: ActivityId, extra = false) {
     const today = localDateKey(new Date(), current.current!.settings.homeTimezone);
+    if (extra && !isDayComplete(current.current!.days[today])) {
+      setNotice("Finish all three of today's activities to unlock extra practice.");
+      return;
+    }
     const result = await persist((s) => {
       if (!extra) return startActivity(s, today, activity, crypto.randomUUID());
       const paused = getRun(s, today, activity, true);
@@ -210,40 +214,25 @@ export function App() {
         <button className="button primary" disabled={busy} onClick={() => void persist((s) => ({ ...s, profile: { ...s.profile, welcomed: true } }))}>Let's explore <span aria-hidden="true">→</span></button>
       </section> : <>
         {screen === "home" && <>
-          <section className="hero">
-            <div className="hero-copy">
-              <span className="eyebrow"><span className="little-wave">≈</span> {save.profile.name.toUpperCase()}'S LITTLE CORNER OF THE OCEAN</span>
-              <h1 ref={heading} tabIndex={-1}>Small steps.<br /><em>Big discoveries.</em></h1>
-              <p>Gobfrey here! Your reef is calling, {save.profile.name}.<br className="desktop-break" /> Let's discover something together.</p>
-              <button className="button primary" disabled={busy} onClick={() => doneCount === 3 ? document.getElementById("expedition-heading")?.focus() : void begin(ACTIVITY_IDS.find((a) => !today?.tasks[a]?.complete)!)}>{doneCount === 3 ? "Try some extra practice" : doneCount > 0 || today ? "Continue my expedition" : "Start today's expedition"} <span aria-hidden="true">→</span></button>
-              <span className="hero-caption">At your pace. About 5–8 minutes. A new friend awaits.</span>
-            </div>
-            <div className="hero-ocean" aria-hidden="true">
-              <span className="bubble b1" /><span className="bubble b2" /><span className="bubble b3" /><span className="bubble b4" />
-              <span className="hero-sticker">OH, FIN-TASTIC! <span>✦</span></span>
-              <img src={asset("sharklication-logo.png")} alt="" />
-            </div>
-          </section>
           <section className="stats-strip" aria-label="Your expedition progress">
             <div><span className="stat-icon amber" aria-hidden="true">☀</span><span><strong>{streak.current} day{streak.current === 1 ? "" : "s"}</strong><small>{streak.current && doneCount < 3 ? "Complete today to keep it going" : "Your daily streak"}</small></span></div>
             <div><span className="stat-icon turquoise" aria-hidden="true">★</span><span><strong>{doneCount} of 3 stars</strong><small>Today's expedition</small></span></div>
             <div><span className="stat-icon lavender" aria-hidden="true">♧</span><span><strong>{save.collection.length} shark{save.collection.length === 1 ? "" : "s"} found</strong><small>A growing ocean of friends</small></span></div>
           </section>
           <section className="expedition">
-            <div className="section-heading"><div><span className="eyebrow">A LITTLE EACH DAY GOES A LONG WAY</span><h2 id="expedition-heading" tabIndex={-1}>Today's expedition <span className="date-tag">{new Intl.DateTimeFormat("en", { day: "numeric", month: "short", timeZone: save.settings.homeTimezone }).format(now)}</span></h2></div><span className="stars" aria-label={`${doneCount} of 3 daily stars`}>{ACTIVITY_IDS.map((a) => <span key={a} className={today?.tasks[a]?.complete ? "earned" : ""}>★</span>)}</span></div>
-            <p className="section-intro">Pick an adventure. We'll choose the questions for you. Finish all three to discover a shark, then try extra practice. Every solved puzzle grows that adventure's reef!</p>
+            <div className="section-heading"><div><span className="eyebrow">{save.profile.name.toUpperCase()}'S DAILY CHALLENGE</span><h1 className="home-heading" ref={heading} id="expedition-heading" tabIndex={-1}>Today's expedition <span className="date-tag">{new Intl.DateTimeFormat("en", { day: "numeric", month: "short", timeZone: save.settings.homeTimezone }).format(now)}</span></h1></div><span className="stars" aria-label={`${doneCount} of 3 daily stars`}>{ACTIVITY_IDS.map((a) => <span key={a} className={today?.tasks[a]?.complete ? "earned" : ""}>★</span>)}</span></div>
+            <p className="section-intro">{doneCount === 3 ? "All three done! Your shark is saved. Do more of any activity to grow its ocean habitat." : "Gobfrey says: “Pick one, then tick off all three!” Finish today's checklist to discover a shark and unlock extra practice."}</p>
             <div className="activity-grid">{ACTIVITY_IDS.map((id, i) => {
               const info = ACTIVITY_INFO[id], task = today?.tasks[id];
-              return <button key={id} className={`activity-card ${id} ${task?.complete ? "complete" : ""}`} disabled={busy} onClick={() => void begin(id, !!task?.complete)}>
-                <div className="activity-art" aria-hidden="true"><span className="art-orbit" /><span className="art-emoji">{info.icon}</span><span className="art-spark">✦</span><span className="art-number">0{i + 1}</span></div>
-                <div className="activity-body"><span className="activity-tag">{info.tag}</span><h3>{info.title}</h3><p>{info.subtitle}</p><div className="activity-meta"><span>{task?.complete ? "✓ Daily star earned" : task ? `${task.index} of ${task.questions.length} resolved` : info.minutes}</span><span aria-hidden="true">{task?.complete ? "★" : "✧"}</span></div><span className="activity-action">{task?.complete ? "Try some extra practice" : task ? "Continue" : "Let's go"} <span aria-hidden="true">→</span></span></div>
-              </button>;
+              const waiting = !!task?.complete && doneCount < 3;
+              return <article key={id} className={`activity-card ${id} ${task?.complete ? "complete" : ""} ${waiting ? "waiting" : ""}`}>
+                <button className="activity-launch" disabled={busy || waiting} onClick={() => void begin(id, doneCount === 3)}>
+                  <div className="activity-art" aria-hidden="true"><span className="art-orbit" /><span className="art-emoji">{info.icon}</span><span className="art-spark">✦</span><span className="art-number">{task?.complete ? "✓" : `0${i + 1}`}</span></div>
+                  <div className="activity-body"><span className="activity-tag">{info.tag}</span><h2>{info.title}</h2><p>{info.subtitle}</p><div className="activity-meta"><span>{task?.complete ? "✓ Completed today" : task ? `${task.index} of ${task.questions.length} resolved` : info.minutes}</span><span aria-hidden="true">{task?.complete ? "★" : "✧"}</span></div><span className="activity-action">{waiting ? "Done! Finish the other activities" : doneCount === 3 ? "Do more to grow your habitat" : task ? "Continue" : "Let's go"} {!waiting && <span aria-hidden="true">→</span>}</span></div>
+                </button>
+                {doneCount === 3 && <div className="activity-habitat"><GrowingReef solved={solved[id]} activity={id} seed={reefSeed} /></div>}
+              </article>;
             })}</div>
-          </section>
-          <section className="daily-reefs" aria-labelledby="reefs-heading">
-            <div className="section-heading"><div><span className="eyebrow">A LITTLE WORLD YOU HELP GROW</span><h2 id="reefs-heading">Today's growing reefs</h2></div></div>
-            <p className="section-intro">Gobfrey says: “One solved puzzle, one new reef friend!” A different little ecosystem awaits each day. Helped answers count too. Every 12 friends starts another reef; your daily total keeps growing.</p>
-            <div className="reef-grid">{ACTIVITY_IDS.map((activity) => <section className="reef-panel" key={activity}><h3>{ACTIVITY_INFO[activity].title}</h3><GrowingReef solved={solved[activity]} activity={activity} seed={reefSeed} /></section>)}</div>
           </section>
           <section className="ocean-bottom">
             <div className="discovery-note"><span className="round-mystery" aria-hidden="true">{doneCount === 3 ? "✦" : "?"}</span><div><span className="eyebrow">JUST BEYOND THE REEF</span><h3>{doneCount === 3 ? "You made a discovery!" : "Someone new is waiting…"}</h3><p>{doneCount === 3 ? "Today's treasure is safe in your album." : `${3 - doneCount} more ${3 - doneCount === 1 ? "adventure" : "adventures"} to meet your next ocean friend.`}</p><button className="text-button" onClick={() => doneCount === 3 ? go("celebrate") : go("collection")}>{doneCount === 3 ? "See today's discovery" : "Peek at my shark album"} →</button></div></div>
@@ -335,7 +324,7 @@ function Play({ run, activity, extra, busy, hasError, solved, reefSeed, onHint, 
     (id) => { void onNext(id); });
   useEffect(() => { setAnswer(""); setArrayMode(false); input.current?.focus({ preventScroll: true }); }, [q?.id]);
   useEffect(() => { if (run.complete) headingRef.current?.focus(); }, [run.complete, headingRef]);
-  if (run.complete) return <section className="section activity-finished"><span className="big-symbol" aria-hidden="true">★</span><h1 ref={headingRef} tabIndex={-1}>{ACTIVITY_INFO[activity].title} {extra ? "extra practice" : "complete"}!</h1><p>{extra ? "Those facts are part of your learning story. Your reef keeps growing!" : "Your daily star and all your progress are saved."}</p><GrowingReef solved={solved} activity={activity} seed={reefSeed} compact /><button className="button primary" onClick={onHome}>Back to my ocean →</button></section>;
+  if (run.complete) return <section className="section activity-finished"><span className="big-symbol" aria-hidden="true">★</span><h1 ref={headingRef} tabIndex={-1}>{ACTIVITY_INFO[activity].title} {extra ? "extra practice" : "complete"}!</h1><p>{extra ? "Those facts are part of your learning story. Your habitat keeps growing!" : "Tick! Your daily star is saved. Finish the other activities to unlock extra practice."}</p>{extra && <GrowingReef solved={solved} activity={activity} seed={reefSeed} compact />}<button className="button primary" onClick={onHome}>Back to my ocean →</button></section>;
   if (!q) return null;
   const nextAttempted = autoAttempted || manualAttempt === q.id;
   const total = q.a * q.b;
@@ -363,7 +352,7 @@ function Play({ run, activity, extra, busy, hasError, solved, reefSeed, onHint, 
         <div id="answer-feedback" role="status" aria-atomic="true" className={`feedback ${q.resolved ? "correct" : ""}`}>{q.resolved ? <><span className="success-star" aria-hidden="true">★</span><strong>{q.hinted || q.attempts > 1 ? "You worked it out!" : ["Fin-tastic thinking!", "You nailed it, explorer!", "That's a brilliant discovery!", "Whale done!", "You're making waves!"][run.index % 5]}</strong><span className="success-equation">{workedFor(q)}</span></> : q.attempts >= 2 ? "Gobfrey says: Let's build it together. Use the worked example below." : q.attempts ? "Not quite yet. Gobfrey has another way to try." : "Gobfrey says: Take your time. You've got room to think."}</div>
         {q.resolved && <div className="auto-next"><p>{busy ? "Saving your next step…" : hasError || nextAttempted ? "Your answer is safe. Retry Next discovery to save your next step." : autoPaused ? "Auto-next paused. Take all the time you need." : "Next question follows automatically after your celebration."}</p>{!nextAttempted && !hasError && <button type="button" className="text-button" disabled={busy} aria-pressed={autoPaused} onClick={() => setAutoPaused(!autoPaused)}>{autoPaused ? "Resume auto-next" : "Pause auto-next"}</button>}</div>}
       </form>
-    </div><aside className={`hint-card ${q.resolved ? "guide-cheering" : ""}`} aria-label="Gobfrey's encouragement and hints"><GobfreyPortrait teacher /><h3>{q.resolved ? "Gobfrey says: Whale done!" : "A little help from Gobfrey?"}</h3><p>{q.resolved ? "“You kept thinking, and you found it! Look, a new reef friend!”" : "“No rush, no timer. We can try a different way together.”"}</p>{q.hinted ? <div className="hint-content"><h4>{q.attempts >= 2 ? "Let's put it together" : "Try splitting it"}</h4><p>{q.attempts >= 2 ? workedFor(q) : hintFor(q)}</p>{q.attempts >= 2 && !q.resolved && <button className="button soft" disabled={busy} onClick={() => { setAnswer(String(total)); input.current?.focus(); }}>Build the answer: {total}</button>}<small>Helped answers count for your expedition, not independent recall.</small></div> : <button className="button soft" disabled={busy || q.resolved} onClick={() => void onHint()}>Show me a strategy ✧</button>}<div className="hint-bottom">Mistakes never cost you a shark.</div><GrowingReef solved={solved} activity={activity} seed={reefSeed} compact /></aside></div>
+    </div><aside className={`hint-card ${q.resolved ? "guide-cheering" : ""}`} aria-label="Gobfrey's encouragement and hints"><GobfreyPortrait teacher /><h3>{q.resolved ? "Gobfrey says: Whale done!" : "A little help from Gobfrey?"}</h3><p>{q.resolved ? extra ? "“You kept thinking, and you found it! Look, a new ocean friend!”" : "“You kept thinking, and you found it! One step closer to your daily star.”" : "“No rush, no timer. We can try a different way together.”"}</p>{q.hinted ? <div className="hint-content"><h4>{q.attempts >= 2 ? "Let's put it together" : "Try splitting it"}</h4><p>{q.attempts >= 2 ? workedFor(q) : hintFor(q)}</p>{q.attempts >= 2 && !q.resolved && <button className="button soft" disabled={busy} onClick={() => { setAnswer(String(total)); input.current?.focus(); }}>Build the answer: {total}</button>}<small>Helped answers count for your expedition, not independent recall.</small></div> : <button className="button soft" disabled={busy || q.resolved} onClick={() => void onHint()}>Show me a strategy ✧</button>}<div className="hint-bottom">Mistakes never cost you a shark.</div>{extra && <GrowingReef solved={solved} activity={activity} seed={reefSeed} compact />}</aside></div>
   </section>;
 }
 

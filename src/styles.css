@@ -88,27 +88,32 @@
 .auto-next{font-size:.78rem;color:#466b78;text-align:center}
 .auto-next p{margin:12px 0 0;line-height:1.6}
 .auto-next button{font-size:.78rem;min-height:44px}
-.daily-reefs{margin-top:36px}
-.reef-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
-.reef-panel{min-width:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px}
-.reef-panel h3{font-size:1.15rem;margin:0 0 14px}
+.expedition{margin-top:28px}
+.home-heading{font-size:clamp(1.6rem,3vw,2.3rem);margin:8px 0}
+.activity-card{display:flex;flex-direction:column;min-width:0}
+.activity-launch{display:block;width:100%;padding:0;background:transparent;border:0;border-radius:inherit;text-align:left;color:inherit;font:inherit}
+.activity-launch:disabled{opacity:1}
+.activity-launch:focus-visible{outline-offset:-5px}
+.activity-body h2{font-size:1.5rem;margin:0 0 12px}
+.activity-card.waiting:hover{transform:none;box-shadow:0 5px 0 #e6f0f0}
+.activity-card.waiting .activity-art{filter:saturate(.55)}
+.activity-card.waiting .activity-action{font-size:.75rem}
+.activity-habitat{padding:18px;margin-top:auto;border-top:1px solid var(--line)}
 .growing-reef{margin:0;min-width:0;width:100%}
 .growing-reef>svg{display:block;width:100%;height:auto;border-radius:16px}
 .growing-reef figcaption{display:flex;flex-direction:column;gap:5px;padding:12px 0 0;color:#245b69;text-align:center}
 .growing-reef figcaption strong{font-size:.95rem}.growing-reef figcaption span{font-size:.73rem;line-height:1.5}
-.growing-reef .reef-motion{display:block;font-size:.7rem;min-height:44px;margin:0 auto}
 .hint-card>.growing-reef{grid-column:1/-1;border-top:1px solid var(--line);margin-top:16px;padding-top:18px}
 .activity-finished>.growing-reef{max-width:380px;margin:22px auto}
 .reef-arrival{animation:reef-arrive .6s ease-out both}
 .reef-swimmer{animation:reef-swim var(--reef-float,4s) ease-in-out infinite;animation-delay:var(--reef-delay,0s)}
 .reef-tail{transform-box:fill-box;transform-origin:right center;animation:reef-tail 1.1s ease-in-out infinite alternate;animation-delay:var(--reef-delay,0s)}
 .reef-plant{transform-box:fill-box;transform-origin:bottom center;animation:reef-sway 5s ease-in-out infinite alternate;animation-delay:var(--reef-delay,0s)}
-.reef-still *{animation:none!important}
 @keyframes reef-arrive{from{opacity:0}to{opacity:1}}
 @keyframes reef-swim{0%,100%{transform:translate(0,0)}50%{transform:translate(7px,-4px)}}
 @keyframes reef-sway{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
 @keyframes reef-tail{from{transform:scaleX(.8)}to{transform:scaleX(1.08)}}
-@media(max-width:760px){.reef-grid{gap:12px}.reef-panel{padding:12px}.reef-panel h3{font-size:.95rem}.nav-icon{width:26px;height:26px}}
-@media(max-width:520px){.reef-grid{grid-template-columns:1fr}.reef-panel{padding:18px}.reef-panel h3{font-size:1.15rem}.nav-icon{width:27px;height:27px}}
+@media(max-width:760px){.activity-body h2{font-size:1.17rem}.activity-action{font-size:.73rem}.activity-habitat{padding:12px}.nav-icon{width:26px;height:26px}}
+@media(max-width:520px){.activity-launch{display:grid;grid-template-columns:90px minmax(0,1fr)}.activity-body h2{font-size:1.35rem}.activity-habitat{padding:18px}.nav-icon{width:27px;height:27px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .reduce-motion *,.reduce-motion *:before,.reduce-motion *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}

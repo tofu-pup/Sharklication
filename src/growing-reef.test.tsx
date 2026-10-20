@@ -1,9 +1,10 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
-import { GrowingReef, reefGrowth, reefRandom } from "./growing-reef";
+import { afterEach, describe, expect, it } from "vitest";
+import { BIOTOPES, GrowingReef, reefGrowth, reefRandom } from "./growing-reef";
 
 describe("growing ecosystems", () => {
+  afterEach(cleanup);
   it("starts fresh, keeps a completed reef visible and grows more reefs without limiting the daily total", () => {
     expect(reefGrowth(0)).toEqual({ reef: 1, friends: 0 });
     expect(reefGrowth(1)).toEqual({ reef: 1, friends: 1 });
@@ -39,12 +40,29 @@ describe("growing ecosystems", () => {
     expect(renderToStaticMarkup(<GrowingReef {...props} seed="2026-10-21" />)).not.toBe(markup);
     expect((markup.match(/data-resident=/g) ?? []).length).toBe(12);
   });
-  it("labels the illustration and offers a simple motion pause", () => {
+  it("labels the biotope without extra motion controls", () => {
     render(<GrowingReef seed="2026-10-20" activity="feeding" solved={12} />);
     expect(screen.getByRole("figure")).toHaveAccessibleName(/Feeding Time: 12 puzzles solved today/);
-    expect(screen.getByRole("img")).toHaveAccessibleName(/Illustrated growing reef/);
-    fireEvent.click(screen.getByRole("button", { name: "Pause reef motion" }));
-    expect(screen.getByRole("button", { name: "Resume reef motion" })).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("figure")).toHaveClass("reef-still");
+    expect(screen.getByRole("img")).toHaveAccessibleName(/Illustrated seagrass meadow/);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+  it("uses distinct plants, scenery and visitors for each ocean biotope", () => {
+    const scenes = (["reef", "feeding", "dive"] as const).map((activity) => {
+      const { container, unmount } = render(<GrowingReef seed="same-day" activity={activity} solved={12} />);
+      expect(screen.getByRole("img")).toHaveAccessibleName(new RegExp(BIOTOPES[activity].name, "i"));
+      expect(screen.getByText(BIOTOPES[activity].name)).toBeInTheDocument();
+      expect(container.querySelectorAll("[data-resident]")).toHaveLength(12);
+      const flora = { reef: "coral", feeding: "seagrass", dive: "kelp" }[activity];
+      expect(container.querySelectorAll(`.habitat-${flora}`).length).toBeGreaterThan(3);
+      for (const other of ["coral", "seagrass", "kelp"].filter((kind) => kind !== flora)) {
+        expect(container.querySelector(`.habitat-${other}`)).toBeNull();
+      }
+      expect(container.querySelector(".habitat-turtle") !== null).toBe(activity === "feeding");
+      expect(container.querySelector(".habitat-jellyfish") !== null).toBe(activity === "dive");
+      const markup = container.innerHTML;
+      unmount();
+      return markup;
+    });
+    expect(new Set(scenes).size).toBe(3);
   });
 });

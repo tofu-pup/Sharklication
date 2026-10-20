@@ -19,11 +19,11 @@ async function welcome(page: Page) {
   await page.goto("./");
   await expect(page.getByText(/I'm Gobfrey, your whale-shark guide/)).toBeVisible();
   await page.getByRole("button", { name: /Let's explore/ }).click();
-  await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Today's expedition/, level: 1 })).toBeVisible();
 }
 async function begin(page: Page, name: string) {
   const card = page.locator(".activity-card").filter({ has: page.getByRole("heading", { name, exact: true }) });
-  await card.click();
+  await card.getByRole("button").click();
   await expect(page.locator("#answer")).toBeVisible();
 }
 async function solveCurrent(page: Page, activity: ActivityId) {
@@ -42,6 +42,12 @@ async function finish(page: Page, activity: ActivityId, name: string) {
   await begin(page, name);
   for (let i = 0; i < (activity === "reef" ? 6 : activity === "feeding" ? 3 : 10); i++) await solveCurrent(page, activity);
 }
+async function finishDay(page: Page) {
+  for (const activity of ["feeding", "reef", "dive"] as const) {
+    await finish(page, activity, { feeding: "Feeding Time", reef: "Reef Trail", dive: "Discovery Dive" }[activity]);
+    await page.getByRole("button", { name: /^Back to my ocean/ }).click();
+  }
+}
 test("complete all activities in a chosen order, reload mid-task, and issue one durable reward", async ({ page }) => {
   test.slow();
   await welcome(page);
@@ -51,7 +57,7 @@ test("complete all activities in a chosen order, reload mid-task, and issue one 
   await begin(page, "Reef Trail");
   await solveCurrent(page, "reef");
   await page.reload();
-  await page.getByRole("button", { name: /Continue my expedition/ }).click();
+  await begin(page, "Reef Trail");
   await expect(page.locator(".question-counter")).toContainText("2 / 6");
   for (let i = 0; i < 5; i++) await solveCurrent(page, "reef");
   await page.getByRole("button", { name: /Back to my ocean/ }).click();
@@ -61,7 +67,7 @@ test("complete all activities in a chosen order, reload mid-task, and issue one 
   expect((await saved(page)).collection).toHaveLength(1);
   await page.reload();
   await expect(page.getByText("3 of 3 stars")).toBeVisible();
-  const swimmer = page.locator(".reef-panel .reef-swimmer").first();
+  const swimmer = page.locator(".activity-habitat .reef-swimmer").first();
   await page.emulateMedia({ reducedMotion: "no-preference" });
   expect(await swimmer.evaluate((el) => getComputedStyle(el).animationName)).toBe("reef-swim");
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -118,7 +124,7 @@ test("production subpath works offline, including photographs, progress and stan
   expect(manifest.scope).toBe("/Sharklication/");
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Today's expedition/, level: 1 })).toBeVisible();
   await finish(page, "reef", "Reef Trail");
   await page.getByRole("button", { name: /Back to my ocean/ }).click();
   await finish(page, "feeding", "Feeding Time");
@@ -213,22 +219,47 @@ test("correct answers celebrate once without blocking the next question; system 
   await expect(page.getByLabel("Reduce motion (system preference is also respected)")).toBeChecked();
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.getByRole("button", { name: /My ocean/ }).click();
-  expect(await page.locator(".hero-ocean>img").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  await expect(page.locator(".hero")).toHaveCount(0);
   await page.reload();
   expect(await page.locator("main").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
 });
 
-test("a completed expedition card opens more of the same activity with no daily reward changes", async ({ page }) => {
+test("completed cards wait for all three stars, then unlock same-type extra practice without more rewards", async ({ page }) => {
   test.slow();
   await welcome(page);
   for (const activity of ["feeding", "reef", "dive"] as ActivityId[]) {
     const title = { reef: "Reef Trail", feeding: "Feeding Time", dive: "Discovery Dive" }[activity];
     await finish(page, activity, title);
     await page.getByRole("button", { name: /^Back to my ocean/ }).click();
+    const done = Object.values((await saved(page)).days)[0].tasks;
+    const allDone = ["feeding", "reef", "dive"].every((id) => done[id as ActivityId]?.complete);
+    const card = page.locator(`.activity-card.${activity}`);
+    await expect(card).toContainText("Completed today");
+    if (!allDone) {
+      await expect(card.getByRole("button")).toBeDisabled();
+      await expect(card).toContainText("Finish the other activities");
+      await expect(page.locator(".growing-reef")).toHaveCount(0);
+      await expect(page.getByText("Do more to grow your habitat", { exact: true })).toHaveCount(0);
+      await page.reload();
+      await expect(card.getByRole("button")).toBeDisabled();
+      expect((await saved(page)).extra).toBeUndefined();
+    }
+  }
+  await expect(page.locator(".activity-card")).toHaveCount(3);
+  await expect(page.locator(".activity-habitat")).toHaveCount(3);
+  await expect(page.locator(".daily-reefs, .reef-panel, .hero")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /Pause reef motion|Resume reef motion/ })).toHaveCount(0);
+  for (const viewport of [{ width: 375, height: 812 }, { width: 768, height: 1024 }, { width: 1180, height: 820 }]) {
+    await page.setViewportSize(viewport);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: test.info().outputPath(`inline-habitats-${viewport.width}.png`), fullPage: true });
+  }
+  for (const activity of ["feeding", "reef", "dive"] as ActivityId[]) {
+    const title = { reef: "Reef Trail", feeding: "Feeding Time", dive: "Discovery Dive" }[activity];
     const before = await saved(page);
     const card = page.locator(`.activity-card.${activity}`);
-    await expect(card).toContainText("Try some extra practice");
-    await card.click();
+    await expect(card).toContainText("Do more to grow your habitat");
+    await card.getByRole("button").click();
     await expect(page.getByRole("heading", { name: new RegExp(title), level: 1 })).toBeVisible();
     await expect(page.getByRole("button", { name: "Check my answer" })).toBeVisible();
     let extra = (await saved(page)).extra!;
@@ -241,7 +272,7 @@ test("a completed expedition card opens more of the same activity with no daily 
     await expect.poll(async () => (await saved(page)).extra!.run.index).toBe(1);
     extra = (await saved(page)).extra!;
     await page.reload();
-    await card.click();
+    await card.getByRole("button").click();
     await expect(page.locator(".question-counter")).toContainText(`2 / ${extra.run.questions.length}`);
     const after = await saved(page);
     expect(after.extra?.run.id).toBe(extra.run.id);
@@ -252,11 +283,11 @@ test("a completed expedition card opens more of the same activity with no daily 
 });
 
 test("Feeding Time keeps countable cartoon sharks and fish up to twelve by twelve without a separate practice menu", async ({ page }) => {
+  test.slow();
   await welcome(page);
   await expect(page.getByRole("button", { name: /Free swim/ })).toHaveCount(0);
   await expect(page.getByText("Pick a times table")).toHaveCount(0);
-  await finish(page, "feeding", "Feeding Time");
-  await page.getByRole("button", { name: /Back to my ocean/ }).click();
+  await finishDay(page);
   const base = await saved(page);
   base.settings.enabledTables = [12]; base.settings.autoUnlock = false;
   const date = new Intl.DateTimeFormat("sv-SE", { timeZone: base.settings.homeTimezone }).format(new Date());
@@ -275,7 +306,7 @@ test("Feeding Time keeps countable cartoon sharks and fish up to twelve by twelv
   await page.getByRole("button", { name: "Confirm replacement" }).click();
   await expect(page.getByLabel("Explorer name")).toHaveValue("Lily");
   await page.getByRole("button", { name: /My ocean/ }).click();
-  await page.locator(".activity-card.feeding").click();
+  await page.locator(".activity-card.feeding").getByRole("button").click();
   await expect(page.locator(".feeding-shark")).toHaveCount(12);
   await expect(page.locator(".feeding-fish")).toHaveCount(144);
   await expect(page.getByRole("img", { name: /12 cartoon sharks, each with 12 fish/ })).toBeVisible();
@@ -294,7 +325,7 @@ test("Feeding Time keeps countable cartoon sharks and fish up to twelve by twelv
   await expect(logo.locator("img")).toHaveAttribute("src", /sharklication-header\.webp$/);
   expect(await logo.locator("img").evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
   await logo.click();
-  await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Today's expedition/, level: 1 })).toBeVisible();
 });
 
 test("auto-next can pause, cancels on navigation, resumes saved feedback and exposes failed advances", async ({ page }) => {
@@ -337,20 +368,20 @@ test("auto-next can pause, cancels on navigation, resumes saved feedback and exp
 });
 
 test("daily ecosystems grow with extra practice, persist through reload and change on a new day", async ({ page, context }) => {
+  test.slow();
   await welcome(page);
   await expect(page.locator(".site-header nav .nav-icon")).toHaveCount(2);
   await expect(page.locator(".sea-floor")).toHaveCount(0);
   await page.goto("#practice");
-  await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
-  await finish(page, "feeding", "Feeding Time");
-  await page.getByRole("button", { name: /Back to my ocean/ }).click();
-  const reef = page.locator(".reef-panel").filter({ has: page.getByRole("heading", { name: "Feeding Time", exact: true }) });
+  await expect(page.getByRole("heading", { name: /Today's expedition/, level: 1 })).toBeVisible();
+  await finishDay(page);
+  const reef = page.locator(".activity-card.feeding .activity-habitat");
   await expect(reef).toContainText("3 solved today");
   await expect(reef.locator("[data-resident]")).toHaveCount(3);
   const before = await reef.locator("svg").evaluate((el) => el.outerHTML);
   await page.reload();
   expect(await reef.locator("svg").evaluate((el) => el.outerHTML)).toBe(before);
-  await page.locator(".activity-card.feeding").click();
+  await page.locator(".activity-card.feeding").getByRole("button").click();
   const extra = (await saved(page)).extra!, q = extra.run.questions[0];
   await page.getByLabel("Your answer", { exact: true }).fill(String(q.a * q.b));
   await page.getByRole("button", { name: "Check my answer" }).click();
@@ -358,22 +389,25 @@ test("daily ecosystems grow with extra practice, persist through reload and chan
   await page.clock.fastForward(2000);
   await page.getByRole("button", { name: /Pause & return/ }).click();
   await expect(reef.locator("[data-resident]")).toHaveCount(4);
-  expect((await saved(page)).collection).toHaveLength(0);
+  expect((await saved(page)).collection).toHaveLength(1);
   await page.getByRole("button", { name: /Shark album/ }).click();
   await page.getByRole("button", { name: /My ocean/ }).click();
-  await reef.getByRole("button", { name: "Pause reef motion" }).click();
-  await expect(reef.locator("figure")).toHaveClass(/reef-still/);
+  await expect(page.getByRole("button", { name: /Pause reef motion/ })).toHaveCount(0);
+  await expect(page.locator(".biotope-reef")).toContainText("Coral reef");
+  await expect(page.locator(".biotope-feeding")).toContainText("Seagrass meadow");
+  await expect(page.locator(".biotope-dive")).toContainText("Kelp forest");
   await expect(page.getByText("Offline ready", { exact: true })).toBeVisible({ timeout: 30_000 });
   await context.setOffline(true);
-  await page.locator(".activity-card.feeding").click();
+  await page.locator(".activity-card.feeding").getByRole("button").click();
   const teacher = page.locator(".gobfrey-teacher");
   await expect.poll(() => teacher.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth === 640)).toBe(true);
   await page.getByRole("button", { name: /Pause & return/ }).click();
   await page.clock.setSystemTime(new Date(Date.now() + 24 * 60 * 60 * 1000));
   await page.reload();
-  await expect(reef).toContainText("0 solved today");
-  await expect(reef.locator("[data-resident]")).toHaveCount(0);
-  expect((await saved(page)).attempts.filter((a) => a.correct)).toHaveLength(4);
+  await expect(page.locator(".activity-habitat")).toHaveCount(0);
+  await expect(page.getByText("0 of 3 stars")).toBeVisible();
+  await expect(page.locator(".activity-card.feeding").getByRole("button")).toBeEnabled();
+  expect((await saved(page)).attempts.filter((a) => a.correct)).toHaveLength(20);
 });
 
 for (const viewport of [{ width: 375, height: 812 }, { width: 768, height: 1024 }, { width: 1180, height: 820 }]) {

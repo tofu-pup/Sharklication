@@ -58,7 +58,7 @@ test("real service-worker upgrades defer questions and settings, preserve progre
     await expect(page.getByLabel("Your answer", { exact: true })).toHaveValue("14");
     expect(loads).toBe(0);
     await Promise.all([page.waitForEvent("load"), page.getByRole("button", { name: /Pause & return/ }).click()]);
-    await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Today's expedition/, level: 1 })).toBeVisible();
     const after = await page.evaluate(async () => {
       const db = await new Promise<IDBDatabase>((done) => {
         const request = indexedDB.open("sharklication", 1);
@@ -81,10 +81,10 @@ test("real service-worker upgrades defer questions and settings, preserve progre
     await expect(page.getByLabel("Explorer name")).toHaveValue("Unsaved name");
     expect(loads).toBe(priorLoads);
     await Promise.all([page.waitForEvent("load"), page.getByRole("button", { name: /My ocean/ }).click()]);
-    await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Today's expedition/, level: 1 })).toBeVisible();
     version = 4;
     await Promise.all([page.waitForEvent("load"), page.evaluate(() => { window.dispatchEvent(new Event("online")); })]);
-    await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Today's expedition/, level: 1 })).toBeVisible();
     await page.getByRole("button", { name: "Open parent settings" }).click();
     await expect(page.getByLabel("Explorer name")).toHaveValue("Lily");
   } finally {
