@@ -1,0 +1,98 @@
+{
+  "continue": {
+    "iistart": "2008-08-03T00:11:35Z",
+    "continue": "||"
+  },
+  "query": {
+    "pages": {
+      "4490678": {
+        "pageid": 4490678,
+        "ns": 6,
+        "title": "File:Leopard shark in kelp.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Leopard_shark_in_kelp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Leopard_shark_in_kelp.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=4490678",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2009-02-05 05:53:53",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Leopard shark in kelp",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Chromis punctipinnis|Triakis semifasciata|GFDL|Birch Aquarium|License migration redundant|Selachimorpha in public aquariums|Self-published work|Featured pictures on Wikipedia, English|Commons featured widescreen desktop backgrounds|Featured pictures on Wikipedia, Turkish|Files with Assessments template missing SDC Commons no value quality assessment|Underwater photographs of kelp forests|Underwater photographs of sharks",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "A <a rel=\"mw:WikiLink/Interwiki\" href=\"https://en.wikipedia.org/wiki/Leopard%20shark\" title=\"en:Leopard shark\" class=\"extiw\">leopard shark</a> (<i>Triakis semifasciata</i>) and two <a rel=\"mw:WikiLink/Interwiki\" href=\"https://en.wikipedia.org/wiki/Chromis%20punctipinnis\" title=\"en:Chromis punctipinnis\" class=\"extiw\">blacksmith damselfish</a> (<i>Chromis punctipinnis</i>), swimming in a <a rel=\"mw:WikiLink/Interwiki\" href=\"https://en.wikipedia.org/wiki/Kelp%20forest\" title=\"en:Kelp forest\" class=\"extiw\">kelp forest</a> in the 70,000 gallon (approx. 265,000 litre) kelp tank at <a rel=\"mw:WikiLink/Interwiki\" href=\"https://en.wikipedia.org/wiki/Birch%20Aquarium\" title=\"en:Birch Aquarium\" class=\"extiw\">Scripps Aquarium</a> in <a rel=\"mw:WikiLink/Interwiki\" href=\"https://en.wikipedia.org/wiki/La%20Jolla,%20San%20Diego,%20California\" title=\"en:La Jolla, San Diego, California\" class=\"extiw\">La Jolla, California</a>, United States",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2008-07-27",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a rel=\"mw:WikiLink\" href=\"https://commons.wikimedia.org/wiki/User:Mfield\" title=\"User:Mfield\">Mfield</a>, Matthew Field, <a rel=\"mw:ExtLink nofollow\" href=\"http://www.photography.mattfield.com\" class=\"external text\">www.photography.mattfield.com</a>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY-SA 3.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution-Share Alike 3.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by-sa/3.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-sa-3.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

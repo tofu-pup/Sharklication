@@ -1,0 +1,108 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "155817557": {
+        "pageid": 155817557,
+        "ns": 6,
+        "title": "File:Blacktip reef shark (Carcharhinus melanopterus) Moorea.jpg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Blacktip_reef_shark_%28Carcharhinus_melanopterus%29_Moorea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Blacktip_reef_shark_(Carcharhinus_melanopterus)_Moorea.jpg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=155817557",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2024-11-26 10:14:45",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Blacktip reef shark (Carcharhinus melanopterus) Moorea",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Carcharhinus melanopterus|Featured pictures of French Polynesia|Photographs by Charlesjsharp|Fish of French Polynesia|Self-published work|Featured pictures on Wikipedia, English|Featured pictures by Charlesjsharp|Featured pictures on Wikipedia, Spanish|Files with coordinates missing SDC location of creation|Featured pictures by Charlesjsharp/French Polynesia|Featured pictures on English Wikipedia by Charlesjsharp|Underwater total internal reflection|Featured pictures of fish by Charlesjsharp|Featured pictures of Chondrichthyes",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "quality|featured",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "GPSLatitude": {
+                "value": "-17.490000",
+                "source": "commons-desc-page"
+              },
+              "GPSLongitude": {
+                "value": "-149.900000",
+                "source": "commons-desc-page"
+              },
+              "GPSMapDatum": {
+                "value": "WGS-84",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "Blacktip reef shark (<i>Carcharhinus melanopterus</i>), Moorea, French Polynesia",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2024-10-10 10:53:39",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>, from <a rel=\"nofollow\" class=\"external text\" href=\"https://www.sharpphotography.co.uk/\">Sharp Photography, sharpphotography.co.uk</a>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<bdi><a href=\"https://www.wikidata.org/wiki/Q54800218\" class=\"extiw\" title=\"d:Q54800218\"><span title=\"Scottish wildlife photographer\">Charles J. Sharp</span></a></bdi>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "CC BY-SA 4.0",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Creative Commons Attribution-Share Alike 4.0",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "true",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "LicenseUrl": {
+                "value": "https://creativecommons.org/licenses/by-sa/4.0",
+                "source": "commons-desc-page"
+              },
+              "Copyrighted": {
+                "value": "True",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "cc-by-sa-4.0",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

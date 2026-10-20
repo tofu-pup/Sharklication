@@ -1,0 +1,104 @@
+[
+  {
+    "id": "whale-shark", "name": "Whale shark", "scientificName": "Rhincodon typus", "kind": "real", "color": "#1395ac",
+    "habitat": "Tropical and warm-temperate open seas.",
+    "size": "Around 9 m at maturity; adults can grow much larger.",
+    "facts": ["The whale shark is the largest living fish.", "It filters food such as plankton from seawater.", "Its broad, flat head and pale spotted pattern make it distinctive."],
+    "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/whale-shark/"]
+  },
+  {
+    "id": "epaulette-shark", "name": "Epaulette shark", "scientificName": "Hemiscyllium ocellatum", "kind": "real", "color": "#b89b64",
+    "habitat": "Shallow coral reefs around northern Australia and New Guinea.",
+    "size": "Adults roughly 0.6–1 m; reported maximum about 1.07 m.",
+    "facts": ["It can use its fins to walk along the seabed.", "The large dark spot above each pectoral fin gives it its name.", "It searches reef flats and tide pools for small prey."],
+    "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/epaulette-shark/"]
+  },
+  {
+    "id": "blacktip-reef-shark", "name": "Blacktip reef shark", "scientificName": "Carcharhinus melanopterus", "kind": "real", "color": "#689fa6",
+    "habitat": "Shallow coral reefs and sand flats in the tropical Indo-Pacific.",
+    "size": "Adults roughly 1–1.6 m; some reach about 1.8 m.",
+    "facts": ["Its fins have striking black tips.", "It often stays close to familiar reef areas.", "It eats fish, crustaceans and other small sea animals."],
+    "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blacktip-reef-shark/"]
+  },
+  {
+    "id": "whitetip-reef-shark", "name": "Whitetip reef shark", "scientificName": "Triaenodon obesus", "kind": "real", "color": "#8eaaa5",
+    "habitat": "Coral reefs and reef caves in the Indo-Pacific and eastern tropical Pacific.",
+    "size": "Adults usually about 1–1.8 m; rarely larger.",
+    "facts": ["Its first dorsal fin and upper tail have white tips.", "It often rests in reef caves during the day and hunts at night.", "It can breathe while resting without swimming forward."],
+    "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/whitetip-reef-shark/"]
+  },
+  {
+    "id": "bonnethead", "name": "Bonnethead", "scientificName": "Sphyrna tiburo", "kind": "real", "color": "#9cbaa5",
+    "habitat": "Warm, shallow coastal bays and estuaries of the western Atlantic.",
+    "size": "Often about 1–1.2 m as an adult; maximum about 1.5 m.",
+    "facts": ["Its evenly rounded head looks like a shovel.", "It is a small member of the hammerhead family.", "Its back teeth help crush hard prey such as crabs."],
+    "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/bonnethead/"]
+  },
+  {
+    "id": "leopard-shark", "name": "Leopard shark", "scientificName": "Triakis semifasciata", "kind": "real", "color": "#939d93",
+    "habitat": "Sandy or muddy bays and estuaries of the eastern Pacific.",
+    "size": "Adults average about 1.2–1.5 m; larger individuals occur.",
+    "facts": ["Dark saddle-shaped marks decorate its back.", "It often swims in schools, sometimes with other shark species.", "It feeds on small fish and bottom-dwelling animals such as crabs."],
+    "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/leopard-shark/"]
+  },
+  {
+    "id": "coral-comet", "name": "Coral Comet", "kind": "fantasy", "color": "#ef8e81", "accent": "#ffdc94", "symbol": "✦",
+    "habitat": "The daydream reef", "size": "Three imaginary surfboards long",
+    "facts": ["Leaves a trail of tiny star-shaped bubbles.", "Collects coral-colored pebbles in groups of five."], "references": []
+  },
+  {
+    "id": "moonfin", "name": "Moonfin", "kind": "fantasy", "color": "#a79cdf", "accent": "#fff0b8", "symbol": "☾",
+    "habitat": "The moonlit make-believe trench", "size": "One moonbeam long",
+    "facts": ["A sleepy explorer with a glowing crescent fin.", "Counts constellations before going to sleep."], "references": []
+  },
+  {
+    "id": "bubble-buddy", "name": "Bubble Buddy", "kind": "fantasy", "color": "#55c6cb", "accent": "#b6f6ed", "symbol": "○",
+    "habitat": "Bubblegum lagoon", "size": "Six soap bubbles long",
+    "facts": ["Blows bubble rings that never quite pop.", "Keeps its treasures in perfectly equal groups."], "references": []
+  },
+  {
+    "id": "sunny-saw", "name": "Sunny Saw", "kind": "fantasy", "color": "#f1bc54", "accent": "#fff0af", "symbol": "☀",
+    "habitat": "The sunshine shallows", "size": "Two sunbeams long",
+    "facts": ["Its pretend saw-shaped nose cuts birthday cake, not fish.", "Invites every sea creature to its counting picnics."], "references": []
+  },
+  {
+    "id": "mint-mischief", "name": "Mint Mischief", "kind": "fantasy", "color": "#7dc4a3", "accent": "#e1f9a8", "symbol": "♧",
+    "habitat": "The peppermint kelp forest", "size": "Four mint leaves long",
+    "facts": ["Hides tiny treasure maps in the kelp.", "Always leaves a useful clue for a friend."], "references": []
+  },
+  {
+    "id": "star-skipper", "name": "Star Skipper", "kind": "fantasy", "color": "#848fd4", "accent": "#ffd98a", "symbol": "★",
+    "habitat": "The starlight sea", "size": "Nine shooting stars long",
+    "facts": ["Skips across the waves like a pebble.", "Loves making patterns with bright little stars."], "references": []
+  },
+  {
+    "id": "peach-pirate", "name": "Peach Pirate", "kind": "fantasy", "color": "#eca183", "accent": "#fce7c0", "symbol": "◇",
+    "habitat": "Peachy pirate cove", "size": "A treasure chest long",
+    "facts": ["Shares every imaginary treasure equally.", "Its pirate flag is really a very fancy napkin."], "references": []
+  },
+  {
+    "id": "cloud-cruiser", "name": "Cloud Cruiser", "kind": "fantasy", "color": "#91b9d5", "accent": "#ecf8ff", "symbol": "☁",
+    "habitat": "The upside-down sky ocean", "size": "One fluffy cloud long",
+    "facts": ["Swims through clouds in its dreams.", "Makes soft landing spots for tired explorers."], "references": []
+  },
+  {
+    "id": "jelly-jester", "name": "Jelly Jester", "kind": "fantasy", "color": "#d39bc6", "accent": "#ffe5a8", "symbol": "✧",
+    "habitat": "The giggling grotto", "size": "Seven jellybeans long",
+    "facts": ["Wears a hat made from a pretend jellyfish.", "Knows a different silly joke for every times table."], "references": []
+  },
+  {
+    "id": "kelp-knight", "name": "Kelp Knight", "kind": "fantasy", "color": "#6da6a0", "accent": "#e0dfa4", "symbol": "♢",
+    "habitat": "The secret seaweed castle", "size": "Two seaweed swords long",
+    "facts": ["Protects the smallest fish with a leafy shield.", "Practises brave deeds, never battles."], "references": []
+  },
+  {
+    "id": "rainbow-ripple", "name": "Rainbow Ripple", "kind": "fantasy", "color": "#bb9cdc", "accent": "#ffc6c0", "symbol": "⌁",
+    "habitat": "The rainbow tide pool", "size": "A whole rainbow long",
+    "facts": ["Its fins change color with every happy thought.", "Makes ripples in repeating patterns."], "references": []
+  },
+  {
+    "id": "disco-dorsal", "name": "Disco Dorsal", "kind": "fantasy", "color": "#68b7cb", "accent": "#fbc574", "symbol": "♫",
+    "habitat": "The underwater dance floor", "size": "Five dance steps long",
+    "facts": ["Has a glitter-ball fin and two left flippers.", "Always dances in groups of eight beats."], "references": []
+  }
+]
