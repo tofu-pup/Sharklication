@@ -33,6 +33,7 @@ async function solveCurrent(page: Page, activity: ActivityId) {
   await page.getByRole("button", { name: "Check my answer" }).click();
   await expect(page.getByRole("button", { name: /Next discovery/ })).toBeEnabled();
   await page.getByRole("button", { name: /Next discovery/ }).click();
+  await expect.poll(async () => (await saved(page)).days[date].tasks[activity]!.index).toBe(run.index + 1);
 }
 async function finish(page: Page, activity: ActivityId, name: string) {
   await begin(page, name);

@@ -11,7 +11,7 @@ import { storage } from "./storage";
 import { parseBackup } from "./validation";
 import { SharkArt } from "./shark-art";
 import { checkOfflineReady } from "./offline";
-import { canApplyUpdate, watchForUpdates } from "./updates";
+import { canApplyUpdate, watchForControllerChange, watchForUpdates } from "./updates";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 type Screen = "home" | "collection" | "practice" | "parents" | "credits" | "play" | "celebrate";
@@ -62,6 +62,12 @@ export function App() {
     onNeedReload() { setReloadPending(true); },
     onRegisterError(error) { setNotice(`Offline setup did not finish: ${errorMessage(error)}. Practice and saving still work online.`); },
   });
+  useEffect(() => {
+    if ("serviceWorker" in navigator) return watchForControllerChange(navigator.serviceWorker, () => {
+      setUpdateAvailable(true);
+      setReloadPending(true);
+    });
+  }, []);
   useEffect(() => {
     if (reloadPending && canApplyUpdate(screen, busy, !!save, error)) location.reload();
   }, [reloadPending, screen, busy, save, error]);

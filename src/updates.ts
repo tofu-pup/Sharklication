@@ -1,5 +1,16 @@
 export const UPDATE_INTERVAL = 5 * 60 * 1000;
 
+export function watchForControllerChange(container: EventTarget & { readonly controller: unknown }, onUpdate: () => void): () => void {
+  let previous = container.controller;
+  const changed = () => {
+    const next = container.controller;
+    if (previous && next && next !== previous) onUpdate();
+    previous = next;
+  };
+  container.addEventListener("controllerchange", changed);
+  return () => container.removeEventListener("controllerchange", changed);
+}
+
 // iOS suspends timers while backgrounded, so foreground/reconnect checks matter.
 export function watchForUpdates(registration: Pick<ServiceWorkerRegistration, "update">, onError: (error: unknown) => void): () => void {
   let checking = false;

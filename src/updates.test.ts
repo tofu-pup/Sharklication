@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { canApplyUpdate, UPDATE_INTERVAL, watchForUpdates } from "./updates";
+import { canApplyUpdate, UPDATE_INTERVAL, watchForControllerChange, watchForUpdates } from "./updates";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -9,6 +9,22 @@ beforeEach(() => {
 afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
 
 describe("safe automatic updates", () => {
+  it("observes actual controller replacement, ignoring first install and repeated events", () => {
+    class Controllers extends EventTarget { controller: object | null = null; }
+    const container = new Controllers(), onUpdate = vi.fn();
+    const stop = watchForControllerChange(container, onUpdate);
+    container.controller = {};
+    container.dispatchEvent(new Event("controllerchange"));
+    expect(onUpdate).not.toHaveBeenCalled();
+    container.controller = {};
+    container.dispatchEvent(new Event("controllerchange"));
+    container.dispatchEvent(new Event("controllerchange"));
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    stop();
+    container.controller = {};
+    container.dispatchEvent(new Event("controllerchange"));
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+  });
   it("only applies after loading and saving, away from questions or settings", () => {
     for (const screen of ["home", "collection", "practice", "credits", "celebrate"]) {
       expect(canApplyUpdate(screen, false, true, "")).toBe(true);

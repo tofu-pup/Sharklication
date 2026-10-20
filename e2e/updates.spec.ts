@@ -3,7 +3,7 @@ import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { extname, resolve, sep } from "node:path";
 
-test("real service-worker upgrades defer questions and settings, preserve progress, and apply on reconnect", async ({ browser }) => {
+test("real service-worker upgrades defer questions and settings, preserve progress, and apply on reconnect", async ({ page }) => {
   test.setTimeout(120_000);
   let version = 1;
   const dist = resolve("dist");
@@ -30,9 +30,7 @@ test("real service-worker upgrades defer questions and settings, preserve progre
   await new Promise<void>((done) => server.listen(0, "127.0.0.1", done));
   const address = server.address();
   if (!address || typeof address === "string") throw new Error("Test server failed to bind.");
-  const context = await browser.newContext();
   try {
-    const page = await context.newPage();
     await page.goto(`http://127.0.0.1:${address.port}/Sharklication/`);
     await page.getByRole("button", { name: /Let's explore/ }).click();
     await expect(page.getByText("Offline ready", { exact: true })).toBeVisible();
@@ -90,8 +88,9 @@ test("real service-worker upgrades defer questions and settings, preserve progre
     await page.getByRole("button", { name: "Open parent settings" }).click();
     await expect(page.getByLabel("Explorer name")).toHaveValue("Lily");
   } finally {
-    await context.close();
-    server.closeAllConnections();
-    await new Promise<void>((done, fail) => server.close((error) => error ? fail(error) : done()));
+    await new Promise<void>((done, fail) => {
+      server.close((error) => error ? fail(error) : done());
+      server.closeAllConnections();
+    });
   }
 });
