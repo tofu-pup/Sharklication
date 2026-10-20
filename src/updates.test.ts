@@ -26,7 +26,7 @@ describe("safe automatic updates", () => {
     expect(onUpdate).toHaveBeenCalledTimes(1);
   });
   it("only applies after loading and saving, away from questions or settings", () => {
-    for (const screen of ["home", "collection", "practice", "credits", "celebrate"]) {
+    for (const screen of ["home", "collection", "credits", "celebrate"]) {
       expect(canApplyUpdate(screen, false, true, "")).toBe(true);
       expect(canApplyUpdate(screen, true, true, "")).toBe(false);
       expect(canApplyUpdate(screen, false, false, "")).toBe(false);

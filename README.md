@@ -22,18 +22,21 @@ Open `http://localhost:4173/Sharklication/`. Development mode does not install a
 
 ## What works
 
-- Welcome, sanctuary, three daily activities, daily checklist, skippable discovery reveal, shark album/details, free swim, parent settings and learning summary.
+- Welcome, sanctuary, three daily activities, daily checklist, skippable discovery reveal, shark album/details, extra practice, parent settings and learning summary.
 - Reef Trail: six accurate missing-multiple sequences; Feeding Time: three equal-group puzzles with an alternate array view; Discovery Dive: ten primary mixed-recall questions with an in-app number pad.
-- Each daily adventure is a single tappable card. It starts/resumes that activity; after earning its daily star, tapping again opens extra practice of the same type. Free Swim has just the same three activity choices, with automatic adaptive question selection rather than weak/mixed/table menus. Focus tables remain in Parent port.
+- Each daily adventure is a single tappable card. It starts/resumes that activity; after earning its daily star, **Try some extra practice** opens more of that same type. There is no separate Free Swim screen or navigation item; old `#practice` links land on My ocean. Question selection is automatic; focus tables remain in Parent port. My ocean and Shark album use original illustrated navigation icons.
 - Feeding Time uses original cartoon SVG sharks and fish: exactly one shark per group and one fish per item, including the row/array view. The array scrolls sideways within its own panel on narrow screens so twelve fish remain recognisable without overflowing the page. The pictures illustrate equal-group maths, not real species or instructions to feed wildlife.
 - Gobfrey introduces the ocean, reassures players after mistakes, helps with strategies and celebrates effort and discoveries. The name was chosen by the owner, inspired by Gobfrey Whale Shark; no Jellycat artwork or affiliation is claimed. His illustrated portrait is distinct from the real whale-shark photograph in the collection.
+- Each activity has a daily solved counter and a growing illustrated ecosystem. Every distinct correctly resolved question adds a randomized fish, coral or other ocean friend; helped answers and delayed review questions count too. Mistakes and duplicate submissions do not. Daily and extra practice contribute together, without affecting mastery, stars, streak qualification or collectible rewards. Every 12 friends completes a reef; the next puzzle starts another, with an uncapped daily total. These are decorative cartoon ecosystems, not scientific species exhibits.
 - Wrong answers show relationship-based hints. After two misses, a worked equation and assisted reconstruction avoid an endless guessing loop. Up to three delayed corrections are inserted after two intervening questions when possible. Helped completion earns task progress, not independent success.
 - A shared saved daily pool uses a varied first-day starter mix, then introduces at most three new commutative fact pairs on later dates. This first-day exception was explicitly approved during playtesting and recorded in the PRD; it never marks starter facts as mastered. Available facts rotate before repeating and identical consecutive answers are avoided when possible. Both orientations retain separate assessment records. Selection initially weights due/weak, focus and familiar pools at 60/25/15, constrained by variety and redistributing empty pools. Initial focus is 2, 5 and 10. Parents can immediately enable any table from 1–12; automatic broadening is optional.
 - Recall reviews are scheduled 1, 3, 7 and 14 days after independent successes on distinct dates. Secure requires independent successful recall on three dates and the latest two assessed primary recall attempts independently correct. Mistakes/assistance in a primary recall assessment return the fact to Practising. Visual puzzle success never establishes recall.
 - Complete all three activities, in any order, to qualify a date and grant exactly one previously uncollected shark. Extra practice does not qualify a day or earn another daily shark. Once all sharks are found, completed days receive an Ocean Explorer celebration badge.
 - Versioned IndexedDB persistence saves every submitted answer, hint, checkpoint, settings change and reward. A task's completion and its reward are written in the same transaction. Duplicate submissions are guarded and another tab's revision cannot silently overwrite a newer save.
 - Production service-worker precaching supports offline daily practice, UI, logo, all starter photos and facts. Offline readiness is checked against actual cached resources. Online updates are checked on launch, foreground/reconnect and every five visible minutes, then applied automatically away from active questions and parent settings.
-- Gentle ocean motion, smooth screen/question entrances and touch feedback bring the app to life. Correct answers receive varied encouragement, a brief star-and-bubble burst and a cheering guide; activity stars and daily discoveries have reveal animations. Nothing forces a delay before continuing, mistakes have no punitive effects, sound remains optional, and system/Parent port reduced-motion preferences disable all animations and transitions.
+- Correct answers celebrate for about 1.8 seconds (3.6 seconds for supported answers), then advance automatically after the answer is saved. **Next discovery** can continue immediately; **Pause auto-next** allows unlimited reading time. Hidden/background pages do not advance; returning gives a fresh feedback interval. Navigation cancels pending progression. Failed advances show a save error and require explicit retry, not an automatic retry loop. Saved resolved questions resume safely, and stale timers cannot skip questions.
+- On tablets and larger screens, the question/pictures and answer controls sit in separate columns. The question area scrolls independently for large fish groups; on phones it occupies a consistent-height area above the controls. The input, keypad and submit button retain their positions through question changes and feedback, including supported/correct answers. Gobfrey's help and reef sit below on tablets and alongside on wide screens.
+- Gentle ocean motion, smooth screen/question entrances and touch feedback bring the app to life. Fish swim and plants sway in each growing reef, with a local pause control. Correct answers receive varied encouragement, a brief star-and-bubble burst and a cheering guide; activity stars and daily discoveries have reveal animations. Mistakes have no punitive effects, sound remains optional, and system/Parent port reduced-motion preferences disable all animations and transitions.
 
 ## Collection and photo rights
 
@@ -68,6 +71,8 @@ Preparing assets again downloads the allow-listed originals and regenerates opti
 
 The top-left home link uses the separately supplied transparent wordmark. Its source is preserved at `assets/header-logo-source.png`; `npm run logo` removes transparent outer margins and generates `public/sharklication-header.webp` at 1200 x 258 px (about 77 KiB), with no redesign. It is displayed smaller for a sharp, compact header and cached offline.
 
+The help sidebar uses the owner's supplied teacher Gobfrey (glasses and pencil). Its source is retained at `assets/gobfrey-teacher-source.png`; `npm run teacher` produces a transparent 640 x 338 px WebP (about 54 KiB), trimming empty margins without redesign. It is hosted locally, precached and included in offline readiness checks.
+
 ## iPad installation and offline use
 
 1. Visit the deployed HTTPS address in Safari.
@@ -100,7 +105,8 @@ Extra practice retains the same v1 record shape; its existing question activity 
 - Answers are credited on submission. Crossing midnight while playing returns to today's fresh checklist with a notice; the earlier partial checkpoint stays on its own date.
 - Offline clock changes cannot be reliably prevented without a server. Backward dates do not erase records or duplicate an already-issued date's reward; future dates do not extend today's streak.
 - The first discoveries are curated (whale shark, epaulette shark, then Coral Comet); remaining entries use a persisted shuffle.
-- Saved daily questions remain stable if parent focus settings change mid-day. New settings apply to new daily plans/free-swim runs.
+- Saved daily questions remain stable if parent focus settings change mid-day. New settings apply to new daily plans/extra-practice runs.
+- Reef totals are derived from the existing saved attempt log, deduplicated by question ID, so old progress and backups contribute without a schema change. Counts use the stored home-date key, not a new interpretation of the timestamp. Each home date, explorer creation timestamp, activity and reef number seeds a deterministic pseudorandom layout/order/palette: different daily ecosystems, stable residents across reloads and backup restore. A new day starts fresh reefs without deleting earlier attempts. Reefs are decorative and do not model predator/prey or ecological realism; completed earlier reefs are not browsable, but all solved puzzles remain in the daily total.
 - Parent port is intentionally lightweight, not a PIN/security boundary. No child account or personal-data transmission is implemented.
 - Use a single active tab for the smoothest experience. A conflicting write from another tab is refused with a reload instruction, not silently merged.
 - Independent accuracy reports unhinted first-attempt primary recall attempts with numerator/denominator. All other submissions are shown separately as supported/non-recall work. These heuristics are not validated educational assessment or proof of school-level mastery.
@@ -127,6 +133,7 @@ If the repository name or hosting path changes, update `base`, manifest `start_u
 | `src/validation.ts` | Versioned backup validation and migration boundary |
 | `src/storage.ts` | `ProgressStorage` interface with transactional IndexedDB implementation and optimistic revision checking |
 | `src/app.tsx`, `src/shark-art.tsx`, `src/styles.css` | Responsive screens, accessible number input and original fantasy art |
+| `src/growing-reef.tsx`, `src/nav-icon.tsx`, `src/use-auto-advance.ts` | Daily seeded ecosystems, illustrated navigation and cancellable feedback progression |
 | `src/offline.ts`, `src/updates.ts`, `vite.config.ts` | Cached-asset readiness, foreground/reconnect update checks, safe activation policy and PWA generation |
 | `scripts/` | Repeatable photo preparation, credit generation and asset validation |
 
@@ -142,7 +149,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-- Unit tests cover all 144 factor orientations for unambiguous missing multiples, valid strategy arithmetic, enabled-table selection, new-pair caps, weighted review, distinct-day Secure criteria, schedule intervals, assisted correction limits, free-swim isolation, reward exhaustion, duplicate submissions, calendar/DST/clock rules, and backup rejection/round trips.
+- Unit tests cover all 144 factor orientations for unambiguous missing multiples, valid strategy arithmetic, enabled-table selection, new-pair caps, weighted review, distinct-day Secure criteria, schedule intervals, assisted correction limits, extra-practice isolation, reward exhaustion, duplicate submissions, calendar/DST/clock rules, and backup rejection/round trips. Reef tests cover unique daily counts, assisted/review answers, seed stability/variation, growth boundaries and motion pause. Timer tests cover feedback duration, busy/pause states, stale callbacks, hidden pages, iOS page lifecycle, cleanup and no implicit retries.
 - Integration tests use fake IndexedDB for reload persistence, transaction/revision conflicts and failed-write preservation.
 - Playwright runs against the production build at the repository subpath. It covers the complete loop in a chosen order, mid-task reload, reward persistence/idempotency, hints/reconstruction, offline completion and a genuine local photo, manifest paths, restore confirmation, corrupt import protection, midnight behavior, reduced-motion settings, phone/iPad-size overflow checks and absence of remote runtime requests.
 - `build` also validates local image checksums, evidence/provenance metadata and output asset files.
@@ -150,7 +157,7 @@ npm run test:e2e
 ### Honest remaining scope
 
 - The PRD launch target is **40 real + 12 fantasy**. This build has **6 real + 12 fantasy**, so **34 real species still need curated content and licensed/identified photos**. Basking, megamouth, goblin, frilled, cookiecutter, zebra, angel and sawsharks are not yet included; do not advertise them as present.
-- There is no shell currency or decoration economy. Free swim is fully available without it, as permitted by the PRD.
+- There is no shell currency or decoration shop. The owner instead selected daily growing reefs; extra practice remains fully available without currency.
 - Feeding Time uses accessible equal groups and an array toggle, not a drag-and-drop puzzle or a complete progression curriculum. Fantasy illustrations have shared geometry; bespoke art remains a polish opportunity.
 - Browser tests use Chromium with iPad-sized/touch layouts, **not physical iPad Safari or standalone testing**. Actual Safari VoiceOver, touch keyboard/audio behavior, portrait/landscape installation, cold standalone relaunch, storage eviction/quota behavior and app-update transitions still need manual device checks. Passing Chromium does not establish these.
 - WCAG 2.2 AA is an aim, not a certification. Semantic controls, focus, keyboard input, minimum control sizes and motion preferences are implemented; a full manual accessibility/contrast review remains pending.

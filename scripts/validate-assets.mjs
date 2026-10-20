@@ -39,4 +39,7 @@ await access(new URL("dist/sharklication-logo.png", root));
 const header = await readFile(new URL("dist/sharklication-header.webp", root));
 const headerInfo = await sharp(header).metadata();
 assert.ok(headerInfo.width <= 1200 && headerInfo.hasAlpha && header.length < 200_000, "Header logo must stay compact and transparent");
+const teacher = await readFile(new URL("dist/gobfrey-teacher.webp", root));
+const teacherInfo = await sharp(teacher).metadata();
+assert.ok(teacherInfo.width <= 640 && teacherInfo.hasAlpha && teacher.length < 150_000, "Teacher Gobfrey must stay compact and transparent");
 console.log(`Validated ${manifest.length} local real-species photos, provenance, checksums, and built assets.`);

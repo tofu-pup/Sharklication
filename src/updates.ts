@@ -37,5 +37,5 @@ export function watchForUpdates(registration: Pick<ServiceWorkerRegistration, "u
   };
 }
 export function canApplyUpdate(screen: string, saving: boolean, saveLoaded: boolean, error: string): boolean {
-  return saveLoaded && !saving && !error && ["home", "collection", "practice", "credits", "celebrate"].includes(screen);
+  return saveLoaded && !saving && !error && ["home", "collection", "credits", "celebrate"].includes(screen);
 }

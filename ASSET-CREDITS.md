@@ -10,6 +10,8 @@ The Home Screen/PWA icon is a separate owner-supplied illustration (`assets/app-
 
 The transparent home-link wordmark was supplied by the owner (`assets/header-logo-source.png`) and resized to WebP after trimming transparent margins, without redesign. Gobfrey is the owner's chosen name for the illustrated whale-shark guide; no third-party toy artwork or affiliation is claimed. Feeding Time's cartoon sharks and fish are original SVG illustrations in `src/feeding-art.tsx`, not wildlife photographs.
 
+Teacher Gobfrey was supplied by the owner (`assets/gobfrey-teacher-source.png`). `npm run teacher` trims only transparent margins and resizes to a 640-pixel-wide WebP for offline help sidebars, without redesign. Owner-supplied use is assumed; original authorship/reuse terms were not independently established. The growing reef and navigation icons are original SVG illustrations in `src/growing-reef.tsx` and `src/nav-icon.tsx`, not photographs or accurate species identifications.
+
 ## Rhincodon typus
 
 - Local file: `public/sharks/whale-shark.webp` (1000 × 461)

@@ -10,6 +10,7 @@ export async function checkOfflineReady(): Promise<boolean> {
     new URL("index.html", base).href,
     new URL("sharklication-logo.png", base).href,
     new URL("sharklication-header.webp", base).href,
+    new URL("gobfrey-teacher.webp", base).href,
     ...CATALOG.flatMap((s) => s.photo ? [new URL(s.photo.localPath, base).href] : []),
     ...Array.from(document.querySelectorAll<HTMLScriptElement>("script[src]")).map((s) => s.src),
     ...Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')).map((s) => s.href),

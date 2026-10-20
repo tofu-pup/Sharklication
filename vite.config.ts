@@ -9,7 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: "prompt",
       injectRegister: null,
-      includeAssets: ["sharks/*", "icon-*.png", "apple-touch-icon*.png", "sharklication-logo.png", "sharklication-header.webp"],
+      includeAssets: ["sharks/*", "icon-*.png", "apple-touch-icon*.png", "sharklication-logo.png", "sharklication-header.webp", "gobfrey-teacher.webp"],
       manifest: {
         name: "Sharklication",
         short_name: "Sharklication",

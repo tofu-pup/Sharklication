@@ -298,10 +298,10 @@ export function submitAnswer(save: SaveEnvelope, date: string, activity: Activit
   }
   return next;
 }
-export function advance(save: SaveEnvelope, date: string, activity: ActivityId, now: Date, extra = false): SaveEnvelope {
+export function advance(save: SaveEnvelope, date: string, activity: ActivityId, now: Date, extra = false, questionId?: string): SaveEnvelope {
   const next = structuredClone(save);
   const run = getRun(next, date, activity, extra);
-  if (!run || run.complete || !currentQuestion(run)?.resolved) return save;
+  if (!run || run.complete || !currentQuestion(run)?.resolved || (questionId !== undefined && currentQuestion(run)?.id !== questionId)) return save;
   run.index++;
   if (run.index < run.questions.length) return next;
   run.complete = true;
@@ -328,6 +328,17 @@ export function summary(save: SaveEnvelope, today: string) {
   };
 }
 export function catalogEntry(id: string) { return CATALOG.find((s) => s.id === id); }
+
+export function solvedToday(save: SaveEnvelope, date: string): Record<ActivityId, number> {
+  const solved: Record<ActivityId, Set<string>> = { reef: new Set(), feeding: new Set(), dive: new Set() };
+  for (const attempt of save.attempts) {
+    if (attempt.date === date && attempt.correct) {
+      // Attempt IDs end in a retry number; one question grows the reef only once.
+      solved[attempt.activity].add(attempt.id.slice(0, attempt.id.lastIndexOf(":")));
+    }
+  }
+  return { reef: solved.reef.size, feeding: solved.feeding.size, dive: solved.dive.size };
+}
 
 export function upgradeSampling(save: SaveEnvelope): SaveEnvelope {
   if (save.samplingVersion === 2) return save;
