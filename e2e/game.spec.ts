@@ -1,6 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
 import type { ActivityId, SaveEnvelope } from "../src/domain";
-import { localDateKey, startExtra } from "../src/domain";
 
 async function saved(page: Page): Promise<SaveEnvelope> {
   return page.evaluate(async () => {
@@ -253,9 +252,17 @@ test("free swim is one tap per type and Feeding Time has countable cartoon shark
   }
   const base = await saved(page);
   base.settings.enabledTables = [12]; base.settings.autoUnlock = false;
-  const date = localDateKey(new Date(), base.settings.homeTimezone);
-  const imported = startExtra(base, date, "mixed", "twelve-feeding", () => .5, "feeding");
-  imported.extra!.run.questions.forEach((q) => { q.a = 12; q.b = 12; });
+  const date = new Intl.DateTimeFormat("sv-SE", { timeZone: base.settings.homeTimezone }).format(new Date());
+  const imported: SaveEnvelope = {
+    ...base,
+    extra: { date, run: {
+      id: "twelve-feeding", index: 0, complete: false, corrections: 0,
+      questions: Array.from({ length: 3 }, (_, i) => ({
+        id: `twelve-feeding-${i}`, activity: "feeding", a: 12, b: 12,
+        hinted: false, resolved: false, correction: false, attempts: 0,
+      })),
+    } },
+  };
   await page.getByRole("button", { name: "Open parent settings" }).click();
   await page.locator('input[type="file"]').setInputFiles({ name: "twelve.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(imported)) });
   await page.getByRole("button", { name: "Confirm replacement" }).click();
