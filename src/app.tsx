@@ -12,6 +12,7 @@ import { parseBackup } from "./validation";
 import { SharkArt } from "./shark-art";
 import { checkOfflineReady } from "./offline";
 import { canApplyUpdate, watchForControllerChange, watchForUpdates } from "./updates";
+import { FeedingGroups } from "./feeding-art";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 type Screen = "home" | "collection" | "practice" | "parents" | "credits" | "play" | "celebrate";
@@ -137,9 +138,13 @@ export function App() {
     history.replaceState(null, "", `#${target}`);
     setScreen(target);
   }
-  async function begin(activity: ActivityId, extra = false, mode: "weak" | "mixed" | number = "mixed") {
+  async function begin(activity: ActivityId, extra = false) {
     const today = localDateKey(new Date(), current.current!.settings.homeTimezone);
-    const result = await persist((s) => extra ? startExtra(s, today, mode, crypto.randomUUID()) : startActivity(s, today, activity, crypto.randomUUID()));
+    const result = await persist((s) => {
+      if (!extra) return startActivity(s, today, activity, crypto.randomUUID());
+      const paused = getRun(s, today, activity, true);
+      return paused && !paused.complete ? s : startExtra(s, today, "mixed", crypto.randomUUID(), Math.random, activity);
+    });
     if (result) {
       setActive({ activity, date: today, extra });
       setNow(new Date()); go("play");
@@ -179,7 +184,7 @@ export function App() {
   return <div className={`app ${reduceMotion ? "reduce-motion" : ""}`}>
     <a className="skip-link" href="#main" onClick={(event) => { event.preventDefault(); document.getElementById("main")?.focus(); }}>Skip to content</a>
     <header className="site-header">
-      <a href="#home" className="brand" onClick={(event) => { event.preventDefault(); go("home"); }} aria-label="Sharklication home"><span className="brand-fin" aria-hidden="true">◢</span> shark<span>lication</span><span className="brand-dot">✦</span></a>
+      <a href="#home" className="brand" onClick={(event) => { event.preventDefault(); go("home"); }} aria-label="Sharklication home"><img src={asset("sharklication-header.webp")} width="600" height="129" alt="Sharklication" /></a>
       <nav aria-label="Main navigation">
         <button className={screen === "home" || screen === "play" ? "nav-item active" : "nav-item"} onClick={() => go("home")}><span aria-hidden="true">⌂</span> My ocean</button>
         <button className={screen === "collection" ? "nav-item active" : "nav-item"} onClick={() => go("collection")}><span aria-hidden="true">▧</span> Shark album</button>
@@ -196,7 +201,7 @@ export function App() {
         <span className="eyebrow">YOUR UNDERWATER ADVENTURE STARTS HERE</span>
         <h1 ref={heading} tabIndex={-1}>Hey {save.profile.name},<br />there's an ocean waiting.</h1>
         <img src={asset("sharklication-logo.png")} alt="The approved Sharklication whale-shark mascot and colorful wordmark" />
-        <p>Meet curious sharks. Discover clever patterns. A little practice every day, at your own pace.</p>
+        <p>I'm Gobfrey, your whale-shark guide! Come meet curious sharks and discover clever patterns with me. We'll practise a little each day, at your own pace.</p>
         <p className="muted">No timer. No lost treasures. Just a whale of a good time.</p>
         <button className="button primary" disabled={busy} onClick={() => void persist((s) => ({ ...s, profile: { ...s.profile, welcomed: true } }))}>Let's explore <span aria-hidden="true">→</span></button>
       </section> : <>
@@ -205,7 +210,7 @@ export function App() {
             <div className="hero-copy">
               <span className="eyebrow"><span className="little-wave">≈</span> {save.profile.name.toUpperCase()}'S LITTLE CORNER OF THE OCEAN</span>
               <h1 ref={heading} tabIndex={-1}>Small steps.<br /><em>Big discoveries.</em></h1>
-              <p>Your reef is calling, {save.profile.name}. Ready for a little<br className="desktop-break" /> maths and a whole lot of shark?</p>
+              <p>Gobfrey here! Your reef is calling, {save.profile.name}.<br className="desktop-break" /> Let's discover something together.</p>
               <button className="button primary" disabled={busy} onClick={() => doneCount === 3 ? go("practice") : void begin(ACTIVITY_IDS.find((a) => !today?.tasks[a]?.complete)!)}>{doneCount === 3 ? "Go for a free swim" : doneCount > 0 || today ? "Continue my expedition" : "Start today's expedition"} <span aria-hidden="true">→</span></button>
               <span className="hero-caption">At your pace. About 5–8 minutes. A new friend awaits.</span>
             </div>
@@ -223,18 +228,18 @@ export function App() {
           </section>
           <section className="expedition">
             <div className="section-heading"><div><span className="eyebrow">A LITTLE EACH DAY GOES A LONG WAY</span><h2>Today's expedition <span className="date-tag">{new Intl.DateTimeFormat("en", { day: "numeric", month: "short", timeZone: save.settings.homeTimezone }).format(now)}</span></h2></div><span className="stars" aria-label={`${doneCount} of 3 daily stars`}>{ACTIVITY_IDS.map((a) => <span key={a} className={today?.tasks[a]?.complete ? "earned" : ""}>★</span>)}</span></div>
-            <p className="section-intro">Three little adventures. Any order you like. Finish all three to discover a shark.</p>
+            <p className="section-intro">Pick an adventure. We'll choose the questions for you. Finish all three to discover a shark; tap a completed adventure to do more of that kind.</p>
             <div className="activity-grid">{ACTIVITY_IDS.map((id, i) => {
               const info = ACTIVITY_INFO[id], task = today?.tasks[id];
-              return <article key={id} className={`activity-card ${id} ${task?.complete ? "complete" : ""}`}>
+              return <button key={id} className={`activity-card ${id} ${task?.complete ? "complete" : ""}`} disabled={busy} onClick={() => void begin(id, !!task?.complete)}>
                 <div className="activity-art" aria-hidden="true"><span className="art-orbit" /><span className="art-emoji">{info.icon}</span><span className="art-spark">✦</span><span className="art-number">0{i + 1}</span></div>
-                <div className="activity-body"><span className="activity-tag">{info.tag}</span><h3>{info.title}</h3><p>{info.subtitle}</p><div className="activity-meta"><span>{task?.complete ? "✓ Expedition complete" : task ? `${task.index} of ${task.questions.length} resolved` : info.minutes}</span><span aria-hidden="true">{task?.complete ? "★" : "✧"}</span></div><button className={`button ${task?.complete ? "soft" : "card-button"}`} disabled={busy} onClick={() => task?.complete ? go("practice") : void begin(id)}>{task?.complete ? "Try some extra practice" : task ? "Keep exploring" : "Let's go"} <span aria-hidden="true">→</span></button></div>
-              </article>;
+                <div className="activity-body"><span className="activity-tag">{info.tag}</span><h3>{info.title}</h3><p>{info.subtitle}</p><div className="activity-meta"><span>{task?.complete ? "✓ Daily star earned" : task ? `${task.index} of ${task.questions.length} resolved` : info.minutes}</span><span aria-hidden="true">{task?.complete ? "★" : "✧"}</span></div><span className="activity-action">{task?.complete ? "Do more" : task ? "Continue" : "Let's go"} <span aria-hidden="true">→</span></span></div>
+              </button>;
             })}</div>
           </section>
           <section className="ocean-bottom">
             <div className="discovery-note"><span className="round-mystery" aria-hidden="true">{doneCount === 3 ? "✦" : "?"}</span><div><span className="eyebrow">JUST BEYOND THE REEF</span><h3>{doneCount === 3 ? "You made a discovery!" : "Someone new is waiting…"}</h3><p>{doneCount === 3 ? "Today's treasure is safe in your album." : `${3 - doneCount} more ${3 - doneCount === 1 ? "adventure" : "adventures"} to meet your next ocean friend.`}</p><button className="text-button" onClick={() => doneCount === 3 ? go("celebrate") : go("collection")}>{doneCount === 3 ? "See today's discovery" : "Peek at my shark album"} →</button></div></div>
-            <div className="guide-note"><span aria-hidden="true">💬</span><blockquote>“A wrong answer is just<br />a new place to explore.”<cite>— Your whale-shark guide</cite></blockquote></div>
+            <div className="guide-note"><GobfreyPortrait /><blockquote>“A wrong answer is just<br />a new place to explore.”<cite>— Gobfrey, your whale-shark guide</cite></blockquote></div>
           </section>
           {save.collection.length > 0 && <section className="section"><div className="section-heading"><h2>At home in your ocean</h2><button className="text-button" onClick={() => go("collection")}>Meet everyone →</button></div><div className="sanctuary-friends">{save.collection.slice(-4).map((entry) => {
             const shark = catalogEntry(entry.sharkId)!;
@@ -256,22 +261,27 @@ export function App() {
           </>}
         </section>}
         {screen === "practice" && <section className="section practice">
-          <span className="eyebrow">NO STARS NEEDED. JUST CURIOSITY.</span><h1 ref={heading} tabIndex={-1}>Fancy a free swim?</h1><p className="section-intro">Extra practice, at your pace. It helps your learning, but doesn't change today's checklist or earn another shark.</p>
-          <div className="practice-grid"><button className="practice-card" disabled={busy} onClick={() => void begin("dive", true, "weak")}><span aria-hidden="true">🫧</span><h2>A little more practice</h2><p>Revisit facts that are ready for another go.</p><strong>Review my facts →</strong></button><button className="practice-card" disabled={busy} onClick={() => void begin("dive", true, "mixed")}><span aria-hidden="true">🌊</span><h2>A mixed adventure</h2><p>A gentle mix from your enabled tables.</p><strong>Take a dip →</strong></button></div>
-          {save.extra?.date === date && !save.extra.run.complete && <button className="button soft" onClick={() => { setActive({ activity: "dive", date, extra: true }); go("play"); }}>Resume my free swim →</button>}
-          <h2>Pick a times table</h2><div className="table-picker">{effectiveTables(save).map((table) => <button key={table} disabled={busy} onClick={() => void begin("dive", true, table)}>{table}×</button>)}</div>
+          <span className="eyebrow">NO STARS NEEDED. JUST CURIOSITY.</span><h1 ref={heading} tabIndex={-1}>Fancy a free swim?</h1><p className="section-intro">Choose the adventure you want more of. We'll pick questions from your tables and facts ready for review. Extra practice doesn't change your daily stars or earn another shark.</p>
+          <div className="practice-grid">{ACTIVITY_IDS.map((id) => {
+            const paused = getRun(save, date, id, true);
+            return <button key={id} className={`practice-card ${id}`} disabled={busy} onClick={() => void begin(id, true)}><span aria-hidden="true">{ACTIVITY_INFO[id].icon}</span><h2>{ACTIVITY_INFO[id].title}</h2><p>{ACTIVITY_INFO[id].subtitle}</p><strong>{paused && !paused.complete ? "Continue" : "Let's go"} →</strong></button>;
+          })}</div>
         </section>}
         {screen === "celebrate" && <section className="celebration section">
-          <span className="eyebrow">THREE STARS. ONE BRILLIANT EXPLORER.</span><div className="celebration-stars" aria-hidden="true">★ ★ ★</div><h1 ref={heading} tabIndex={-1}>Fin-tastic work, {save.profile.name}!</h1><p>You completed all three adventures. Your treasure is already saved.</p>
+          <span className="eyebrow">THREE STARS. ONE BRILLIANT EXPLORER.</span><div className="celebration-stars" aria-hidden="true">★ ★ ★</div><h1 ref={heading} tabIndex={-1}>Fin-tastic work, {save.profile.name}!</h1><p>Gobfrey says: “You kept exploring and finished all three adventures! Let's meet your new ocean friend.” Your treasure is already saved.</p>
           {today?.rewardId && catalogEntry(today.rewardId) ? <div className="reward-reveal"><SharkImage shark={catalogEntry(today.rewardId)!} /><span className={`badge ${catalogEntry(today.rewardId)!.kind}`}>{catalogEntry(today.rewardId)!.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span><h2>{catalogEntry(today.rewardId)!.name}</h2><p>A new friend for your ocean.</p></div> : <div className="reward-reveal"><span className="big-symbol" aria-hidden="true">🏅</span><h2>Ocean Explorer badge</h2><p>Your collection is complete. Keep exploring for the joy of learning.</p></div>}
           <div className="button-row"><button className="button primary" onClick={() => go("collection")}>Open my album →</button><button className="button soft" onClick={() => go("home")}>Back to my ocean</button></div>
         </section>}
         {screen === "parents" && <Parents save={save} date={date} busy={busy} persist={persist} headingRef={heading} setError={setError} refreshOffline={refreshOffline} offline={offline} />}
-        {screen === "credits" && <section className="section credits"><span className="eyebrow">REAL SHARKS. REAL PHOTOGRAPHERS.</span><h1 ref={heading} tabIndex={-1}>Our ocean owes a thank-you.</h1><p>The mascot logo was supplied by the owner. Fantasy SVG illustrations are original artwork for Sharklication, not wildlife photographs.</p>{CATALOG.filter((s) => s.photo).map((s) => <article key={s.id}><h2>{s.name}</h2><Attribution shark={s} /><p>Species facts: <a href={s.references[0]} target="_blank" rel="noreferrer">Florida Museum species profile ↗</a></p></article>)}<p>Photos, credits and facts are included locally. External source links need an internet connection.</p></section>}
+        {screen === "credits" && <section className="section credits"><span className="eyebrow">REAL SHARKS. REAL PHOTOGRAPHERS.</span><h1 ref={heading} tabIndex={-1}>Our ocean owes a thank-you.</h1><p>Gobfrey is our illustrated whale-shark mascot and friendly guide, not a wildlife photograph or a collectible species. The mascot, header logo and Home Screen artwork were supplied by the owner. Fantasy SVG illustrations are original artwork for Sharklication, not wildlife photographs.</p>{CATALOG.filter((s) => s.photo).map((s) => <article key={s.id}><h2>{s.name}</h2><Attribution shark={s} /><p>Species facts: <a href={s.references[0]} target="_blank" rel="noreferrer">Florida Museum species profile ↗</a></p></article>)}<p>Photos, credits and facts are included locally. External source links need an internet connection.</p></section>}
       </>}
     </main>
     <footer><span><span aria-hidden="true">≈</span> Little practice. Lasting discoveries.</span><div><button onClick={() => go("credits")}>Photo credits</button><button onClick={() => go("parents")}>Grown-up stuff</button><span>Made for curious minds & big fins.</span></div></footer>
   </div>;
+}
+
+function GobfreyPortrait() {
+  return <img className="gobfrey-portrait" src={asset("icon-192.png")} width="192" height="192" alt="Gobfrey, your friendly illustrated whale-shark guide" />;
 }
 
 function SharkImage({ shark }: { shark: Shark }) {
@@ -300,7 +310,7 @@ function SharkDetail({ shark, back, headingRef }: { shark: Shark; back: () => vo
       <span className="eyebrow">{shark.kind === "real" ? "A CLOSER LOOK AT AN AMAZING ANIMAL" : "A STORY FROM OUR MAKE-BELIEVE OCEAN"}</span>
       <h2 id="meet-shark">Meet {shark.name}</h2>
       {shark.description.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-      <h2>{shark.kind === "real" ? "Did you know?" : "Imaginary curiosities"}</h2>
+      <h2>{shark.kind === "real" ? `${shark.facts.length} amazing facts` : `${shark.facts.length} imaginary curiosities`}</h2>
       <ul className="shark-facts">{shark.facts.map((fact, i) => <li key={fact}><span className="fact-number" aria-hidden="true">{i + 1}</span><p>{fact}</p></li>)}</ul>
       {shark.kind === "real" && <p className="wildlife-note">Wild sharks are best admired from a respectful distance. Never chase, touch or feed a wild shark.</p>}
       {shark.references.length > 0 && <div className="fact-sources"><h3>Explore the science</h3><p>Descriptions and facts are written for young explorers, using these species references. Source links need an internet connection.</p>{shark.references.map((reference) => <a key={reference} href={reference} target="_blank" rel="noreferrer">Florida Museum: {shark.name} ↗</a>)}</div>}
@@ -335,14 +345,14 @@ function Play({ run, activity, extra, busy, onHint, onSubmit, onNext, onHome, he
       {q.resolved && <div className="answer-burst" aria-hidden="true">{Array.from({ length: 10 }, (_, i) => <span key={i} style={{ "--particle": i } as React.CSSProperties}>{i % 3 === 0 ? "★" : "○"}</span>)}</div>}
       <h2 className={activity === "dive" ? "equation" : ""} aria-label={activity === "dive" ? `${q.a} times ${q.b} equals what?` : undefined}>{prompt}</h2>
       {activity === "reef" && <><div className="sequence" aria-label={sequenceFor(q).map((n) => n === null ? "missing number" : n).join(", ")}>{sequenceFor(q).map((n, i) => <span key={i} className={n === null ? "missing" : ""}>{n ?? "?"}</span>)}</div><p className="muted">Each jump adds {q.a}. The missing number is jump {q.b}.</p></>}
-      {activity === "feeding" && <><div className={`fish-groups ${arrayMode ? "array" : ""}`} aria-label={`${q.a} equal groups of ${q.b} fish`}>{Array.from({ length: q.a }, (_, row) => <div className="fish-group" key={row}><span className="group-label">{arrayMode ? `Row ${row + 1}` : `Shark ${row + 1}`}</span><div className="fish-row">{Array.from({ length: q.b }, (_, col) => <span key={col} aria-hidden="true">●</span>)}</div></div>)}</div><button className="text-button" aria-pressed={arrayMode} onClick={() => setArrayMode(!arrayMode)}>{arrayMode ? "Show equal groups" : "Line them up as an array"} ↔</button><p className="muted">{q.a} groups × {q.b} in each group. The same total as {q.b} × {q.a}.</p></>}
+      {activity === "feeding" && <><FeedingGroups sharks={q.a} fishEach={q.b} array={arrayMode} /><button className="text-button" aria-pressed={arrayMode} onClick={() => setArrayMode(!arrayMode)}>{arrayMode ? "Show equal groups" : "Line them up as an array"} ↔</button><p className="muted">{q.a} groups × {q.b} in each group. The same total as {q.b} × {q.a}.</p></>}
       <form onSubmit={(event) => { event.preventDefault(); void submit(); }}>
         <label htmlFor="answer">Your answer</label><input ref={input} id="answer" type="text" inputMode="none" autoComplete="off" pattern="[0-9]*" maxLength={3} value={q.resolved ? String(total) : answer} disabled={busy || q.resolved} onChange={(event) => setAnswer(event.target.value.replace(/\D/g, "").slice(0, 3))} aria-describedby="answer-feedback" />
-        <div id="answer-feedback" role="status" aria-atomic="true" className={`feedback ${q.resolved ? "correct" : ""}`}>{q.resolved ? <><span className="success-star" aria-hidden="true">★</span><strong>{q.hinted || q.attempts > 1 ? "You worked it out!" : ["Fin-tastic thinking!", "You nailed it, explorer!", "That's a brilliant discovery!", "Whale done!", "You're making waves!"][run.index % 5]}</strong><span className="success-equation">{workedFor(q)}</span></> : q.attempts >= 2 ? "Let's build it together. Use the worked example below." : q.attempts ? "Not quite yet. Let's look at it another way." : "Take your time. You've got room to think."}</div>
+        <div id="answer-feedback" role="status" aria-atomic="true" className={`feedback ${q.resolved ? "correct" : ""}`}>{q.resolved ? <><span className="success-star" aria-hidden="true">★</span><strong>{q.hinted || q.attempts > 1 ? "You worked it out!" : ["Fin-tastic thinking!", "You nailed it, explorer!", "That's a brilliant discovery!", "Whale done!", "You're making waves!"][run.index % 5]}</strong><span className="success-equation">{workedFor(q)}</span></> : q.attempts >= 2 ? "Gobfrey says: Let's build it together. Use the worked example below." : q.attempts ? "Not quite yet. Gobfrey has another way to try." : "Gobfrey says: Take your time. You've got room to think."}</div>
         {!q.resolved && <div className="number-pad" aria-label="Answer number pad">{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => <button key={n} type="button" disabled={busy} onClick={() => setAnswer((s) => (s + n).slice(0, 3))}>{n}</button>)}<button type="button" disabled={busy} onClick={() => setAnswer("")} aria-label="Clear answer">Clear</button><button type="button" disabled={busy} onClick={() => setAnswer((s) => (s + "0").slice(0, 3))}>0</button><button type="button" disabled={busy} onClick={() => setAnswer((s) => s.slice(0, -1))} aria-label="Delete last digit">⌫</button></div>}
         <button type="submit" className="button primary check-answer" disabled={busy || (!q.resolved && !answer)}>{busy ? "Saving…" : q.resolved ? "Next discovery →" : "Check my answer"}</button>
       </form>
-    </div><aside className={`hint-card ${q.resolved ? "guide-cheering" : ""}`}><SharkArt /><h3>{q.resolved ? "Look at you go, explorer!" : "A little help from a friend?"}</h3><p>{q.resolved ? "Another discovery for your learning journey. Onwards when you're ready!" : "No rush, no timer. Trying a new strategy is part of learning."}</p>{q.hinted ? <div className="hint-content"><h4>{q.attempts >= 2 ? "Let's put it together" : "Try splitting it"}</h4><p>{q.attempts >= 2 ? workedFor(q) : hintFor(q)}</p>{q.attempts >= 2 && !q.resolved && <button className="button soft" disabled={busy} onClick={() => { setAnswer(String(total)); input.current?.focus(); }}>Build the answer: {total}</button>}<small>Helped answers count for your expedition, not independent recall.</small></div> : <button className="button soft" disabled={busy || q.resolved} onClick={() => void onHint()}>Show me a strategy ✧</button>}<div className="hint-bottom">Mistakes never cost you a shark.</div></aside></div>
+    </div><aside className={`hint-card ${q.resolved ? "guide-cheering" : ""}`} aria-label="Gobfrey's encouragement and hints"><GobfreyPortrait /><h3>{q.resolved ? "Gobfrey says: Whale done!" : "A little help from Gobfrey?"}</h3><p>{q.resolved ? "“You kept thinking, and you found it! Onwards when you're ready.”" : "“No rush, no timer. We can try a different way together.”"}</p>{q.hinted ? <div className="hint-content"><h4>{q.attempts >= 2 ? "Let's put it together" : "Try splitting it"}</h4><p>{q.attempts >= 2 ? workedFor(q) : hintFor(q)}</p>{q.attempts >= 2 && !q.resolved && <button className="button soft" disabled={busy} onClick={() => { setAnswer(String(total)); input.current?.focus(); }}>Build the answer: {total}</button>}<small>Helped answers count for your expedition, not independent recall.</small></div> : <button className="button soft" disabled={busy || q.resolved} onClick={() => void onHint()}>Show me a strategy ✧</button>}<div className="hint-bottom">Mistakes never cost you a shark.</div></aside></div>
   </section>;
 }
 

@@ -181,6 +181,33 @@ describe("maths and adaptive selection", () => {
     expect(save.days).toEqual({});
     expect(validateBackup(save)).toEqual(save);
   });
+  it.each(ACTIVITY_IDS)("keeps extra %s practice typed, adaptive, resumable and separate from daily rewards", (activity) => {
+    let save = finish(initial(), "feeding");
+    const daily = structuredClone(save.days);
+    save = startExtra(save, date, "mixed", "typed-extra", seededRandom(4), activity);
+    expect(save.extra!.run.questions).toHaveLength(RULES[activity]);
+    expect(save.extra!.run.questions.every((q) => q.activity === activity && [2, 5, 10].includes(q.a))).toBe(true);
+    expect(getRun(save, date, ACTIVITY_IDS.find((id) => id !== activity)!, true)).toBeUndefined();
+    while (!save.extra!.run.complete) {
+      const q = currentQuestion(save.extra!.run)!;
+      save = submitAnswer(save, date, activity, q.id, q.a * q.b, time, true);
+      save = parseBackup(JSON.stringify(save));
+      save = advance(save, date, activity, time, true);
+    }
+    expect(save.days).toEqual(daily);
+    expect(save.collection).toHaveLength(0);
+    expect(save.attempts.slice(RULES.feeding).every((a) => a.activity === activity && a.independent === (activity === "dive"))).toBe(true);
+    expect(validateBackup(save)).toEqual(save);
+  });
+  it("prioritizes due facts automatically in extra practice of every type", () => {
+    const base = assessed(initial(), date, false);
+    base.settings.enabledTables = [7];
+    for (const activity of ACTIVITY_IDS) {
+      const save = startExtra(base, date, "mixed", activity, seededRandom(7), activity);
+      expect(save.extra!.run.questions.every((q) => q.a === 7 && q.activity === activity)).toBe(true);
+      expect(save.extra!.run.questions.some((q) => q.a === 7 && q.b === 8)).toBe(true);
+    }
+  });
   it("awards each shark once then badges without losing prior discoveries", () => {
     let save = initial();
     for (let d = 0; d < CATALOG.length + 2; d++) {
@@ -194,6 +221,28 @@ describe("maths and adaptive selection", () => {
   });
 });
 describe("backup validation and version boundaries", () => {
+  it("keeps a legacy extra dive checkpoint intact without adding a new save field", () => {
+    let legacy = startExtra(initial(), date, "mixed", "legacy-extra", seededRandom(2));
+    const q = currentQuestion(legacy.extra!.run)!;
+    legacy = submitAnswer(legacy, date, "dive", q.id, q.a * q.b, time, true);
+    legacy = advance(legacy, date, "dive", time, true);
+    expect(parseBackup(JSON.stringify(legacy))).toEqual(legacy);
+    expect(legacy.extra!.run.index).toBe(1);
+  });
+  it("rejects extra runs that mix activity types or have invalid lengths or corrections", () => {
+    const save = startExtra(initial(), date, "mixed", "extra", seededRandom(2), "feeding");
+    const mixed = structuredClone(save);
+    mixed.extra!.run.questions[1].activity = "dive";
+    expect(() => validateBackup(mixed)).toThrow();
+    const wrongSize = structuredClone(save);
+    wrongSize.extra!.run.questions.pop();
+    expect(() => validateBackup(wrongSize)).toThrow();
+    const corrected = structuredClone(save);
+    const q = corrected.extra!.run.questions[0];
+    corrected.extra!.run.questions.push({ ...q, id: `${q.id}-review`, correction: true });
+    corrected.extra!.run.corrections = 1;
+    expect(() => validateBackup(corrected)).toThrow();
+  });
   it("round trips a partially completed save and the released schema", () => {
     const save = finish(initial(), "feeding");
     expect(parseBackup(JSON.stringify(save))).toEqual(save);

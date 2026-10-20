@@ -42,6 +42,8 @@ First launch: welcome Lily, introduce the whale shark guide, offer an optional b
 
 Daily return: show three clearly labeled destinations, current completion, streak, next discovery, and a prominent Continue button. Resume unfinished work after closing the app. The child can choose activity order. Finishing one task fills one of three daily stars. Only finishing all three completes the day, advances the streak once, and grants the daily shark discovery. Provide a satisfying, skippable celebration.
 
+Owner-directed refinement: each destination is a single tappable card. An unfinished activity starts/resumes its daily set; a completed card opens more practice of that same activity type. Free Swim presents the same three types, automatically selecting suitable questions without a child-facing weak/mixed/table menu. Parent focus-table controls remain available.
+
 Wrong answers: keep tone neutral and encouraging; offer a useful hint and another attempt. Never remove sharks, points, or task progress. Completing corrections counts toward task completion; hinted answers do not count as independent recall.
 
 ## 6. Activities
@@ -67,6 +69,7 @@ Strategy hints should teach relationships, for example 7 × 8 = (5 × 8) + (2 ×
 - Label a fact Secure after independent correct recall in the mixed dive on at least 3 distinct days with the latest two assessed attempts independently correct. Errors move it back to Practising. Use child-friendly labels New / Practising / Secure and explain the heuristic in parent settings.
 - Do not infer mastery from speed alone. Response times can be retained locally for future tuning but are not required in v1.
 - Allow extra practice targeted to weak facts, any enabled table, or a mixed set. Do not allow a missed day or shark reward to alter maths assessment.
+- The child-facing extra-practice picker now asks only for activity type, per owner feedback. Adaptation chooses review/focus questions automatically; parents configure enabled tables.
 
 Parent summary: show coverage by table, facts needing review, independent first-attempt accuracy with sample counts, and completed practice days. Distinguish assisted completion from independent answers. No claims that an app score proves school-level mastery.
 
@@ -91,6 +94,8 @@ Target launch collection: 40 real species and 12 clearly imaginary sharks. This 
 
 Real species cards MUST use genuine, correctly identified photographs with suitable reuse rights. Never substitute AI-generated photorealistic sharks, drawings, or another species. Download permitted assets into the project rather than relying on hotlinks. Record photographer, source URL, license, attribution requirements, and verification source. Include common and scientific names, 2–3 short verified facts, habitat, and approximate adult size with units and qualification. Do not invent facts to fill the catalog. Avoid conservation claims unless sourced and dated.
 
+Owner-directed content expansion: retain detailed child-friendly descriptions and provide substantially more learning material on every detail page. The current six real species each have 15 independently written sourced facts; each fantasy shark has eight explicitly imaginary curiosities, never presented as science.
+
 Fantasy cards MUST use illustrations with an explicit Fantasy badge and playful invented descriptions clearly separated from scientific facts. Real cards get a Real species badge. Visual distinction must work without relying on color alone. Cartoon mascots and the logo are allowed outside documentary species imagery.
 
 If a correctly licensed photograph is unavailable, keep that entry out of the unlockable pool; show an honest neutral placeholder only in a development catalog. Report missing assets and reduced launch counts. Never represent a placeholder build as meeting the full catalog target.
@@ -102,6 +107,8 @@ Optional extra practice earns a simple capped daily shell currency for sanctuary
 Quirky, joyful underwater expedition world suitable for a shark-savvy ten-year-old, not a toddler UI. Ocean turquoise and navy, coral and warm yellow accents; chunky readable headings; expressive guide; bubbles, seaweed, tiny unexpected creatures. Make the sanctuary feel inhabited, with restrained ambient movement. Maths screens are calmer and high contrast; answer controls remain visually dominant.
 
 The approved direction uses a cartoon whale shark logo: rounded broad head and distinctive pale spots, not a hammerhead. Supplied logo asset is separate from this document; request it if absent. Do not fabricate an approval of a replacement. A text wordmark is an acceptable temporary implementation asset, clearly disclosed.
+
+The game's whale-shark mascot is **Gobfrey**, the owner's chosen name inspired by Gobfrey Whale Shark. Use the owner-supplied illustrations, not third-party toy artwork. Gobfrey communicates as a warm, reassuring companion for children: introduce adventures, suggest strategies, welcome mistakes as learning and celebrate effort without pressure. He is an illustrated guide, separate from real-species collection photographs. The latest supplied transparent wordmark is the top-left home link. Feeding Time uses friendly original cartoon sharks and fish to make every equal group visually countable.
 
 Screens: welcome, sanctuary/daily checklist, each of 3 activities, daily celebration/reveal, collection grid, shark detail, extra practice selection, parent settings/summary. Support portrait and landscape iPads plus narrower phones and desktop. No hover-only interactions. Avoid long text during play. Use encouraging specific feedback and restrained sound, off by default, with persistent mute and reduced-motion options. Honor system reduced-motion settings.
 

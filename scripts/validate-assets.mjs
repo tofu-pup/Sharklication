@@ -11,10 +11,10 @@ for (const shark of content) {
   assert.ok(shark.name && shark.habitat && shark.size && shark.facts.length >= 2);
   assert.ok(shark.description.length >= 2 && shark.description.every((p) => p.length >= 80), `${shark.id} needs a detailed, readable description`);
   if (shark.kind === "real") {
-    assert.ok(shark.facts.length >= 5, `${shark.id} needs at least five sourced facts`);
+    assert.ok(shark.facts.length >= 15, `${shark.id} needs at least fifteen sourced facts`);
     assert.ok(shark.scientificName && shark.references.length);
     assert.ok(manifest.some((p) => p.sharkId === shark.id && p.scientificName === shark.scientificName), `Unlockable ${shark.id} lacks a matching photo/provenance`);
-  } else assert.ok(shark.symbol && shark.color && !shark.scientificName);
+  } else assert.ok(shark.symbol && shark.color && !shark.scientificName && shark.facts.length >= 8);
 }
 for (const asset of manifest) {
   for (const field of ["sharkId", "scientificName", "sourcePageUrl", "originalFileUrl", "creator", "creditLine", "licenseId", "licenseUrl", "rightsEvidence", "accessedDate", "modifications", "identificationReference", "sha256"]) assert.ok(asset[field], `${asset.sharkId} missing ${field}`);
@@ -36,4 +36,7 @@ for (const [name, size] of [["icon-192.png", 192], ["icon-512.png", 512], ["icon
   assert.ok(bytes.length < 180_000, `${name} should remain compact`);
 }
 await access(new URL("dist/sharklication-logo.png", root));
+const header = await readFile(new URL("dist/sharklication-header.webp", root));
+const headerInfo = await sharp(header).metadata();
+assert.ok(headerInfo.width <= 1200 && headerInfo.hasAlpha && header.length < 200_000, "Header logo must stay compact and transparent");
 console.log(`Validated ${manifest.length} local real-species photos, provenance, checksums, and built assets.`);

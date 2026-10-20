@@ -88,7 +88,12 @@ export function validateBackup(value: unknown): SaveEnvelope {
   for (const entry of save.collection) {
     if (!ids.has(entry.sharkId) || !save.rewardOrder.includes(entry.sharkId) || save.days[entry.rewardDate]?.rewardId !== entry.sharkId || !isDayComplete(save.days[entry.rewardDate])) fail();
   }
-  if (save.extra && (save.extra.run.questions.some((q) => q.activity !== "dive") || save.extra.run.questions.filter((q) => !q.correction).length !== 10)) fail();
+  if (save.extra) {
+    const run = save.extra.run, activity = run.questions[0].activity;
+    if (run.questions.some((q) => q.activity !== activity)
+      || run.questions.filter((q) => !q.correction).length !== RULES[activity]
+      || (activity !== "dive" && run.corrections !== 0)) fail();
+  }
   return save;
 }
 export function migrateSave(value: unknown): SaveEnvelope {

@@ -8,12 +8,14 @@ it("provides substantial offline stories and properly separated real-species fac
     expect(shark.description.length).toBeGreaterThanOrEqual(2);
     expect(shark.description.every((p) => p.length >= 80)).toBe(true);
     if (shark.kind === "real") {
-      expect(shark.facts.length).toBeGreaterThanOrEqual(5);
+      expect(shark.facts.length).toBeGreaterThanOrEqual(15);
       expect(shark.references[0]).toMatch(/^https:\/\/www\.floridamuseum\.ufl\.edu\//);
       expect(shark.photo?.scientificName).toBe(shark.scientificName);
     } else {
+      expect(shark.facts.length).toBeGreaterThanOrEqual(8);
       expect(shark.description.join(" ")).toMatch(/fantasy|imagina|make-believe/i);
       expect(shark.photo).toBeUndefined();
     }
+    expect(new Set(shark.facts).size).toBe(shark.facts.length);
   }
 });

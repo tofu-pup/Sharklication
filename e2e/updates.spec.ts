@@ -34,7 +34,7 @@ test("real service-worker upgrades defer questions and settings, preserve progre
     await page.goto(`http://127.0.0.1:${address.port}/Sharklication/`);
     await page.getByRole("button", { name: /Let's explore/ }).click();
     await expect(page.getByText("Offline ready", { exact: true })).toBeVisible();
-    await page.locator(".activity-card.dive").getByRole("button", { name: /Let's go/ }).click();
+    await page.locator(".activity-card.dive").click();
     await page.getByLabel("Your answer", { exact: true }).fill("14");
     const before = await page.evaluate(async () => {
       const db = await new Promise<IDBDatabase>((done, fail) => {

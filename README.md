@@ -1,6 +1,6 @@
 # Sharklication
 
-A local-first underwater multiplication game for Lily. Built with React, TypeScript and Vite, using the supplied whale-shark logo. No account, backend, ads, analytics, remote fonts or runtime photo hotlinks.
+A local-first underwater multiplication game for Lily, guided by **Gobfrey**, our friendly illustrated whale-shark mascot. Built with React, TypeScript and Vite, using the supplied whale-shark artwork. No account, backend, ads, analytics, remote fonts or runtime photo hotlinks.
 
 ## Run locally
 
@@ -24,6 +24,9 @@ Open `http://localhost:4173/Sharklication/`. Development mode does not install a
 
 - Welcome, sanctuary, three daily activities, daily checklist, skippable discovery reveal, shark album/details, free swim, parent settings and learning summary.
 - Reef Trail: six accurate missing-multiple sequences; Feeding Time: three equal-group puzzles with an alternate array view; Discovery Dive: ten primary mixed-recall questions with an in-app number pad.
+- Each daily adventure is a single tappable card. It starts/resumes that activity; after earning its daily star, tapping again opens extra practice of the same type. Free Swim has just the same three activity choices, with automatic adaptive question selection rather than weak/mixed/table menus. Focus tables remain in Parent port.
+- Feeding Time uses original cartoon SVG sharks and fish: exactly one shark per group and one fish per item, including the row/array view. The array scrolls sideways within its own panel on narrow screens so twelve fish remain recognisable without overflowing the page. The pictures illustrate equal-group maths, not real species or instructions to feed wildlife.
+- Gobfrey introduces the ocean, reassures players after mistakes, helps with strategies and celebrates effort and discoveries. The name was chosen by the owner, inspired by Gobfrey Whale Shark; no Jellycat artwork or affiliation is claimed. His illustrated portrait is distinct from the real whale-shark photograph in the collection.
 - Wrong answers show relationship-based hints. After two misses, a worked equation and assisted reconstruction avoid an endless guessing loop. Up to three delayed corrections are inserted after two intervening questions when possible. Helped completion earns task progress, not independent success.
 - A shared saved daily pool uses a varied first-day starter mix, then introduces at most three new commutative fact pairs on later dates. This first-day exception was explicitly approved during playtesting and recorded in the PRD; it never marks starter facts as mastered. Available facts rotate before repeating and identical consecutive answers are avoided when possible. Both orientations retain separate assessment records. Selection initially weights due/weak, focus and familiar pools at 60/25/15, constrained by variety and redistributing empty pools. Initial focus is 2, 5 and 10. Parents can immediately enable any table from 1–12; automatic broadening is optional.
 - Recall reviews are scheduled 1, 3, 7 and 14 days after independent successes on distinct dates. Secure requires independent successful recall on three dates and the latest two assessed primary recall attempts independently correct. Mistakes/assistance in a primary recall assessment return the fact to Practising. Visual puzzle success never establishes recall.
@@ -38,9 +41,9 @@ Open `http://localhost:4173/Sharklication/`. Development mode does not install a
 
 Real species: whale shark (*Rhincodon typus*), epaulette shark (*Hemiscyllium ocellatum*), blacktip reef shark (*Carcharhinus melanopterus*), whitetip reef shark (*Triaenodon obesus*), bonnethead (*Sphyrna tiburo*) and leopard shark (*Triakis semifasciata*).
 
-Every real entry has a genuine local WebP photograph, scientific name, approximate size, habitat, two independently written description paragraphs, five interesting facts, a Florida Museum reference, and source-specific attribution/license links. Images and their license/species descriptions were reviewed by the coding agent, including visual comparison of diagnostic features. This is **not** a claim of a human taxonomist's certification. No AI wildlife images or substitutions are used.
+Every real entry has a genuine local WebP photograph, scientific name, approximate size, habitat, two independently written description paragraphs, **15 interesting facts**, a Florida Museum reference, and source-specific attribution/license links. The expanded facts cover identification, habitat, food, movement and young; the species profiles were consulted on 20 October 2026. Dated conservation ratings from those older profiles are not repeated as current facts. Images and their license/species descriptions were reviewed by the coding agent, including visual comparison of diagnostic features. This is **not** a claim of a human taxonomist's certification. No AI wildlife images or substitutions are used.
 
-All 12 fantasy entries use original SVG illustrations, explicit Fantasy badges, imaginary habitats/sizes, and playful invented descriptions rather than scientific claims. Fantasy art shares a cartoon silhouette with distinct colors and symbols. The owner-supplied logo is mascot art, not a species photograph; its original authorship/license has not been independently established.
+All 12 fantasy entries use original SVG illustrations, explicit Fantasy badges, imaginary habitats/sizes, two story paragraphs and **eight invented curiosities each**, rather than scientific claims. Fantasy art shares a cartoon silhouette with distinct colors and symbols. The owner-supplied logo is mascot art, not a species photograph; its original authorship/license has not been independently established.
 
 See [ASSET-CREDITS.md](ASSET-CREDITS.md), the in-app Credits screen and each unlocked shark's detail page. Photographs retain their individual Creative Commons licenses, including share-alike for these resized adaptations. This does not automatically relicense application code.
 
@@ -62,6 +65,8 @@ No assets are fetched from Wikimedia at game runtime. All display images are che
 5. Visually inspect the local resized output. Check file-specific rights/credits, identification and factual claims; exclude anything uncertain. Check in the photograph, manifest entry and raw Commons API evidence together. The script records file URL, creator, rights evidence, access date, modification notice, dimensions and SHA-256.
 
 Preparing assets again downloads the allow-listed originals and regenerates optimized files/icons; it is not required to run or deploy the game. Current photos total approximately 363 KiB; the supplied logo is about 1.44 MiB. The complete starter set is small enough to precache. As the catalog grows, switch to lazy per-unlocked-image caching before adding hundreds of photographs.
+
+The top-left home link uses the separately supplied transparent wordmark. Its source is preserved at `assets/header-logo-source.png`; `npm run logo` removes transparent outer margins and generates `public/sharklication-header.webp` at 1200 x 258 px (about 77 KiB), with no redesign. It is displayed smaller for a sharp, compact header and cached offline.
 
 ## iPad installation and offline use
 
@@ -85,6 +90,8 @@ In **Parent port**, export a versioned JSON backup. Keep it somewhere safe; brow
 To restore, choose a JSON file, review its player/shark/attempt counts, and explicitly confirm replacing current progress. The game does not silently merge two saves. Export the existing save first if it matters. Validation checks schema version, dates, timezone, numeric bounds, table settings, checkpoints, attempt IDs, correct arithmetic, catalog IDs, reward uniqueness and consistency before any replacement transaction. Invalid or unsupported imports leave existing progress untouched. Reset also requires explicit confirmation.
 
 The first released save schema is version 1. `migrateSave` preserves v1 data and appends newly introduced catalog IDs without disturbing the persisted discovery order. The sampling-version-2 migration repairs untouched questions from the first playtest build; answered, hinted, correction and completed questions, attempts, rewards and checkpoints are preserved. Unknown schema versions are rejected rather than guessed or reset. Future shape changes belong in explicit migrations there, with fixture tests; database upgrades belong in `storage.ts`. No pre-release scaffold save format is treated as a released migration contract.
+
+Extra practice retains the same v1 record shape; its existing question activity identifies Reef Trail, Feeding Time or Discovery Dive. Legacy dive checkpoints remain valid. A paused extra set resumes when the same type is selected, including after reload. As before, only one extra set is retained: selecting a different extra-practice type replaces that extra checkpoint, but preserves all submitted attempts and daily progress. Extra sets never earn daily stars or shark rewards; visual practice does not count as independent recall.
 
 ## Dates, streaks and assumptions
 

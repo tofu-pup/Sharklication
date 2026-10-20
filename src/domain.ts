@@ -197,11 +197,11 @@ export function rotateFacts(allowed: Fact[], count: number, random = Math.random
   return result;
 }
 
-export function makeRun(activity: ActivityId, plan: Fact[], id: string): TaskRun {
+export function makeRun(activity: ActivityId, plan: Fact[], id: string, offset = activity === "feeding" ? 6 : activity === "dive" ? 9 : 0): TaskRun {
   return {
     id, index: 0, complete: false, corrections: 0,
     questions: Array.from({ length: RULES[activity] }, (_, i) => ({
-      ...plan[(i + (activity === "feeding" ? 6 : activity === "dive" ? 9 : 0)) % plan.length], id: `${id}-${i}`, activity, correction: false,
+      ...plan[(i + offset) % plan.length], id: `${id}-${i}`, activity, correction: false,
       attempts: 0, hinted: false, resolved: false,
     })),
   };
@@ -212,7 +212,7 @@ export function startActivity(save: SaveEnvelope, date: string, activity: Activi
   next.days[date].tasks[activity] ??= makeRun(activity, next.days[date].plan, id);
   return next;
 }
-export function startExtra(save: SaveEnvelope, date: string, mode: "weak" | "mixed" | number, id: string, random = Math.random): SaveEnvelope {
+export function startExtra(save: SaveEnvelope, date: string, mode: "weak" | "mixed" | number, id: string, random = Math.random, activity: ActivityId = "dive"): SaveEnvelope {
   const next = structuredClone(save);
   const tables = typeof mode === "number" ? [mode] : effectiveTables(save);
   let plan = dailyPlan(save, date, tables, random);
@@ -223,7 +223,12 @@ export function startExtra(save: SaveEnvelope, date: string, mode: "weak" | "mix
       return { a, b };
     });
   }
-  next.extra = { date, run: makeRun("dive", plan, id) };
+  const reviewIndex = plan.findIndex((fact) => {
+    const progress = save.facts[factKey(fact)];
+    return progress && (progress.nextReview <= date || progress.state !== "Secure");
+  });
+  if (reviewIndex > 0) plan = [...plan.slice(reviewIndex), ...plan.slice(0, reviewIndex)];
+  next.extra = { date, run: makeRun(activity, plan, id, 0) };
   return next;
 }
 export function currentQuestion(run: TaskRun): Question | undefined { return run.questions[run.index]; }
@@ -261,7 +266,7 @@ function assess(save: SaveEnvelope, q: Question, attempt: Attempt) {
 }
 
 export function getRun(save: SaveEnvelope, date: string, activity: ActivityId, extra = false) {
-  return extra ? save.extra?.date === date ? save.extra.run : undefined : save.days[date]?.tasks[activity];
+  return extra ? save.extra?.date === date && save.extra.run.questions[0]?.activity === activity ? save.extra.run : undefined : save.days[date]?.tasks[activity];
 }
 export function markHint(save: SaveEnvelope, date: string, activity: ActivityId, extra = false): SaveEnvelope {
   const next = structuredClone(save);

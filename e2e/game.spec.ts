@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import type { ActivityId, SaveEnvelope } from "../src/domain";
+import { localDateKey, startExtra } from "../src/domain";
 
 async function saved(page: Page): Promise<SaveEnvelope> {
   return page.evaluate(async () => {
@@ -16,12 +17,13 @@ async function saved(page: Page): Promise<SaveEnvelope> {
 }
 async function welcome(page: Page) {
   await page.goto("./");
+  await expect(page.getByText(/I'm Gobfrey, your whale-shark guide/)).toBeVisible();
   await page.getByRole("button", { name: /Let's explore/ }).click();
   await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
 }
 async function begin(page: Page, name: string) {
   const card = page.locator(".activity-card").filter({ has: page.getByRole("heading", { name, exact: true }) });
-  await card.getByRole("button", { name: /Let's go|Keep exploring/ }).click();
+  await card.click();
   await expect(page.locator("#answer")).toBeVisible();
 }
 async function solveCurrent(page: Page, activity: ActivityId) {
@@ -64,7 +66,7 @@ test("complete all activities in a chosen order, reload mid-task, and issue one 
   await page.getByRole("button", { name: /Real species Whale shark/ }).click();
   await expect(page.getByText("Rhincodon typus", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Meet Whale shark" })).toBeVisible();
-  await expect(page.locator(".shark-facts li")).toHaveCount(5);
+  await expect(page.locator(".shark-facts li")).toHaveCount(15);
   await expect(page.locator(".shark-story")).toContainText("largest living fish");
   await expect(page.getByRole("link", { name: /CC BY-SA 2.5/ })).toBeVisible();
 });
@@ -122,7 +124,7 @@ test("production subpath works offline, including photographs, progress and stan
   await page.getByRole("button", { name: /Shark album/ }).click();
   await page.getByRole("button", { name: /Real species Whale shark/ }).click();
   await expect(page.locator(".shark-story")).toContainText("biggest fish on Earth");
-  await expect(page.locator(".shark-facts li")).toHaveCount(5);
+  await expect(page.locator(".shark-facts li")).toHaveCount(15);
 });
 test("backup round trip requires confirmation and invalid imports leave progress untouched", async ({ page }) => {
   await welcome(page);
@@ -183,6 +185,8 @@ test("correct answers celebrate once without blocking the next question; system 
   await page.getByLabel("Your answer", { exact: true }).fill(String(q.a * q.b));
   await page.getByRole("button", { name: "Check my answer" }).click();
   const feedback = page.locator("#answer-feedback");
+  await expect(page.getByRole("complementary", { name: "Gobfrey's encouragement and hints" })).toContainText("Gobfrey says: Whale done!");
+  await expect(page.getByRole("img", { name: "Gobfrey, your friendly illustrated whale-shark guide" })).toBeVisible();
   await expect(feedback).toContainText("Fin-tastic thinking!");
   await expect(page.locator(".answer-burst span")).toHaveCount(10);
   await expect(page.getByRole("progressbar")).toHaveAttribute("value", "1");
@@ -203,4 +207,78 @@ test("correct answers celebrate once without blocking the next question; system 
   expect(await page.locator(".hero-ocean>img").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
   await page.reload();
   expect(await page.locator("main").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+});
+
+test("a completed expedition card opens more of the same activity with no daily reward changes", async ({ page }) => {
+  await welcome(page);
+  for (const activity of ["feeding", "reef", "dive"] as ActivityId[]) {
+    const title = { reef: "Reef Trail", feeding: "Feeding Time", dive: "Discovery Dive" }[activity];
+    await finish(page, activity, title);
+    await page.getByRole("button", { name: "Back to my ocean", exact: true }).click();
+    const before = await saved(page);
+    const card = page.locator(`.activity-card.${activity}`);
+    await expect(card).toContainText("Do more");
+    await card.click();
+    await expect(page.getByRole("heading", { name: new RegExp(title), level: 1 })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Check my answer" })).toBeVisible();
+    let extra = (await saved(page)).extra!;
+    expect(extra.run.questions.every((q) => q.activity === activity)).toBe(true);
+    const q = extra.run.questions[0];
+    await page.getByLabel("Your answer", { exact: true }).fill(String(q.a * q.b));
+    await page.getByRole("button", { name: "Check my answer" }).click();
+    await page.getByRole("button", { name: /Next discovery/ }).click();
+    await expect.poll(async () => (await saved(page)).extra!.run.index).toBe(1);
+    extra = (await saved(page)).extra!;
+    await page.reload();
+    await card.click();
+    await expect(page.locator(".question-counter")).toContainText(`2 / ${extra.run.questions.length}`);
+    const after = await saved(page);
+    expect(after.extra?.run.id).toBe(extra.run.id);
+    expect(after.days).toEqual(before.days);
+    expect(after.collection).toEqual(before.collection);
+    await page.getByRole("button", { name: /Pause & return/ }).click();
+  }
+});
+
+test("free swim is one tap per type and Feeding Time has countable cartoon sharks and fish up to twelve by twelve", async ({ page }) => {
+  await welcome(page);
+  await page.getByRole("button", { name: /Free swim/ }).click();
+  await expect(page.locator(".practice-card")).toHaveCount(3);
+  await expect(page.getByText("Pick a times table")).toHaveCount(0);
+  for (const activity of ["reef", "feeding", "dive"] as ActivityId[]) {
+    await page.locator(`.practice-card.${activity}`).click();
+    await expect(page.locator(`.play-${activity}`)).toBeVisible();
+    expect((await saved(page)).extra?.run.questions[0].activity).toBe(activity);
+    await page.getByRole("button", { name: /Free swim/ }).click();
+  }
+  const base = await saved(page);
+  base.settings.enabledTables = [12]; base.settings.autoUnlock = false;
+  const date = localDateKey(new Date(), base.settings.homeTimezone);
+  const imported = startExtra(base, date, "mixed", "twelve-feeding", () => .5, "feeding");
+  imported.extra!.run.questions.forEach((q) => { q.a = 12; q.b = 12; });
+  await page.getByRole("button", { name: "Open parent settings" }).click();
+  await page.locator('input[type="file"]').setInputFiles({ name: "twelve.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(imported)) });
+  await page.getByRole("button", { name: "Confirm replacement" }).click();
+  await expect(page.getByLabel("Explorer name")).toHaveValue("Lily");
+  await page.getByRole("button", { name: /Free swim/ }).click();
+  await page.locator(".practice-card.feeding").click();
+  await expect(page.locator(".feeding-shark")).toHaveCount(12);
+  await expect(page.locator(".feeding-fish")).toHaveCount(144);
+  await expect(page.getByRole("img", { name: /12 cartoon sharks, each with 12 fish/ })).toBeVisible();
+  for (const viewport of [{ width: 375, height: 812 }, { width: 768, height: 1024 }, { width: 1180, height: 820 }]) {
+    await page.setViewportSize(viewport);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  }
+  await page.getByRole("button", { name: /Line them up/ }).click();
+  await expect(page.locator(".feeding-groups.as-array")).toBeVisible();
+  await expect(page.locator(".feeding-shark")).toHaveCount(12);
+  await expect(page.locator(".feeding-fish")).toHaveCount(144);
+  for (const group of await page.locator(".feeding-group").all()) await expect(group.locator(".feeding-fish")).toHaveCount(12);
+  await page.setViewportSize({ width: 375, height: 812 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  const logo = page.getByRole("link", { name: "Sharklication home" });
+  await expect(logo.locator("img")).toHaveAttribute("src", /sharklication-header\.webp$/);
+  expect(await logo.locator("img").evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
+  await logo.click();
+  await expect(page.getByRole("heading", { name: /Small steps/ })).toBeVisible();
 });
