@@ -6,6 +6,8 @@ The supplied Sharklication logo is the owner's approved mascot artwork, not a wi
 
 Each resized photograph remains available under its own source license. Share-alike applies to those image adaptations, not automatically to the application code. Required credit, source links, modification notice, and license are also displayed in the app and cached offline.
 
+The Home Screen/PWA icon is a separate owner-supplied illustration (`assets/app-icon-source.png`), not a wildlife photograph. `scripts/prepare-icons.mjs` only resizes and optimizes it into opaque PNGs, without cropping or redesign. Original authorship/reuse terms were not independently established; owner-supplied use is assumed.
+
 ## Rhincodon typus
 
 - Local file: `public/sharks/whale-shark.webp` (1000 × 461)

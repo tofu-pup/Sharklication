@@ -1,4 +1,4 @@
-import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import sharp from "sharp";
 
@@ -90,13 +90,4 @@ for (const asset of approved) {
   await new Promise((resolve) => setTimeout(resolve, 1200));
 }
 await writeFile(new URL("src/data/asset-manifest.json", root), JSON.stringify(manifest, null, 2) + "\n");
-const logo = await readFile(new URL("public/sharklication-logo.png", root));
-for (const size of [192, 512]) {
-  await sharp(logo).resize(size - 24, size - 24, { fit: "inside" })
-    .extend({ top: 12, bottom: 12, left: 12, right: 12, background: "#063b51" })
-    .resize(size, size, { fit: "contain", background: "#063b51" }).png()
-    .toFile(new URL(`public/icon-${size}.png`, root).pathname.replace(/^\/([A-Za-z]:)/, "$1"));
-}
-await sharp(logo).resize(370, 250, { fit: "inside" })
-  .resize(512, 512, { fit: "contain", background: "#063b51" }).png()
-  .toFile(new URL("public/icon-maskable.png", root).pathname.replace(/^\/([A-Za-z]:)/, "$1"));
+await import("./prepare-icons.mjs");

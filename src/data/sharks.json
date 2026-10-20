@@ -3,102 +3,138 @@
     "id": "whale-shark", "name": "Whale shark", "scientificName": "Rhincodon typus", "kind": "real", "color": "#1395ac",
     "habitat": "Tropical and warm-temperate open seas.",
     "size": "Around 9 m at maturity; adults can grow much larger.",
-    "facts": ["The whale shark is the largest living fish.", "It filters food such as plankton from seawater.", "Its broad, flat head and pale spotted pattern make it distinctive."],
+    "description": [
+      "Meet the biggest fish on Earth! Despite its name, a whale shark is a fish, not a whale. Its wide, flat head and enormous mouth help it collect a meal from the water around it. Instead of chasing one big dinner, it can take in water full of tiny animals and filter out the food.",
+      "Look closely at the pale spots and stripes across its back. That striking pattern is one of the best clues for recognising a whale shark. These ocean travellers live in warm seas and sometimes gather where there is lots of plankton to eat. A huge body can be powered by very small snacks!"
+    ],
+    "facts": ["It is the largest living fish, but it still has gills like other sharks.", "Plankton are tiny drifting organisms. Whale sharks eat these, along with fish eggs, small fish and other food.", "Water flows back out through the gills while food is caught by filtering structures.", "Its broad head has a mouth near the front, rather than tucked far underneath.", "Although often seen near the surface, whale sharks also dive into much deeper water."],
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/whale-shark/"]
   },
   {
     "id": "epaulette-shark", "name": "Epaulette shark", "scientificName": "Hemiscyllium ocellatum", "kind": "real", "color": "#b89b64",
     "habitat": "Shallow coral reefs around northern Australia and New Guinea.",
     "size": "Adults roughly 0.6–1 m; reported maximum about 1.07 m.",
-    "facts": ["It can use its fins to walk along the seabed.", "The large dark spot above each pectoral fin gives it its name.", "It searches reef flats and tide pools for small prey."],
+    "description": [
+      "Some sharks cruise the open ocean. This little explorer takes a different route: it can wriggle and walk along the seabed using its paired fins! Its long, slender body and rounded fins help it move through shallow reef habitats, looking for a meal among sand and coral.",
+      "The name epaulette comes from the large dark spot above each pectoral fin, a little like a shoulder badge. Life on a reef flat can be tricky when the tide goes out and water holds less oxygen. Epaulette sharks have unusual adaptations for coping with those conditions, but they are still fish that belong in the sea."
+    ],
+    "facts": ["It bends its body and moves its pectoral and pelvic fins to walk over the bottom.", "The shoulder spots have pale edges that help them stand out.", "It hunts small animals such as crabs, shrimp and worms.", "It is often most active around dawn and dusk.", "Females lay egg cases. Tiny sharks hatch out rather than being born live."],
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/epaulette-shark/"]
   },
   {
     "id": "blacktip-reef-shark", "name": "Blacktip reef shark", "scientificName": "Carcharhinus melanopterus", "kind": "real", "color": "#689fa6",
     "habitat": "Shallow coral reefs and sand flats in the tropical Indo-Pacific.",
     "size": "Adults roughly 1–1.6 m; some reach about 1.8 m.",
-    "facts": ["Its fins have striking black tips.", "It often stays close to familiar reef areas.", "It eats fish, crustaceans and other small sea animals."],
+    "description": [
+      "Those dark fin tips are a brilliant clue! A blacktip reef shark is a streamlined swimmer often found in shallow, clear water around tropical reefs. Its brownish upper body fades to a pale underside, while black markings make the fins easy to spot.",
+      "Rather than roaming across vast stretches of open ocean all the time, many blacktip reef sharks stay close to familiar reef areas. A reef offers food, shelter and different habitats close together, from sandy flats to coral edges. It is a busy neighbourhood for a curious shark."
+    ],
+    "facts": ["The black fin tips are often highlighted by paler markings next to them.", "It is a different species from the blacktip shark, Carcharhinus limbatus. Similar names do not always mean the same shark!", "It eats fish, crustaceans and cephalopods, the group that includes squid and octopuses.", "Young are born live rather than hatching from egg cases on the seabed.", "Researchers studying their movements have found that individuals can remain strongly attached to a local reef area."],
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blacktip-reef-shark/"]
   },
   {
     "id": "whitetip-reef-shark", "name": "Whitetip reef shark", "scientificName": "Triaenodon obesus", "kind": "real", "color": "#8eaaa5",
     "habitat": "Coral reefs and reef caves in the Indo-Pacific and eastern tropical Pacific.",
     "size": "Adults usually about 1–1.8 m; rarely larger.",
-    "facts": ["Its first dorsal fin and upper tail have white tips.", "It often rests in reef caves during the day and hunts at night.", "It can breathe while resting without swimming forward."],
+    "description": [
+      "If you could peek into a quiet reef cave during the day, you might find a whitetip reef shark resting inside. Its slender body, rounded snout and bright white fin tips make it a very different neighbour from the blacktip reef shark.",
+      "When night arrives, this reef explorer becomes a hunter. It searches cracks and crevices for small animals that other sharks might struggle to reach. Unlike sharks that depend on swimming forward to move water over their gills, it can keep breathing while it rests. So a shark taking a break is not necessarily in trouble!"
+    ],
+    "facts": ["The first dorsal fin and the upper tip of its tail have conspicuous white markings.", "It often shelters near the bottom or in caves by day and feeds at night.", "It can remain in a familiar reef area for months or even years.", "Its slender shape helps it investigate narrow spaces in the reef.", "It eats animals such as fish, crustaceans and molluscs."],
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/whitetip-reef-shark/"]
   },
   {
     "id": "bonnethead", "name": "Bonnethead", "scientificName": "Sphyrna tiburo", "kind": "real", "color": "#9cbaa5",
     "habitat": "Warm, shallow coastal bays and estuaries of the western Atlantic.",
     "size": "Often about 1–1.2 m as an adult; maximum about 1.5 m.",
-    "facts": ["Its evenly rounded head looks like a shovel.", "It is a small member of the hammerhead family.", "Its back teeth help crush hard prey such as crabs."],
+    "description": [
+      "Not every hammerhead has a head shaped like a wide hammer! The bonnethead has a smooth, rounded head that looks more like a small shovel. Its eyes sit at the ends of that broad head, giving this little shark a wonderfully distinctive outline.",
+      "Bonnetheads explore warm coastal shallows, bays and estuaries, often in groups. Their teeth are a useful toolkit: sharper teeth at the front help handle prey, while flatter teeth farther back crush harder food. For a crab-hunting shark, having the right tools makes a big difference."
+    ],
+    "facts": ["Its head has an evenly rounded front edge, a useful identification clue.", "It is one of the smaller members of the hammerhead family.", "Hard-shelled prey such as crabs are important in its diet.", "Its rear teeth act like little crushing surfaces rather than all being sharp points.", "Bonnetheads can gather in small schools, and females give birth to live pups."],
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/bonnethead/"]
   },
   {
     "id": "leopard-shark", "name": "Leopard shark", "scientificName": "Triakis semifasciata", "kind": "real", "color": "#939d93",
     "habitat": "Sandy or muddy bays and estuaries of the eastern Pacific.",
     "size": "Adults average about 1.2–1.5 m; larger individuals occur.",
-    "facts": ["Dark saddle-shaped marks decorate its back.", "It often swims in schools, sometimes with other shark species.", "It feeds on small fish and bottom-dwelling animals such as crabs."],
+    "description": [
+      "With bold dark saddles across its back and blotches down its sides, the leopard shark is dressed for a very different habitat from a tropical coral reef. It often lives close to the bottom of sandy or muddy bays along the eastern Pacific coast.",
+      "Leopard sharks are strong swimmers and may form schools, sometimes alongside other kinds of sharks. They search for small fish and bottom-dwelling animals. Their patterned coats make them fun to recognise, but there is a naming twist: in some places people also call the unrelated zebra shark a leopard shark. The scientific name tells you exactly which species you have found."
+    ],
+    "facts": ["This leopard shark is Triakis semifasciata, not the zebra shark sometimes given the same common name.", "Its range includes coastal waters from Oregon to the Gulf of California.", "Its back markings include dark saddle shapes as well as smaller blotches.", "It eats prey such as crabs, shrimp, worms and small fish.", "It gives birth to live young, and newborn pups already have a shark shape."],
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/leopard-shark/"]
   },
   {
     "id": "coral-comet", "name": "Coral Comet", "kind": "fantasy", "color": "#ef8e81", "accent": "#ffdc94", "symbol": "✦",
     "habitat": "The daydream reef", "size": "Three imaginary surfboards long",
+    "description": ["In our make-believe ocean, Coral Comet is the first friend to volunteer for a treasure hunt. Every turn leaves a trail of star-shaped bubbles, which is very useful for anyone who has forgotten the way home.", "Its favourite treasure is a beautifully sorted pebble collection. Some are arranged in fives, some in tens, and one very special pebble is reserved for a friend who tried something difficult. This is a fantasy story, not a real shark species."],
     "facts": ["Leaves a trail of tiny star-shaped bubbles.", "Collects coral-colored pebbles in groups of five."], "references": []
   },
   {
     "id": "moonfin", "name": "Moonfin", "kind": "fantasy", "color": "#a79cdf", "accent": "#fff0b8", "symbol": "☾",
     "habitat": "The moonlit make-believe trench", "size": "One moonbeam long",
+    "description": ["When the pretend ocean grows quiet, Moonfin switches on its crescent-shaped glow and goes exploring. It likes counting the stars reflected on the surface, though a passing ripple can make it lose its place.", "Moonfin keeps a notebook full of dream maps. Every map ends at a cosy nook with room for a friend and a bedtime story. Glowing moon fins and dream maps belong to our imagination, not shark science."],
     "facts": ["A sleepy explorer with a glowing crescent fin.", "Counts constellations before going to sleep."], "references": []
   },
   {
     "id": "bubble-buddy", "name": "Bubble Buddy", "kind": "fantasy", "color": "#55c6cb", "accent": "#b6f6ed", "symbol": "○",
     "habitat": "Bubblegum lagoon", "size": "Six soap bubbles long",
+    "description": ["Bubble Buddy is the make-believe lagoon's most enthusiastic bubble artist. Rings, spirals and wobbly squares drift behind it like a floating gallery. Nobody has worked out how it makes the square ones.", "Before a bubble show, it shares the tickets equally among its friends and leaves the front row for the smallest creatures. This bubble-making character is imaginary; it is not a real shark species."],
     "facts": ["Blows bubble rings that never quite pop.", "Keeps its treasures in perfectly equal groups."], "references": []
   },
   {
     "id": "sunny-saw", "name": "Sunny Saw", "kind": "fantasy", "color": "#f1bc54", "accent": "#fff0af", "symbol": "☀",
     "habitat": "The sunshine shallows", "size": "Two sunbeams long",
+    "description": ["Sunny Saw organises the best pretend picnics in the sunshine shallows. Its extraordinary nose is just the thing for dividing an imaginary birthday cake into fair shares, provided someone remembers the napkins.", "When clouds roll over the make-believe sea, Sunny invites everyone to count rays of sunshine instead. This friendly character is a fantasy invention, not a description of a real sawshark."],
     "facts": ["Its pretend saw-shaped nose cuts birthday cake, not fish.", "Invites every sea creature to its counting picnics."], "references": []
   },
   {
     "id": "mint-mischief", "name": "Mint Mischief", "kind": "fantasy", "color": "#7dc4a3", "accent": "#e1f9a8", "symbol": "♧",
     "habitat": "The peppermint kelp forest", "size": "Four mint leaves long",
+    "description": ["Mint Mischief leaves little treasure clues between the leaves of an imaginary peppermint forest. Some clues are number patterns. Others are very bad drawings of where the treasure might be.", "The game is never about tricking a friend into feeling stuck: another helpful clue is always waiting nearby. Peppermint kelp and this mischievous shark belong to our make-believe ocean."],
     "facts": ["Hides tiny treasure maps in the kelp.", "Always leaves a useful clue for a friend."], "references": []
   },
   {
     "id": "star-skipper", "name": "Star Skipper", "kind": "fantasy", "color": "#848fd4", "accent": "#ffd98a", "symbol": "★",
     "habitat": "The starlight sea", "size": "Nine shooting stars long",
+    "description": ["Star Skipper spends imaginary evenings bouncing across a sea full of reflected stars. Its favourite challenge is making a new repeating pattern without using the same sparkle twice in a row.", "When a pattern goes wrong, it calls the mistake a brand-new constellation and tries again. A star-skipping shark is a fantasy friend, not a species you could find on a real expedition."],
     "facts": ["Skips across the waves like a pebble.", "Loves making patterns with bright little stars."], "references": []
   },
   {
     "id": "peach-pirate", "name": "Peach Pirate", "kind": "fantasy", "color": "#eca183", "accent": "#fce7c0", "symbol": "◇",
     "habitat": "Peachy pirate cove", "size": "A treasure chest long",
+    "description": ["Peach Pirate has the least frightening pirate ship in the make-believe sea. Its flag is a fancy napkin, its treasure is mostly shiny buttons, and everyone is welcome aboard.", "The captain's most important rule is that every crew member gets a fair share, including the tiny snail who polishes the anchor. This is an imaginary pirate adventure, not information about a real shark."],
     "facts": ["Shares every imaginary treasure equally.", "Its pirate flag is really a very fancy napkin."], "references": []
   },
   {
     "id": "cloud-cruiser", "name": "Cloud Cruiser", "kind": "fantasy", "color": "#91b9d5", "accent": "#ecf8ff", "symbol": "☁",
     "habitat": "The upside-down sky ocean", "size": "One fluffy cloud long",
+    "description": ["Cloud Cruiser dreams of an upside-down ocean where clouds are soft islands and rain falls upwards. It carries a small pretend cushion for anyone who needs a rest between adventures.", "Its maps change whenever the wind blows, so Cloud Cruiser has become very good at trying a different route. Sky oceans and cushion-carrying sharks are part of this fantasy story, not marine biology."],
     "facts": ["Swims through clouds in its dreams.", "Makes soft landing spots for tired explorers."], "references": []
   },
   {
     "id": "jelly-jester", "name": "Jelly Jester", "kind": "fantasy", "color": "#d39bc6", "accent": "#ffe5a8", "symbol": "✧",
     "habitat": "The giggling grotto", "size": "Seven jellybeans long",
+    "description": ["Jelly Jester is the chief entertainer of an imaginary grotto, wearing a hat that looks suspiciously like a jellyfish. Its jokes are so silly that even the pretend seaweed seems to wiggle with laughter.", "Before each show, it arranges seats into equal rows so nobody is left behind a rock. This jellybean-sized jester is invented, not a real shark with scientific facts."],
     "facts": ["Wears a hat made from a pretend jellyfish.", "Knows a different silly joke for every times table."], "references": []
   },
   {
     "id": "kelp-knight", "name": "Kelp Knight", "kind": "fantasy", "color": "#6da6a0", "accent": "#e0dfa4", "symbol": "♢",
     "habitat": "The secret seaweed castle", "size": "Two seaweed swords long",
+    "description": ["Kelp Knight guards a pretend castle built from folded seaweed. There are no battles here: its brave deeds include helping a lost fish and asking for help with a tricky treasure map.", "Its leafy shield doubles as a picnic tray, and its helmet has a special opening for bubbles. This gentle knight lives in our imagination, not in a real species guide."],
     "facts": ["Protects the smallest fish with a leafy shield.", "Practises brave deeds, never battles."], "references": []
   },
   {
     "id": "rainbow-ripple", "name": "Rainbow Ripple", "kind": "fantasy", "color": "#bb9cdc", "accent": "#ffc6c0", "symbol": "⌁",
     "habitat": "The rainbow tide pool", "size": "A whole rainbow long",
+    "description": ["Rainbow Ripple paints our make-believe tide pool with waves of changing colour. It loves arranging shells into patterns, then inviting a friend to guess what comes next.", "Sometimes the best pattern is a completely surprising one. Rainbow Ripple keeps a special corner for happy accidents. Colour-changing rainbow fins are fantasy, not a claim about real sharks."],
     "facts": ["Its fins change color with every happy thought.", "Makes ripples in repeating patterns."], "references": []
   },
   {
     "id": "disco-dorsal", "name": "Disco Dorsal", "kind": "fantasy", "color": "#68b7cb", "accent": "#fbc574", "symbol": "♫",
     "habitat": "The underwater dance floor", "size": "Five dance steps long",
+    "description": ["Disco Dorsal runs an imaginary dance party where every fin is welcome. Its glitter-ball dorsal fin turns the cave ceiling into a field of little stars, even when its dance steps go in the wrong direction.", "The music comes in groups of eight beats, but nobody has to keep up. Taking a break is part of a good party. This disco shark is a fantasy character, not a real glowing species."],
     "facts": ["Has a glitter-ball fin and two left flippers.", "Always dances in groups of eight beats."], "references": []
   }
 ]

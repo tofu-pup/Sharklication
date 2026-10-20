@@ -31,6 +31,7 @@ export interface Shark {
   habitat: string;
   size: string;
   facts: string[];
+  description: string[];
   references: string[];
   photo?: Photo;
 }

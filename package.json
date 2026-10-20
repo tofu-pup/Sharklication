@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "assets": "node scripts/prepare-assets.mjs",
+    "icons": "node scripts/prepare-icons.mjs",
     "credits": "node scripts/credits.mjs"
   },
   "dependencies": {

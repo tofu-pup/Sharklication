@@ -29,7 +29,8 @@ Open `http://localhost:4173/Sharklication/`. Development mode does not install a
 - Recall reviews are scheduled 1, 3, 7 and 14 days after independent successes on distinct dates. Secure requires independent successful recall on three dates and the latest two assessed primary recall attempts independently correct. Mistakes/assistance in a primary recall assessment return the fact to Practising. Visual puzzle success never establishes recall.
 - Complete all three activities, in any order, to qualify a date and grant exactly one previously uncollected shark. Extra practice does not qualify a day or earn another daily shark. Once all sharks are found, completed days receive an Ocean Explorer celebration badge.
 - Versioned IndexedDB persistence saves every submitted answer, hint, checkpoint, settings change and reward. A task's completion and its reward are written in the same transaction. Duplicate submissions are guarded and another tab's revision cannot silently overwrite a newer save.
-- Production service-worker precaching supports offline daily practice, UI, logo, all starter photos and facts. Offline readiness is checked against actual cached resources. New versions are offered between activities rather than reloading an active question.
+- Production service-worker precaching supports offline daily practice, UI, logo, all starter photos and facts. Offline readiness is checked against actual cached resources. Online updates are checked on launch, foreground/reconnect and every five visible minutes, then applied automatically away from active questions and parent settings.
+- Gentle ocean motion, smooth screen/question entrances and touch feedback bring the app to life. Correct answers receive varied encouragement, a brief star-and-bubble burst and a cheering guide; activity stars and daily discoveries have reveal animations. Nothing forces a delay before continuing, mistakes have no punitive effects, sound remains optional, and system/Parent port reduced-motion preferences disable all animations and transitions.
 
 ## Collection and photo rights
 
@@ -37,7 +38,7 @@ Open `http://localhost:4173/Sharklication/`. Development mode does not install a
 
 Real species: whale shark (*Rhincodon typus*), epaulette shark (*Hemiscyllium ocellatum*), blacktip reef shark (*Carcharhinus melanopterus*), whitetip reef shark (*Triaenodon obesus*), bonnethead (*Sphyrna tiburo*) and leopard shark (*Triakis semifasciata*).
 
-Every real entry has a genuine local WebP photograph, scientific name, approximate size, habitat, short independently written facts, a Florida Museum reference, and source-specific attribution/license links. Images and their license/species descriptions were reviewed by the coding agent, including visual comparison of diagnostic features. This is **not** a claim of a human taxonomist's certification. No AI wildlife images or substitutions are used.
+Every real entry has a genuine local WebP photograph, scientific name, approximate size, habitat, two independently written description paragraphs, five interesting facts, a Florida Museum reference, and source-specific attribution/license links. Images and their license/species descriptions were reviewed by the coding agent, including visual comparison of diagnostic features. This is **not** a claim of a human taxonomist's certification. No AI wildlife images or substitutions are used.
 
 All 12 fantasy entries use original SVG illustrations, explicit Fantasy badges, imaginary habitats/sizes, and playful invented descriptions rather than scientific claims. Fantasy art shares a cartoon silhouette with distinct colors and symbols. The owner-supplied logo is mascot art, not a species photograph; its original authorship/license has not been independently established.
 
@@ -71,7 +72,11 @@ Preparing assets again downloads the allow-listed originals and regenerates opti
 
 The readiness label is not shown merely because the browser reports itself online/offline; the production worker must be active and required document, script, style, logo and photo assets must be cached. Parent port has an offline retry/check control. On a failed download, practice and saving remain available online; no wildlife photograph is replaced with invented imagery. Free device space, reconnect and reload between activities to retry installation.
 
-Updates are offered outside activities. Applying an update reloads the page, not the IndexedDB save. Cached photo attribution is visible offline, but external source/license pages need internet access. Safari and an installed app may not share every storage context: export from one and restore into the other if necessary.
+The installed app checks for newer versions when opened, brought to the foreground, reconnected, and every five minutes while visible and online. It downloads in the background, then reloads automatically on a safe screen, after progress has loaded and writes have finished. Questions and Parent port (including unsaved settings/import previews) are never deliberately interrupted; return to My ocean to apply a waiting update. Save errors block automatic reload. Applying an update reloads the page, not the IndexedDB save.
+
+iOS can suspend background apps, so no website can guarantee an update while closed, suspended or offline. Open it online to check. The original first release used an update prompt: that one-time transition may still require accepting its prompt or reopening the app before this automatic behavior is installed.
+
+Home Screen icons use the exact owner-supplied artwork from `assets/app-icon-source.png`, resized without cropping or redesign. `npm run icons` regenerates opaque, optimized PNGs: 180 px for iPhone/new installs (about 21 KiB), 167/152 px for iPads, and 192/512 px PWA icons. iOS supplies rounded corners. Existing installed icons may stay cached; to change one, **export a backup first**, then remove/re-add the Home Screen shortcut if necessary. Safari and an installed app may not share every storage context: restore the backup if needed. Cached shark descriptions and photo attribution work offline; external source/license pages need internet access.
 
 ## Backup and restore
 
@@ -100,7 +105,7 @@ The app is configured for the case-sensitive repository subpath **`/Sharklicatio
 1. In this repository's **Settings → Pages**, select **GitHub Actions** as the build source.
 2. Merge the app onto `main`, or run the workflow manually on `main`.
 3. `.github/workflows/pages.yml` installs from the lockfile, runs unit/integration tests, builds/typechecks, runs Chromium browser tests, then uploads and deploys `dist`.
-4. Read the actual deployed address from the successful deployment environment and verify it. Configuration is prepared; **no successful GitHub deployment is claimed here**.
+4. Read the actual deployed address from the successful deployment environment and verify it. The first release was deployed and HTTP-verified at **https://tofu-pup.github.io/Sharklication/**. Every subsequent release still needs its own successful workflow and live verification.
 
 Pull requests run verification without publishing. The workflow uses only repository-scoped Pages/OIDC permissions at deployment time; there are no frontend credentials or provider keys.
 
@@ -115,7 +120,7 @@ If the repository name or hosting path changes, update `base`, manifest `start_u
 | `src/validation.ts` | Versioned backup validation and migration boundary |
 | `src/storage.ts` | `ProgressStorage` interface with transactional IndexedDB implementation and optimistic revision checking |
 | `src/app.tsx`, `src/shark-art.tsx`, `src/styles.css` | Responsive screens, accessible number input and original fantasy art |
-| `src/offline.ts`, `vite.config.ts` | Actual cached-asset readiness and build-time PWA generation |
+| `src/offline.ts`, `src/updates.ts`, `vite.config.ts` | Cached-asset readiness, foreground/reconnect update checks, safe activation policy and PWA generation |
 | `scripts/` | Repeatable photo preparation, credit generation and asset validation |
 
 A future authenticated adapter can implement/extend `ProgressStorage` and introduce parent/child IDs and conflict-resolution policy without moving arithmetic/reward logic into UI components. No Supabase, sign-in, sync, tokens or backend is currently included. Never treat an app-local ID as authenticated authority.
@@ -139,7 +144,7 @@ npm run test:e2e
 
 - The PRD launch target is **40 real + 12 fantasy**. This build has **6 real + 12 fantasy**, so **34 real species still need curated content and licensed/identified photos**. Basking, megamouth, goblin, frilled, cookiecutter, zebra, angel and sawsharks are not yet included; do not advertise them as present.
 - There is no shell currency or decoration economy. Free swim is fully available without it, as permitted by the PRD.
-- Feeding Time uses accessible equal groups and an array toggle, not a drag-and-drop puzzle or a complete progression curriculum. Fantasy illustrations have shared geometry; bespoke art and a more animated sanctuary remain polish opportunities.
+- Feeding Time uses accessible equal groups and an array toggle, not a drag-and-drop puzzle or a complete progression curriculum. Fantasy illustrations have shared geometry; bespoke art remains a polish opportunity.
 - Browser tests use Chromium with iPad-sized/touch layouts, **not physical iPad Safari or standalone testing**. Actual Safari VoiceOver, touch keyboard/audio behavior, portrait/landscape installation, cold standalone relaunch, storage eviction/quota behavior and app-update transitions still need manual device checks. Passing Chromium does not establish these.
 - WCAG 2.2 AA is an aim, not a certification. Semantic controls, focus, keyboard input, minimum control sizes and motion preferences are implemented; a full manual accessibility/contrast review remains pending.
-- No hosted deployment has been verified. The preview is local, not a published website.
+- The first release's hosted HTML, manifest, service worker and a real shark photo were HTTP-verified. Physical iPad behavior is not established by that check.

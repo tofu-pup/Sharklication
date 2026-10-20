@@ -9,7 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: "prompt",
       injectRegister: null,
-      includeAssets: ["sharks/*", "icon-*.png", "sharklication-logo.png"],
+      includeAssets: ["sharks/*", "icon-*.png", "apple-touch-icon*.png", "sharklication-logo.png"],
       manifest: {
         name: "Sharklication",
         short_name: "Sharklication",
@@ -33,6 +33,7 @@ export default defineConfig({
         skipWaiting: false,
         clientsClaim: true,
       },
+      devOptions: { enabled: false },
     }),
   ],
 });

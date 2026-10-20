@@ -62,6 +62,9 @@ test("complete all activities in a chosen order, reload mid-task, and issue one 
   await page.getByRole("button", { name: /Open my album/ }).click();
   await page.getByRole("button", { name: /Real species Whale shark/ }).click();
   await expect(page.getByText("Rhincodon typus", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Meet Whale shark" })).toBeVisible();
+  await expect(page.locator(".shark-facts li")).toHaveCount(5);
+  await expect(page.locator(".shark-story")).toContainText("largest living fish");
   await expect(page.getByRole("link", { name: /CC BY-SA 2.5/ })).toBeVisible();
 });
 test("wrong answers teach, reconstruction is possible, and supported success is not independent", async ({ page }) => {
@@ -115,6 +118,10 @@ test("production subpath works offline, including photographs, progress and stan
   expect(await photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
   await page.reload();
   expect((await saved(page)).collection).toHaveLength(1);
+  await page.getByRole("button", { name: /Shark album/ }).click();
+  await page.getByRole("button", { name: /Real species Whale shark/ }).click();
+  await expect(page.locator(".shark-story")).toContainText("biggest fish on Earth");
+  await expect(page.locator(".shark-facts li")).toHaveCount(5);
 });
 test("backup round trip requires confirmation and invalid imports leave progress untouched", async ({ page }) => {
   await welcome(page);
@@ -166,4 +173,33 @@ test("touch layouts avoid horizontal overflow, reduced motion persists, and runt
   await page.reload();
   await expect(page.getByLabel("Reduce motion (system preference is also respected)")).toBeChecked();
   expect(remote).toEqual([]);
+});
+
+test("correct answers celebrate once without blocking the next question; system and saved motion preferences work", async ({ page }) => {
+  await welcome(page);
+  await begin(page, "Discovery Dive");
+  const save = await saved(page), run = Object.values(save.days)[0].tasks.dive!, q = run.questions[0];
+  await page.getByLabel("Your answer", { exact: true }).fill(String(q.a * q.b));
+  await page.getByRole("button", { name: "Check my answer" }).click();
+  const feedback = page.locator("#answer-feedback");
+  await expect(feedback).toContainText("Fin-tastic thinking!");
+  await expect(page.locator(".answer-burst span")).toHaveCount(10);
+  await expect(page.getByRole("progressbar")).toHaveAttribute("value", "1");
+  await expect(page.getByRole("button", { name: /Next discovery/ })).toBeEnabled();
+  expect(await feedback.evaluate((el) => getComputedStyle(el).animationName)).toBe("success-arrive");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  expect(await feedback.evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  expect(await page.locator(".answer-burst span").first().evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  await page.getByRole("button", { name: /Next discovery/ }).click();
+  await expect(page.locator(".answer-burst")).toHaveCount(0);
+  await expect(feedback).not.toHaveClass(/correct/);
+  await page.getByRole("button", { name: /Pause & return/ }).click();
+  await page.getByRole("button", { name: "Open parent settings" }).click();
+  await page.getByLabel("Reduce motion (system preference is also respected)").click();
+  await expect(page.getByLabel("Reduce motion (system preference is also respected)")).toBeChecked();
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.getByRole("button", { name: /My ocean/ }).click();
+  expect(await page.locator(".hero-ocean>img").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
+  await page.reload();
+  expect(await page.locator("main").evaluate((el) => getComputedStyle(el).animationName)).toBe("none");
 });

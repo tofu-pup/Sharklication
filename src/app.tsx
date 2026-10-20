@@ -11,6 +11,7 @@ import { storage } from "./storage";
 import { parseBackup } from "./validation";
 import { SharkArt } from "./shark-art";
 import { checkOfflineReady } from "./offline";
+import { canApplyUpdate, watchForUpdates } from "./updates";
 
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 type Screen = "home" | "collection" | "practice" | "parents" | "credits" | "play" | "celebrate";
@@ -51,11 +52,32 @@ export function App() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [startupFailed, setStartupFailed] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
+  const [registration, setRegistration] = useState<ServiceWorkerRegistration>();
+  const [reloadPending, setReloadPending] = useState(false);
+  const applyingUpdate = useRef(false);
   const { updateServiceWorker } = useRegisterSW({
+    onRegisteredSW(_url, registration) { setRegistration(registration); },
     onOfflineReady() { void refreshOffline(); },
     onNeedRefresh() { setUpdateAvailable(true); },
+    onNeedReload() { setReloadPending(true); },
     onRegisterError(error) { setNotice(`Offline setup did not finish: ${errorMessage(error)}. Practice and saving still work online.`); },
   });
+  useEffect(() => {
+    if (reloadPending && canApplyUpdate(screen, busy, !!save, error)) location.reload();
+  }, [reloadPending, screen, busy, save, error]);
+  useEffect(() => {
+    if (registration) return watchForUpdates(registration, (error) => {
+      setNotice(`Couldn't check for a new version: ${errorMessage(error)}. Your current game and progress remain available; we'll check again when you reconnect or reopen it.`);
+    });
+  }, [registration]);
+  useEffect(() => {
+    if (!updateAvailable || applyingUpdate.current || !canApplyUpdate(screen, busy, !!save, error)) return;
+    applyingUpdate.current = true;
+    void updateServiceWorker(true).catch((error) => {
+      applyingUpdate.current = false;
+      setNotice(`The new version couldn't be activated: ${errorMessage(error)}. Reopen the game online to retry; your saved progress is safe.`);
+    });
+  }, [updateAvailable, screen, busy, save, error, updateServiceWorker]);
   async function refreshOffline() {
     try { setOffline(await checkOfflineReady()); }
     catch (error) { setOffline(false); setNotice(`Could not check offline assets: ${errorMessage(error)}`); }
@@ -160,10 +182,10 @@ export function App() {
       <button className="profile-pill" onClick={() => go("parents")} aria-label="Open parent settings"><span aria-hidden="true">⚙</span><span>Parent port</span></button>
     </header>
     <div className="connection-bar"><span><i className={offline ? "status-dot ready" : "status-dot"} />{offline ? "Offline ready" : import.meta.env.DEV ? "Development · offline requires a production build" : online ? "Preparing your ocean" : "Offline · cached content only"}</span><span>Just you, the ocean, and a little maths.</span></div>
-    <main id="main" tabIndex={-1}>
+    <main id="main" key={`${screen}-${selected?.id ?? ""}`} className="scene-enter" tabIndex={-1}>
       {error && <div className="message error" role="alert"><strong>Not saved yet.</strong> {error} <button onClick={() => setError("")}>Dismiss</button></div>}
       {notice && <div className="message" role="status">{notice} <button onClick={() => setNotice("")}>Dismiss</button></div>}
-      {updateAvailable && screen !== "play" && <div className="message">A new version is ready. Your saved progress stays safe. <button onClick={() => void updateServiceWorker(true)}>Update between dives</button></div>}
+      {updateAvailable && <div className="message" role="status">{screen === "play" ? "A new version has downloaded. It will open automatically when you return to your ocean; this question won't be interrupted." : screen === "parents" ? "A new version is ready. Finish any settings or backup changes, then return to My ocean to update automatically." : error ? "A new version is waiting. Resolve the save error before updating." : "Opening the latest version… Your saved progress stays safe."}</div>}
       {!save.profile.welcomed ? <section className="welcome">
         <span className="eyebrow">YOUR UNDERWATER ADVENTURE STARTS HERE</span>
         <h1 ref={heading} tabIndex={-1}>Hey {save.profile.name},<br />there's an ocean waiting.</h1>
@@ -257,7 +279,28 @@ function Attribution({ shark }: { shark: Shark }) {
   return photo ? <div className="attribution"><p>Photograph: {photo.creator}. <a href={photo.sourcePageUrl} target="_blank" rel="noreferrer">Original source ↗</a> · <a href={photo.licenseUrl} target="_blank" rel="noreferrer">{photo.licenseId} ↗</a></p><p>{photo.modifications}</p></div> : null;
 }
 function SharkDetail({ shark, back, headingRef }: { shark: Shark; back: () => void; headingRef: React.RefObject<HTMLHeadingElement | null> }) {
-  return <><button className="text-button" onClick={back}>← Back to my album</button><div className="shark-detail"><div className="detail-image"><SharkImage shark={shark} /></div><div><span className={`badge ${shark.kind}`}>{shark.kind === "real" ? "◉ Real species" : "✦ Fantasy · imaginary shark"}</span><h1 ref={headingRef} tabIndex={-1}>{shark.name}</h1>{shark.scientificName && <p className="scientific">{shark.scientificName}</p>}<dl><dt>{shark.kind === "real" ? "Where it lives" : "Make-believe home"}</dt><dd>{shark.habitat}</dd><dt>{shark.kind === "real" ? "Approximate adult size" : "Imaginary size"}</dt><dd>{shark.size}</dd></dl><h2>{shark.kind === "real" ? "A few fascinating facts" : "From the imagination"}</h2><ul>{shark.facts.map((fact) => <li key={fact}>{fact}</li>)}</ul>{shark.references.map((reference) => <a key={reference} href={reference} target="_blank" rel="noreferrer">Read the species reference ↗</a>)}</div></div><Attribution shark={shark} /></>;
+  return <>
+    <button className="text-button" onClick={back}>← Back to my album</button>
+    <div className="shark-detail">
+      <div className="detail-image"><SharkImage shark={shark} /></div>
+      <div>
+        <span className={`badge ${shark.kind}`}>{shark.kind === "real" ? "◉ Real species" : "✦ Fantasy · imaginary shark"}</span>
+        <h1 ref={headingRef} tabIndex={-1}>{shark.name}</h1>
+        {shark.scientificName && <p className="scientific">{shark.scientificName}</p>}
+        <dl><dt>{shark.kind === "real" ? "Where it lives" : "Make-believe home"}</dt><dd>{shark.habitat}</dd><dt>{shark.kind === "real" ? "Approximate adult size" : "Imaginary size"}</dt><dd>{shark.size}</dd></dl>
+      </div>
+    </div>
+    <section className="shark-story" aria-labelledby="meet-shark">
+      <span className="eyebrow">{shark.kind === "real" ? "A CLOSER LOOK AT AN AMAZING ANIMAL" : "A STORY FROM OUR MAKE-BELIEVE OCEAN"}</span>
+      <h2 id="meet-shark">Meet {shark.name}</h2>
+      {shark.description.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      <h2>{shark.kind === "real" ? "Did you know?" : "Imaginary curiosities"}</h2>
+      <ul className="shark-facts">{shark.facts.map((fact, i) => <li key={fact}><span className="fact-number" aria-hidden="true">{i + 1}</span><p>{fact}</p></li>)}</ul>
+      {shark.kind === "real" && <p className="wildlife-note">Wild sharks are best admired from a respectful distance. Never chase, touch or feed a wild shark.</p>}
+      {shark.references.length > 0 && <div className="fact-sources"><h3>Explore the science</h3><p>Descriptions and facts are written for young explorers, using these species references. Source links need an internet connection.</p>{shark.references.map((reference) => <a key={reference} href={reference} target="_blank" rel="noreferrer">Florida Museum: {shark.name} ↗</a>)}</div>}
+    </section>
+    <Attribution shark={shark} />
+  </>;
 }
 function Play({ run, activity, extra, busy, onHint, onSubmit, onNext, onHome, headingRef }: {
   run: TaskRun; activity: ActivityId; extra: boolean; busy: boolean;
@@ -281,18 +324,19 @@ function Play({ run, activity, extra, busy, onHint, onSubmit, onNext, onHome, he
   return <section className={`play section play-${activity}`}>
     <div className="play-top"><button className="text-button" onClick={onHome}>← Pause & return</button><span>Progress saves after every answer</span></div>
     <div className="section-heading"><div><span className="eyebrow">{extra ? "FREE SWIM" : "TODAY'S EXPEDITION"} {q.correction ? "· A LITTLE REVIEW" : ""}</span><h1 ref={headingRef} tabIndex={-1}>{ACTIVITY_INFO[activity].icon} {ACTIVITY_INFO[activity].title}</h1></div><span className="question-counter">{run.index + 1} / {run.questions.length}</span></div>
-    <progress value={run.index} max={run.questions.length} aria-label="Resolved questions" />
-    <div className="play-layout"><div className="question-card">
+    <progress value={run.index + (q.resolved ? 1 : 0)} max={run.questions.length} aria-label="Resolved questions" />
+    <div className="play-layout"><div key={q.id} className={`question-card ${q.resolved ? "answer-success" : ""}`}>
+      {q.resolved && <div className="answer-burst" aria-hidden="true">{Array.from({ length: 10 }, (_, i) => <span key={i} style={{ "--particle": i } as React.CSSProperties}>{i % 3 === 0 ? "★" : "○"}</span>)}</div>}
       <h2 className={activity === "dive" ? "equation" : ""} aria-label={activity === "dive" ? `${q.a} times ${q.b} equals what?` : undefined}>{prompt}</h2>
       {activity === "reef" && <><div className="sequence" aria-label={sequenceFor(q).map((n) => n === null ? "missing number" : n).join(", ")}>{sequenceFor(q).map((n, i) => <span key={i} className={n === null ? "missing" : ""}>{n ?? "?"}</span>)}</div><p className="muted">Each jump adds {q.a}. The missing number is jump {q.b}.</p></>}
       {activity === "feeding" && <><div className={`fish-groups ${arrayMode ? "array" : ""}`} aria-label={`${q.a} equal groups of ${q.b} fish`}>{Array.from({ length: q.a }, (_, row) => <div className="fish-group" key={row}><span className="group-label">{arrayMode ? `Row ${row + 1}` : `Shark ${row + 1}`}</span><div className="fish-row">{Array.from({ length: q.b }, (_, col) => <span key={col} aria-hidden="true">●</span>)}</div></div>)}</div><button className="text-button" aria-pressed={arrayMode} onClick={() => setArrayMode(!arrayMode)}>{arrayMode ? "Show equal groups" : "Line them up as an array"} ↔</button><p className="muted">{q.a} groups × {q.b} in each group. The same total as {q.b} × {q.a}.</p></>}
       <form onSubmit={(event) => { event.preventDefault(); void submit(); }}>
         <label htmlFor="answer">Your answer</label><input ref={input} id="answer" type="text" inputMode="none" autoComplete="off" pattern="[0-9]*" maxLength={3} value={q.resolved ? String(total) : answer} disabled={busy || q.resolved} onChange={(event) => setAnswer(event.target.value.replace(/\D/g, "").slice(0, 3))} aria-describedby="answer-feedback" />
-        <div id="answer-feedback" role="status" className={`feedback ${q.resolved ? "correct" : ""}`}>{q.resolved ? `✓ That's it! ${workedFor(q)}` : q.attempts >= 2 ? "Let's build it together. Use the worked example below." : q.attempts ? "Not quite yet. Let's look at it another way." : "Take your time. You've got room to think."}</div>
+        <div id="answer-feedback" role="status" aria-atomic="true" className={`feedback ${q.resolved ? "correct" : ""}`}>{q.resolved ? <><span className="success-star" aria-hidden="true">★</span><strong>{q.hinted || q.attempts > 1 ? "You worked it out!" : ["Fin-tastic thinking!", "You nailed it, explorer!", "That's a brilliant discovery!", "Whale done!", "You're making waves!"][run.index % 5]}</strong><span className="success-equation">{workedFor(q)}</span></> : q.attempts >= 2 ? "Let's build it together. Use the worked example below." : q.attempts ? "Not quite yet. Let's look at it another way." : "Take your time. You've got room to think."}</div>
         {!q.resolved && <div className="number-pad" aria-label="Answer number pad">{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => <button key={n} type="button" disabled={busy} onClick={() => setAnswer((s) => (s + n).slice(0, 3))}>{n}</button>)}<button type="button" disabled={busy} onClick={() => setAnswer("")} aria-label="Clear answer">Clear</button><button type="button" disabled={busy} onClick={() => setAnswer((s) => (s + "0").slice(0, 3))}>0</button><button type="button" disabled={busy} onClick={() => setAnswer((s) => s.slice(0, -1))} aria-label="Delete last digit">⌫</button></div>}
         <button type="submit" className="button primary check-answer" disabled={busy || (!q.resolved && !answer)}>{busy ? "Saving…" : q.resolved ? "Next discovery →" : "Check my answer"}</button>
       </form>
-    </div><aside className="hint-card"><SharkArt /><h3>A little help from a friend?</h3><p>No rush, no timer. Trying a new strategy is part of learning.</p>{q.hinted ? <div className="hint-content"><h4>{q.attempts >= 2 ? "Let's put it together" : "Try splitting it"}</h4><p>{q.attempts >= 2 ? workedFor(q) : hintFor(q)}</p>{q.attempts >= 2 && !q.resolved && <button className="button soft" disabled={busy} onClick={() => { setAnswer(String(total)); input.current?.focus(); }}>Build the answer: {total}</button>}<small>Helped answers count for your expedition, not independent recall.</small></div> : <button className="button soft" disabled={busy || q.resolved} onClick={() => void onHint()}>Show me a strategy ✧</button>}<div className="hint-bottom">Mistakes never cost you a shark.</div></aside></div>
+    </div><aside className={`hint-card ${q.resolved ? "guide-cheering" : ""}`}><SharkArt /><h3>{q.resolved ? "Look at you go, explorer!" : "A little help from a friend?"}</h3><p>{q.resolved ? "Another discovery for your learning journey. Onwards when you're ready!" : "No rush, no timer. Trying a new strategy is part of learning."}</p>{q.hinted ? <div className="hint-content"><h4>{q.attempts >= 2 ? "Let's put it together" : "Try splitting it"}</h4><p>{q.attempts >= 2 ? workedFor(q) : hintFor(q)}</p>{q.attempts >= 2 && !q.resolved && <button className="button soft" disabled={busy} onClick={() => { setAnswer(String(total)); input.current?.focus(); }}>Build the answer: {total}</button>}<small>Helped answers count for your expedition, not independent recall.</small></div> : <button className="button soft" disabled={busy || q.resolved} onClick={() => void onHint()}>Show me a strategy ✧</button>}<div className="hint-bottom">Mistakes never cost you a shark.</div></aside></div>
   </section>;
 }
 
