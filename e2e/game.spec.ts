@@ -213,7 +213,7 @@ test("a completed expedition card opens more of the same activity with no daily 
   for (const activity of ["feeding", "reef", "dive"] as ActivityId[]) {
     const title = { reef: "Reef Trail", feeding: "Feeding Time", dive: "Discovery Dive" }[activity];
     await finish(page, activity, title);
-    await page.getByRole("button", { name: "Back to my ocean", exact: true }).click();
+    await page.getByRole("button", { name: /^Back to my ocean/ }).click();
     const before = await saved(page);
     const card = page.locator(`.activity-card.${activity}`);
     await expect(card).toContainText("Do more");
