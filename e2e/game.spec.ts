@@ -200,9 +200,14 @@ test("production subpath works offline, including photographs, progress and stan
   await finish(page, "feeding", "Feeding Time");
   await page.getByRole("button", { name: /Back to my ocean/ }).click();
   await finish(page, "dive", "Discovery Dive");
-  const photo = page.locator(".reward-reveal img");
-  await expect(photo).toBeVisible();
-  expect(await photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
+  const discoveredBeforeReload = await onlyCollectedShark(page);
+  if (discoveredBeforeReload.kind === "real") {
+    const photo = page.locator(".reward-reveal img");
+    await expect(photo).toBeVisible();
+    expect(await photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true);
+  } else {
+    await expect(page.locator(".reward-reveal svg")).toBeVisible();
+  }
   await page.reload();
   expect((await saved(page)).collection).toHaveLength(1);
   await page.getByRole("button", { name: /Shark album/ }).click();
