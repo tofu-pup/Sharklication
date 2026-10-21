@@ -134,7 +134,7 @@ test("complete all activities in a chosen order, reload mid-task, and issue one 
   await expect(page.getByRole("heading", { name: "Whale shark", exact: true })).toBeVisible();
   expect((await saved(page)).collection).toHaveLength(1);
   await page.getByRole("button", { name: /Open my album/ }).click();
-  await page.getByRole("button", { name: /Real species Whale shark/ }).click();
+  await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: "Whale shark", exact: true }) }).click();
   await expect(page.getByText("Rhincodon typus", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Meet Whale shark" })).toBeVisible();
   await expect(page.locator(".shark-facts li")).toHaveCount(15);
@@ -194,7 +194,7 @@ test("production subpath works offline, including photographs, progress and stan
   await page.reload();
   expect((await saved(page)).collection).toHaveLength(1);
   await page.getByRole("button", { name: /Shark album/ }).click();
-  await page.getByRole("button", { name: /Real species Whale shark/ }).click();
+  await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: "Whale shark", exact: true }) }).click();
   await expect(page.locator(".shark-story")).toContainText("biggest fish on Earth");
   await expect(page.locator(".shark-facts li")).toHaveCount(15);
 });
