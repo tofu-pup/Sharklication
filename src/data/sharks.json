@@ -1,6 +1,6 @@
 [
   {
-    "id": "whale-shark", "name": "Whale shark", "scientificName": "Rhincodon typus", "kind": "real", "color": "#1395ac",
+    "id": "whale-shark", "name": "Whale shark", "scientificName": "Rhincodon typus", "kind": "real", "color": "#1395ac", "specialBadge": "Gentle Giant",
     "habitat": "Tropical and warm-temperate open seas.",
     "size": "Around 9 m at maturity; adults can grow much larger.",
     "description": [
@@ -27,7 +27,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/whale-shark/"]
   },
   {
-    "id": "epaulette-shark", "name": "Epaulette shark", "scientificName": "Hemiscyllium ocellatum", "kind": "real", "color": "#b89b64",
+    "id": "epaulette-shark", "name": "Epaulette shark", "scientificName": "Hemiscyllium ocellatum", "kind": "real", "color": "#b89b64", "specialBadge": "Reef Walker",
     "habitat": "Shallow coral reefs around northern Australia and New Guinea.",
     "size": "Adults roughly 0.6–1 m; reported maximum about 1.07 m.",
     "description": [
@@ -54,7 +54,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/epaulette-shark/"]
   },
   {
-    "id": "blacktip-reef-shark", "name": "Blacktip reef shark", "scientificName": "Carcharhinus melanopterus", "kind": "real", "color": "#689fa6",
+    "id": "blacktip-reef-shark", "name": "Blacktip reef shark", "scientificName": "Carcharhinus melanopterus", "kind": "real", "color": "#689fa6", "specialBadge": "Dark-Tipped Dazzler",
     "habitat": "Shallow coral reefs and sand flats in the tropical Indo-Pacific.",
     "size": "Adults roughly 1–1.6 m; some reach about 1.8 m.",
     "description": [
@@ -81,7 +81,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blacktip-reef-shark/"]
   },
   {
-    "id": "whitetip-reef-shark", "name": "Whitetip reef shark", "scientificName": "Triaenodon obesus", "kind": "real", "color": "#8eaaa5",
+    "id": "whitetip-reef-shark", "name": "Whitetip reef shark", "scientificName": "Triaenodon obesus", "kind": "real", "color": "#8eaaa5", "specialBadge": "Cave Napper",
     "habitat": "Coral reefs and reef caves in the Indo-Pacific and eastern tropical Pacific.",
     "size": "Adults usually about 1–1.8 m; rarely larger.",
     "description": [
@@ -108,7 +108,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/whitetip-reef-shark/"]
   },
   {
-    "id": "bonnethead", "name": "Bonnethead", "scientificName": "Sphyrna tiburo", "kind": "real", "color": "#9cbaa5",
+    "id": "bonnethead", "name": "Bonnethead", "scientificName": "Sphyrna tiburo", "kind": "real", "color": "#9cbaa5", "specialBadge": "Crab Crusher",
     "habitat": "Warm, shallow coastal bays and estuaries of the western Atlantic.",
     "size": "Often about 1–1.2 m as an adult; maximum about 1.5 m.",
     "description": [
@@ -135,7 +135,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/bonnethead/"]
   },
   {
-    "id": "leopard-shark", "name": "Leopard shark", "scientificName": "Triakis semifasciata", "kind": "real", "color": "#939d93",
+    "id": "leopard-shark", "name": "Leopard shark", "scientificName": "Triakis semifasciata", "kind": "real", "color": "#939d93", "specialBadge": "Saddle-Spot Swimmer",
     "habitat": "Sandy or muddy bays and estuaries of the eastern Pacific.",
     "size": "Adults average about 1.2–1.5 m; larger individuals occur.",
     "description": [
@@ -162,79 +162,79 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/leopard-shark/"]
   },
   {
-    "id": "coral-comet", "name": "Coral Comet", "kind": "fantasy", "color": "#ef8e81", "accent": "#ffdc94", "symbol": "✦",
+    "id": "coral-comet", "name": "Coral Comet", "kind": "fantasy", "color": "#ef8e81", "accent": "#ffdc94", "symbol": "✦", "specialBadge": "Bubble Trailblazer",
     "habitat": "The daydream reef", "size": "Three imaginary surfboards long",
     "description": ["In our make-believe ocean, Coral Comet is the first friend to volunteer for a treasure hunt. Every turn leaves a trail of star-shaped bubbles, which is very useful for anyone who has forgotten the way home.", "Its favourite treasure is a beautifully sorted pebble collection. Some are arranged in fives, some in tens, and one very special pebble is reserved for a friend who tried something difficult. This is a fantasy story, not a real shark species."],
     "facts": ["Leaves a trail of tiny star-shaped bubbles.", "Collects coral-colored pebbles in groups of five.", "Keeps a pretend compass that points towards anyone who needs a friend.", "Has a different treasure-hunt whistle for every day of the week.", "Builds little pebble bridges for the lagoon's imaginary snails.", "Packs five seaweed sandwiches for a make-believe expedition, then invites friends to share.", "Its comet trail becomes a dotted treasure map when it swims in a circle.", "Always puts borrowed treasures back before starting a new adventure."], "references": []
   },
   {
-    "id": "moonfin", "name": "Moonfin", "kind": "fantasy", "color": "#a79cdf", "accent": "#fff0b8", "symbol": "☾",
+    "id": "moonfin", "name": "Moonfin", "kind": "fantasy", "color": "#a79cdf", "accent": "#fff0b8", "symbol": "☾", "specialBadge": "Dream Mapper",
     "habitat": "The moonlit make-believe trench", "size": "One moonbeam long",
     "description": ["When the pretend ocean grows quiet, Moonfin switches on its crescent-shaped glow and goes exploring. It likes counting the stars reflected on the surface, though a passing ripple can make it lose its place.", "Moonfin keeps a notebook full of dream maps. Every map ends at a cosy nook with room for a friend and a bedtime story. Glowing moon fins and dream maps belong to our imagination, not shark science."],
     "facts": ["A sleepy explorer with a glowing crescent fin.", "Counts constellations before going to sleep.", "Keeps its imaginary dream maps rolled inside an empty moon shell.", "Turns down its pretend moonlight whenever a friend wants to rest.", "Invents names for constellations, including the Great Wobbly Jellyfish.", "Carries a tiny bedtime bell that only dream creatures can hear.", "Arranges star pillows in equal rows for visiting explorers.", "Writes tomorrow's adventure in a notebook that closes with a soft bubble-pop."], "references": []
   },
   {
-    "id": "bubble-buddy", "name": "Bubble Buddy", "kind": "fantasy", "color": "#55c6cb", "accent": "#b6f6ed", "symbol": "○",
+    "id": "bubble-buddy", "name": "Bubble Buddy", "kind": "fantasy", "color": "#55c6cb", "accent": "#b6f6ed", "symbol": "○", "specialBadge": "Bubble Artist",
     "habitat": "Bubblegum lagoon", "size": "Six soap bubbles long",
     "description": ["Bubble Buddy is the make-believe lagoon's most enthusiastic bubble artist. Rings, spirals and wobbly squares drift behind it like a floating gallery. Nobody has worked out how it makes the square ones.", "Before a bubble show, it shares the tickets equally among its friends and leaves the front row for the smallest creatures. This bubble-making character is imaginary; it is not a real shark species."],
     "facts": ["Blows bubble rings that never quite pop.", "Keeps its treasures in perfectly equal groups.", "Its imaginary square bubbles are reserved for very special birthdays.", "Practises bubble spirals by counting turns in twos.", "Runs a pretend bubble theatre with a front row for tiny creatures.", "Makes a bubble umbrella for friends who dislike imaginary underwater rain.", "Gives every visitor the same number of shiny pretend tickets.", "Ends each show with one enormous bubble shaped like a smile."], "references": []
   },
   {
-    "id": "sunny-saw", "name": "Sunny Saw", "kind": "fantasy", "color": "#f1bc54", "accent": "#fff0af", "symbol": "☀",
+    "id": "sunny-saw", "name": "Sunny Saw", "kind": "fantasy", "color": "#f1bc54", "accent": "#fff0af", "symbol": "☀", "specialBadge": "Sunshine Sharer",
     "habitat": "The sunshine shallows", "size": "Two sunbeams long",
     "description": ["Sunny Saw organises the best pretend picnics in the sunshine shallows. Its extraordinary nose is just the thing for dividing an imaginary birthday cake into fair shares, provided someone remembers the napkins.", "When clouds roll over the make-believe sea, Sunny invites everyone to count rays of sunshine instead. This friendly character is a fantasy invention, not a description of a real sawshark."],
     "facts": ["Its pretend saw-shaped nose cuts birthday cake, not fish.", "Invites every sea creature to its counting picnics.", "Keeps a pretend picnic list inside a bright yellow shell.", "Makes sure the smallest guest gets a plate before anyone takes seconds.", "Counts sunshine rays in tens when setting the imaginary table.", "Its favourite make-believe cake is lemon-and-seafoam flavour.", "Decorates party hats with patterns of yellow and blue shells.", "Always leaves a little extra room for an unexpected friend."], "references": []
   },
   {
-    "id": "mint-mischief", "name": "Mint Mischief", "kind": "fantasy", "color": "#7dc4a3", "accent": "#e1f9a8", "symbol": "♧",
+    "id": "mint-mischief", "name": "Mint Mischief", "kind": "fantasy", "color": "#7dc4a3", "accent": "#e1f9a8", "symbol": "♧", "specialBadge": "Clue-Leaving Sleuth",
     "habitat": "The peppermint kelp forest", "size": "Four mint leaves long",
     "description": ["Mint Mischief leaves little treasure clues between the leaves of an imaginary peppermint forest. Some clues are number patterns. Others are very bad drawings of where the treasure might be.", "The game is never about tricking a friend into feeling stuck: another helpful clue is always waiting nearby. Peppermint kelp and this mischievous shark belong to our make-believe ocean."],
     "facts": ["Hides tiny treasure maps in the kelp.", "Always leaves a useful clue for a friend.", "Its pretend peppermint forest smells like a freshly opened sweet tin.", "Uses a different leaf shape for each step of a treasure trail.", "Once drew the map upside down and discovered a brand-new imaginary cove.", "Keeps spare hints in a pocket made from folded make-believe kelp.", "Never hides another creature's belongings without asking first.", "Ends every treasure game by sharing the prize equally."], "references": []
   },
   {
-    "id": "star-skipper", "name": "Star Skipper", "kind": "fantasy", "color": "#848fd4", "accent": "#ffd98a", "symbol": "★",
+    "id": "star-skipper", "name": "Star Skipper", "kind": "fantasy", "color": "#848fd4", "accent": "#ffd98a", "symbol": "★", "specialBadge": "Pattern-Making Star",
     "habitat": "The starlight sea", "size": "Nine shooting stars long",
     "description": ["Star Skipper spends imaginary evenings bouncing across a sea full of reflected stars. Its favourite challenge is making a new repeating pattern without using the same sparkle twice in a row.", "When a pattern goes wrong, it calls the mistake a brand-new constellation and tries again. A star-skipping shark is a fantasy friend, not a species you could find on a real expedition."],
     "facts": ["Skips across the waves like a pebble.", "Loves making patterns with bright little stars.", "Its imaginary landing spots glow softly for exactly one pretend wink.", "Counts wave-hops in threes before trying a new pattern.", "Calls a zigzag trail the Dancing Sea Cucumber constellation.", "Keeps a scrapbook of surprising patterns made by happy mistakes.", "Invites friends to finish a sparkle pattern rather than racing them.", "Always checks that the pretend landing pool has room for everybody."], "references": []
   },
   {
-    "id": "peach-pirate", "name": "Peach Pirate", "kind": "fantasy", "color": "#eca183", "accent": "#fce7c0", "symbol": "◇",
+    "id": "peach-pirate", "name": "Peach Pirate", "kind": "fantasy", "color": "#eca183", "accent": "#fce7c0", "symbol": "◇", "specialBadge": "Treasure Sharer",
     "habitat": "Peachy pirate cove", "size": "A treasure chest long",
     "description": ["Peach Pirate has the least frightening pirate ship in the make-believe sea. Its flag is a fancy napkin, its treasure is mostly shiny buttons, and everyone is welcome aboard.", "The captain's most important rule is that every crew member gets a fair share, including the tiny snail who polishes the anchor. This is an imaginary pirate adventure, not information about a real shark."],
     "facts": ["Shares every imaginary treasure equally.", "Its pirate flag is really a very fancy napkin.", "The ship's pretend anchor is a spoon with a ribbon tied to it.", "Keeps shiny buttons sorted into little groups inside a peach-coloured chest.", "Says ahoy to the same imaginary snail every morning.", "Uses a treasure map with a big friendly arrow instead of a scary skull.", "Awards the crew extra napkins whenever a pretend picnic gets messy.", "Its favourite pirate rule is that asking for help is a brave thing to do."], "references": []
   },
   {
-    "id": "cloud-cruiser", "name": "Cloud Cruiser", "kind": "fantasy", "color": "#91b9d5", "accent": "#ecf8ff", "symbol": "☁",
+    "id": "cloud-cruiser", "name": "Cloud Cruiser", "kind": "fantasy", "color": "#91b9d5", "accent": "#ecf8ff", "symbol": "☁", "specialBadge": "Cloud Adventurer",
     "habitat": "The upside-down sky ocean", "size": "One fluffy cloud long",
     "description": ["Cloud Cruiser dreams of an upside-down ocean where clouds are soft islands and rain falls upwards. It carries a small pretend cushion for anyone who needs a rest between adventures.", "Its maps change whenever the wind blows, so Cloud Cruiser has become very good at trying a different route. Sky oceans and cushion-carrying sharks are part of this fantasy story, not marine biology."],
     "facts": ["Swims through clouds in its dreams.", "Makes soft landing spots for tired explorers.", "Its imaginary cloud islands drift into a new arrangement every afternoon.", "Packs a pretend cushion instead of a heavy treasure chest.", "Counts fluffy stepping-stones before choosing a route across the sky sea.", "Keeps a rain-upwards umbrella for the silliest make-believe weather.", "Draws dotted lines on maps to show places it has not explored yet.", "Likes a quiet adventure just as much as a grand one."], "references": []
   },
   {
-    "id": "jelly-jester", "name": "Jelly Jester", "kind": "fantasy", "color": "#d39bc6", "accent": "#ffe5a8", "symbol": "✧",
+    "id": "jelly-jester", "name": "Jelly Jester", "kind": "fantasy", "color": "#d39bc6", "accent": "#ffe5a8", "symbol": "✧", "specialBadge": "Riddle-Room Jester",
     "habitat": "The giggling grotto", "size": "Seven jellybeans long",
     "description": ["Jelly Jester is the chief entertainer of an imaginary grotto, wearing a hat that looks suspiciously like a jellyfish. Its jokes are so silly that even the pretend seaweed seems to wiggle with laughter.", "Before each show, it arranges seats into equal rows so nobody is left behind a rock. This jellybean-sized jester is invented, not a real shark with scientific facts."],
     "facts": ["Wears a hat made from a pretend jellyfish.", "Knows a different silly joke for every times table.", "Its imaginary stage curtain is a very polite piece of seaweed.", "Practises bowing without letting the pretend jellyfish hat slip off.", "Arranges audience seats in equal rows with a clear path for little guests.", "Keeps jokes on coloured cards so friends can choose their favourite.", "A joke that makes nobody laugh becomes a riddle for the next show.", "Always lets an audience member say pass instead of joining in."], "references": []
   },
   {
-    "id": "kelp-knight", "name": "Kelp Knight", "kind": "fantasy", "color": "#6da6a0", "accent": "#e0dfa4", "symbol": "♢",
+    "id": "kelp-knight", "name": "Kelp Knight", "kind": "fantasy", "color": "#6da6a0", "accent": "#e0dfa4", "symbol": "♢", "specialBadge": "Kindness Knight",
     "habitat": "The secret seaweed castle", "size": "Two seaweed swords long",
     "description": ["Kelp Knight guards a pretend castle built from folded seaweed. There are no battles here: its brave deeds include helping a lost fish and asking for help with a tricky treasure map.", "Its leafy shield doubles as a picnic tray, and its helmet has a special opening for bubbles. This gentle knight lives in our imagination, not in a real species guide."],
     "facts": ["Protects the smallest fish with a leafy shield.", "Practises brave deeds, never battles.", "Its imaginary castle has a drawbridge wide enough for two friends.", "Uses the shield as a picnic tray on peaceful pretend patrols.", "Keeps spare seaweed helmets for visitors who want to dress up.", "Counts castle windows in fours when checking the bedtime lights.", "Its bravest badge celebrates the day it asked someone else for help.", "Every creature is welcome through the make-believe castle gate."], "references": []
   },
   {
-    "id": "rainbow-ripple", "name": "Rainbow Ripple", "kind": "fantasy", "color": "#bb9cdc", "accent": "#ffc6c0", "symbol": "⌁",
+    "id": "rainbow-ripple", "name": "Rainbow Ripple", "kind": "fantasy", "color": "#bb9cdc", "accent": "#ffc6c0", "symbol": "⌁", "specialBadge": "Rainbow Pattern Pro",
     "habitat": "The rainbow tide pool", "size": "A whole rainbow long",
     "description": ["Rainbow Ripple paints our make-believe tide pool with waves of changing colour. It loves arranging shells into patterns, then inviting a friend to guess what comes next.", "Sometimes the best pattern is a completely surprising one. Rainbow Ripple keeps a special corner for happy accidents. Colour-changing rainbow fins are fantasy, not a claim about real sharks."],
     "facts": ["Its fins change color with every happy thought.", "Makes ripples in repeating patterns.", "Its imaginary paintbrush is a ribbon of rainbow seaweed.", "Collects shells that almost match, because almost can look wonderful.", "Leaves one space in each pretend pattern for a friend's idea.", "Invented a new make-believe colour called giggle-green.", "Keeps happy accidents in a special corner of the rainbow pool.", "Enjoys quiet grey days too, when the pretend colours can take a rest."], "references": []
   },
   {
-    "id": "disco-dorsal", "name": "Disco Dorsal", "kind": "fantasy", "color": "#68b7cb", "accent": "#fbc574", "symbol": "♫",
+    "id": "disco-dorsal", "name": "Disco Dorsal", "kind": "fantasy", "color": "#68b7cb", "accent": "#fbc574", "symbol": "♫", "specialBadge": "Dance-Floor DJ",
     "habitat": "The underwater dance floor", "size": "Five dance steps long",
     "description": ["Disco Dorsal runs an imaginary dance party where every fin is welcome. Its glitter-ball dorsal fin turns the cave ceiling into a field of little stars, even when its dance steps go in the wrong direction.", "The music comes in groups of eight beats, but nobody has to keep up. Taking a break is part of a good party. This disco shark is a fantasy character, not a real glowing species."],
     "facts": ["Has a glitter-ball fin and two left flippers.", "Always dances in groups of eight beats.", "Its imaginary dance floor has a cosy quiet corner with soft cushions.", "Counts everyone in before starting a new pretend dance.", "Invented the Wobbly Seaweed Shuffle after stepping the wrong way.", "Keeps the make-believe music gentle enough for little ocean ears.", "Invites sitting, swaying and watching as well as full-fin dancing.", "Ends every party by thanking the friends who helped tidy up."], "references": []
   },
   {
-    "id": "great-white-shark", "name": "Great white shark", "scientificName": "Carcharodon carcharias", "kind": "real", "color": "#728e9d",
+    "id": "great-white-shark", "name": "Great white shark", "scientificName": "Carcharodon carcharias", "kind": "real", "color": "#728e9d", "specialBadge": "Ocean Powerhouse",
     "habitat": "Coastal and offshore waters, especially temperate seas around the world.", "size": "Large adults can reach around 6 m; females usually grow larger than males.",
     "description": [
       "A great white is not white all over! Its grey upper body meets a pale belly along a sharp boundary. From above, the dark back can blend into deeper water; from below, the pale underside blends with the brighter surface. Its pointed nose and strong crescent-shaped tail belong to a traveller built for swimming.",
@@ -260,7 +260,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/white-shark/", "https://www.fisheries.noaa.gov/species/white-shark"]
   },
   {
-    "id": "tiger-shark", "name": "Tiger shark", "scientificName": "Galeocerdo cuvier", "kind": "real", "color": "#8c9795",
+    "id": "tiger-shark", "name": "Tiger shark", "scientificName": "Galeocerdo cuvier", "kind": "real", "color": "#8c9795", "specialBadge": "Stripe Spotter",
     "habitat": "Tropical and warm-temperate seas, from coastal shallows to offshore waters.", "size": "Large adults commonly around 3.3–4.3 m, with some growing larger.",
     "description": [
       "Look for the stripes! Young tiger sharks have especially clear dark bars and spots along their sides. The markings become less obvious as the shark grows, so an older tiger shark may not look very stripy at all. Its broad, blunt head is another useful clue.",
@@ -286,7 +286,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/tiger-shark/"]
   },
   {
-    "id": "bull-shark", "name": "Bull shark", "scientificName": "Carcharhinus leucas", "kind": "real", "color": "#849c9e",
+    "id": "bull-shark", "name": "Bull shark", "scientificName": "Carcharhinus leucas", "kind": "real", "color": "#849c9e", "specialBadge": "Freshwater Explorer",
     "habitat": "Warm coastal seas, estuaries and sometimes freshwater rivers.", "size": "Many adults are about 2–3 m long; some grow larger.",
     "description": [
       "Most sharks stay in salty seawater, but a bull shark can travel into rivers too. Special body processes help it handle changing salt levels. An estuary, where river water meets the sea, can be an important part of this shark's world.",
@@ -312,7 +312,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/bull-shark/"]
   },
   {
-    "id": "great-hammerhead", "name": "Great hammerhead", "scientificName": "Sphyrna mokarran", "kind": "real", "color": "#7c9c9c",
+    "id": "great-hammerhead", "name": "Great hammerhead", "scientificName": "Sphyrna mokarran", "kind": "real", "color": "#7c9c9c", "specialBadge": "Hammerhead High-Flyer",
     "habitat": "Warm coastal and offshore waters, including continental shelves and coral reefs.", "size": "Often around 3–4 m as a large adult; exceptional individuals can approach 6 m.",
     "description": [
       "This hammerhead makes a dramatic silhouette! Its very tall first dorsal fin curves backwards, and an adult's wide head has an almost straight front edge. The head shape is called a cephalofoil. It is part of the shark's real body, not a tool it carries around.",
@@ -338,7 +338,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/great-hammerhead/"]
   },
   {
-    "id": "scalloped-hammerhead", "name": "Scalloped hammerhead", "scientificName": "Sphyrna lewini", "kind": "real", "color": "#849ea5",
+    "id": "scalloped-hammerhead", "name": "Scalloped hammerhead", "scientificName": "Sphyrna lewini", "kind": "real", "color": "#849ea5", "specialBadge": "Schooling Superstar",
     "habitat": "Tropical and warm-temperate coastal waters, continental shelves and offshore islands.", "size": "Adults commonly about 2.5–3.5 m; some grow over 4 m.",
     "description": [
       "The front edge of this shark's wide head has a wavy, scalloped outline. A notch in the middle and smaller indentations to either side help give it its name. Its first dorsal fin rises above a slim body, while the second dorsal fin is much smaller.",
@@ -364,7 +364,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/scalloped-hammerhead/"]
   },
   {
-    "id": "smooth-hammerhead", "name": "Smooth hammerhead", "scientificName": "Sphyrna zygaena", "kind": "real", "color": "#8b9d91",
+    "id": "smooth-hammerhead", "name": "Smooth hammerhead", "scientificName": "Sphyrna zygaena", "kind": "real", "color": "#8b9d91", "specialBadge": "Smooth-Gliding Scout",
     "habitat": "Temperate and warm seas, often near continental shelves.", "size": "Large adults can reach around 4 m.",
     "description": [
       "The smooth hammerhead has a head-shaped clue right in its name. Unlike its scalloped cousin, it has no notch in the middle of its rounded front edge. Look carefully at the outline and imagine tracing it with a pencil: a smooth curve across the centre!",
@@ -390,7 +390,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/smooth-hammerhead/"]
   },
   {
-    "id": "shortfin-mako", "name": "Shortfin mako", "scientificName": "Isurus oxyrinchus", "kind": "real", "color": "#477f9e",
+    "id": "shortfin-mako", "name": "Shortfin mako", "scientificName": "Isurus oxyrinchus", "kind": "real", "color": "#477f9e", "specialBadge": "Speedy Sea Sprinter",
     "habitat": "Tropical and temperate open seas, sometimes approaching coastal waters.", "size": "Adults often about 2–3 m, with large individuals reaching around 4 m.",
     "description": [
       "A pointed nose, sleek body and powerful crescent tail make the shortfin mako an impressive ocean swimmer. Its back can look metallic blue, with a bright white underside. It chases fast-moving fish, so a shape that moves efficiently through water is very useful.",
@@ -416,7 +416,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/shortfin-mako/", "https://www.fisheries.noaa.gov/species/atlantic-shortfin-mako-shark"]
   },
   {
-    "id": "blue-shark", "name": "Blue shark", "scientificName": "Prionace glauca", "kind": "real", "color": "#337eb2",
+    "id": "blue-shark", "name": "Blue shark", "scientificName": "Prionace glauca", "kind": "real", "color": "#337eb2", "specialBadge": "Ocean Wanderer",
     "habitat": "Temperate and tropical open oceans around the world.", "size": "Adults commonly around 2–3 m; some grow larger.",
     "description": [
       "Meet a shark with long, wing-like pectoral fins and a beautiful blue back. Its slender body and pointed snout are quite different from the sturdy shape of a bull shark. Beneath that blue upper surface, the belly is a sharply contrasting white.",
@@ -442,7 +442,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-shark/"]
   },
   {
-    "id": "basking-shark", "name": "Basking shark", "scientificName": "Cetorhinus maximus", "kind": "real", "color": "#8b9991",
+    "id": "basking-shark", "name": "Basking shark", "scientificName": "Cetorhinus maximus", "kind": "real", "color": "#8b9991", "specialBadge": "Plankton Sifter",
     "habitat": "Temperate seas worldwide, including coastal waters rich in plankton.", "size": "Adults often around 6.7–8.8 m, with some growing larger.",
     "description": [
       "That enormous open mouth is collecting a very small dinner! A basking shark swims through patches of plankton and strains food from the water. Its huge gill slits almost wrap around its head, giving this giant a very different look from a hunting shark.",
@@ -468,7 +468,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/basking-shark/"]
   },
   {
-    "id": "sand-tiger-shark", "name": "Sand tiger shark", "scientificName": "Carcharias taurus", "kind": "real", "color": "#a39f8b",
+    "id": "sand-tiger-shark", "name": "Sand tiger shark", "scientificName": "Carcharias taurus", "kind": "real", "color": "#a39f8b", "specialBadge": "Toothy Grin",
     "habitat": "Coastal waters, sandy bays and rocky reefs in several warm and temperate regions.", "size": "Large adults are often around 2–3 m long.",
     "description": [
       "Those slender teeth can stick out even when the mouth is closed, but teeth alone do not tell an animal's whole story. Sand tiger sharks often swim slowly around reefs and coastal habitats. Their grey-brown bodies may carry scattered reddish-brown spots.",
@@ -494,7 +494,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/sand-tiger-shark/"]
   },
   {
-    "id": "nurse-shark", "name": "Nurse shark", "scientificName": "Ginglymostoma cirratum", "kind": "real", "color": "#a49273",
+    "id": "nurse-shark", "name": "Nurse shark", "scientificName": "Ginglymostoma cirratum", "kind": "real", "color": "#a49273", "specialBadge": "Seabed Snoozer",
     "habitat": "Warm Atlantic coastal habitats, including reefs, seagrass beds and sandy shallows.", "size": "Large adults are often around 2–3 m long.",
     "description": [
       "A nurse shark can rest on the seabed while moving water over its gills. During the day, several may share a sheltered resting place. At night this bottom explorer becomes more active, looking for small animals tucked among the reef and sand.",
@@ -520,7 +520,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/nurse-shark/"]
   },
   {
-    "id": "lemon-shark", "name": "Lemon shark", "scientificName": "Negaprion brevirostris", "kind": "real", "color": "#aaa878",
+    "id": "lemon-shark", "name": "Lemon shark", "scientificName": "Negaprion brevirostris", "kind": "real", "color": "#aaa878", "specialBadge": "Nursery-Seeker",
     "habitat": "Warm coastal shallows, sandy or muddy bottoms, mangroves and estuaries.", "size": "Large adults commonly about 2.4–3 m long.",
     "description": [
       "A lemon shark is not bright yellow like a lemon sweet. Its back is more yellow-brown or olive-grey, helping it blend into sandy coastal places. Two dorsal fins of similar size make a handy identification clue, because many sharks have a much smaller second fin.",
@@ -546,7 +546,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/lemon-shark/"]
   },
   {
-    "id": "sandbar-shark", "name": "Sandbar shark", "scientificName": "Carcharhinus plumbeus", "kind": "real", "color": "#8b9797",
+    "id": "sandbar-shark", "name": "Sandbar shark", "scientificName": "Carcharhinus plumbeus", "kind": "real", "color": "#8b9797", "specialBadge": "Tall-Fin Champion",
     "habitat": "Coastal continental shelves, bays and estuaries in warm and temperate seas.", "size": "Adults often about 1.5–2 m long, with some larger individuals.",
     "description": [
       "The sandbar shark has a fin that really stands out: a tall triangular first dorsal fin. Its body is deep and sturdy, its snout is rounded, and its plain grey-brown colour has none of a tiger shark's bold stripes. Try spotting the fin before looking at the name!",
@@ -572,7 +572,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/sandbar-shark/"]
   },
   {
-    "id": "dusky-shark", "name": "Dusky shark", "scientificName": "Carcharhinus obscurus", "kind": "real", "color": "#788f9a",
+    "id": "dusky-shark", "name": "Dusky shark", "scientificName": "Carcharhinus obscurus", "kind": "real", "color": "#788f9a", "specialBadge": "Coastline Traveller",
     "habitat": "Warm and temperate continental coasts, from shallow waters to offshore shelf edges.", "size": "Large adults can grow to around 3–4 m.",
     "description": [
       "A dusky shark can look like several of its grey coastal relatives, so a single colour is not enough for identification. Long swept-back pectoral fins, a relatively low rounded first dorsal fin and a small ridge along the back are useful pieces of the puzzle.",
@@ -598,7 +598,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/dusky-shark/"]
   },
   {
-    "id": "grey-reef-shark", "name": "Grey reef shark", "scientificName": "Carcharhinus amblyrhynchos", "kind": "real", "color": "#779fa9",
+    "id": "grey-reef-shark", "name": "Grey reef shark", "scientificName": "Carcharhinus amblyrhynchos", "kind": "real", "color": "#779fa9", "specialBadge": "Reef Patrol Pro",
     "habitat": "Tropical Indo-Pacific coral reefs, especially reef slopes and drop-offs.", "size": "Adults often around 1.3–1.9 m long.",
     "description": [
       "A broad dark border along the back edge of the tail is a useful clue for a grey reef shark. Its grey back fades to a pale belly, while the first dorsal fin is not boldly black-tipped like that of a blacktip reef shark. Similar reef neighbours can have very different details!",
@@ -624,7 +624,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/grey-reef-shark/"]
   },
   {
-    "id": "blacktip-shark", "name": "Blacktip shark", "scientificName": "Carcharhinus limbatus", "kind": "real", "color": "#7997a1",
+    "id": "blacktip-shark", "name": "Blacktip shark", "scientificName": "Carcharhinus limbatus", "kind": "real", "color": "#7997a1", "specialBadge": "Inshore Fin Flasher",
     "habitat": "Tropical and warm-temperate coastal waters, bays and estuaries.", "size": "Adults often around 1.5 m, with larger individuals exceeding 2 m.",
     "description": [
       "This is not the same species as the blacktip reef shark already in your album! The blacktip shark has a more pointed snout, and scientists use fin details and other features to tell related sharks apart. Similar common names can be tricky, which is why scientific names are so helpful.",
@@ -650,7 +650,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blacktip-shark/"]
   },
   {
-    "id": "zebra-shark", "name": "Zebra shark", "scientificName": "Stegostoma tigrinum", "kind": "real", "color": "#b8a574",
+    "id": "zebra-shark", "name": "Zebra shark", "scientificName": "Stegostoma tigrinum", "kind": "real", "color": "#b8a574", "specialBadge": "Spotty Shape-Shifter",
     "habitat": "Shallow tropical Indo-Pacific reefs and sandy seabeds.", "size": "Adults can reach around 2.5 m, including the very long tail.",
     "description": [
       "A baby zebra shark wears stripes, but an adult wears spots! Youngsters have pale bands against a dark body. As they grow, their pattern changes dramatically, leaving adults with dark spots on a yellowish-brown background. That is quite a wardrobe change.",
@@ -676,7 +676,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/zebra-shark/", "https://australian.museum/learn/animals/fishes/zebra-shark-stegostoma-tigrinum/"]
   },
   {
-    "id": "tawny-nurse-shark", "name": "Tawny nurse shark", "scientificName": "Nebrius ferrugineus", "kind": "real", "color": "#ab9578",
+    "id": "tawny-nurse-shark", "name": "Tawny nurse shark", "scientificName": "Nebrius ferrugineus", "kind": "real", "color": "#ab9578", "specialBadge": "Nighttime Reef Scout",
     "habitat": "Tropical Indo-Pacific reefs, lagoons and sandy coastal bottoms.", "size": "Large individuals can grow to around 3 m or more.",
     "description": [
       "This brown reef resident has a broad head and a small mouth that works like a powerful suction nozzle. It searches holes and crevices for hidden food. Its pointed fin tips help distinguish it from the more round-finned nurse shark of the Atlantic.",
@@ -702,7 +702,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/tawny-nurse-shark/"]
   },
   {
-    "id": "spotted-wobbegong", "name": "Spotted wobbegong", "scientificName": "Orectolobus maculatus", "kind": "real", "color": "#9b9c6d",
+    "id": "spotted-wobbegong", "name": "Spotted wobbegong", "scientificName": "Orectolobus maculatus", "kind": "real", "color": "#9b9c6d", "specialBadge": "Camouflage Champion",
     "habitat": "Australian coastal reefs, rocky ledges and nearby seabeds.", "size": "Many are around 1.5–1.8 m; some grow considerably larger.",
     "description": [
       "Can you spot the shark hiding in plain sight? A spotted wobbegong has a broad flattened body, patterned skin and little flaps around its head. Together these features help it blend into a busy reef background. It belongs to the group often called carpet sharks.",
@@ -728,7 +728,7 @@
     "references": ["https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/spotted-wobbegong/"]
   },
   {
-    "id": "port-jackson-shark", "name": "Port Jackson shark", "scientificName": "Heterodontus portusjacksoni", "kind": "real", "color": "#a49d7d",
+    "id": "port-jackson-shark", "name": "Port Jackson shark", "scientificName": "Heterodontus portusjacksoni", "kind": "real", "color": "#a49d7d", "specialBadge": "Egg-Case Keeper",
     "habitat": "Temperate coastal waters of southern Australia, especially rocky reefs and sandy bottoms.", "size": "Usually under 1.5 m, with females generally larger than males.",
     "description": [
       "This little shark looks as if it is wearing a dark harness! Bold bands cross its pale body, while ridges above the eyes give its blunt head a distinctive shape. It belongs to the bullhead sharks, a different group from the much larger bull shark.",

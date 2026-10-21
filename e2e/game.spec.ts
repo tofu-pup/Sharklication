@@ -53,7 +53,7 @@ test("expanded album preserves older discovery order and opens every new species
     test.slow();
     await welcome(page);
     await finishDay(page);
-    const content: Array<{ id: string; name: string; scientificName?: string }> = JSON.parse(readFileSync(new URL("../src/data/sharks.json", import.meta.url), "utf8"));
+    const content: Array<{ id: string; name: string; scientificName?: string; specialBadge: string }> = JSON.parse(readFileSync(new URL("../src/data/sharks.json", import.meta.url), "utf8"));
     const original = await saved(page);
     const legacyIds = new Set(content.slice(0, 18).map((shark) => shark.id));
     const legacy = structuredClone(original);
@@ -98,6 +98,7 @@ test("expanded album preserves older discovery order and opens every new species
     for (const shark of additions) {
       await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: shark.name, exact: true }) }).click();
       await expect(page.getByRole("heading", { name: `Meet ${shark.name}`, exact: true })).toBeVisible();
+      await expect(page.locator(".detail-special-badge")).toContainText(shark.specialBadge);
       await expect(page.locator(".shark-facts li")).toHaveCount(15);
       await expect(page.locator(".shark-story > p:not(.wildlife-note)")).toHaveCount(2);
       const photo = page.getByRole("img", { name: `Photograph of ${shark.name} (${shark.scientificName})`, exact: true });

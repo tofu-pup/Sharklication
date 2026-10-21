@@ -28,6 +28,7 @@ export interface Shark {
   color: string;
   accent?: string;
   symbol?: string;
+  specialBadge: string;
   habitat: string;
   size: string;
   facts: string[];

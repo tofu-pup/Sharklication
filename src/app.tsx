@@ -247,19 +247,19 @@ export function App() {
         {screen === "collection" && <section className="section album">
           {selected ? <SharkDetail shark={selected} back={() => setSelected(undefined)} headingRef={heading} /> : <>
             <span className="eyebrow">YOUR OCEAN, ONE FRIEND AT A TIME</span><h1 ref={heading} tabIndex={-1}>The shark album<span className="heading-dot">.</span></h1><p className="section-intro">{save.collection.length} of {CATALOG.length} discovered. Every friend stays with you, even if you miss a day.</p>
-            <div className="catalog-notice">Starter collection: {CATALOG.filter((s) => s.kind === "real").length} photographed real species + {CATALOG.filter((s) => s.kind === "fantasy").length} illustrated fantasy sharks. More verified species are still being prepared.</div>
+            <div className="catalog-notice">Starter collection: {CATALOG.filter((s) => s.kind === "real").length} photographed real species + {CATALOG.filter((s) => s.kind === "fantasy").length} illustrated fantasy sharks. Every shark has its own special badge to collect!</div>
             <div className="collection-grid">{CATALOG.map((shark) => {
               const collected = save.collection.some((c) => c.sharkId === shark.id);
               return <button key={shark.id} disabled={!collected} className={`shark-card ${collected ? "" : "locked"}`} onClick={() => setSelected(shark)}>
                 {collected ? <SharkImage shark={shark} /> : <div className="locked-art" aria-hidden="true">?</div>}
-                <span className={`badge ${shark.kind}`}>{shark.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span><h3>{collected ? shark.name : "A mystery friend"}</h3><small>{collected ? "Meet this shark →" : "Complete a daily expedition to discover"}</small>
+                <span className={`badge ${shark.kind}`}>{shark.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span>{collected && <span className="special-badge">✦ {shark.specialBadge}</span>}<h3>{collected ? shark.name : "A mystery friend"}</h3><small>{collected ? "Meet this shark →" : "Complete a daily expedition to discover"}</small>
               </button>;
             })}</div>
           </>}
         </section>}
         {screen === "celebrate" && <section className="celebration section">
           <span className="eyebrow">THREE STARS. ONE BRILLIANT EXPLORER.</span><div className="celebration-stars" aria-hidden="true">★ ★ ★</div><h1 ref={heading} tabIndex={-1}>Fin-tastic work, {save.profile.name}!</h1><p>Gobfrey says: “You kept exploring and finished all three adventures! Let's meet your new ocean friend.” Your treasure is already saved.</p>
-          {today?.rewardId && catalogEntry(today.rewardId) ? <div className="reward-reveal"><SharkImage shark={catalogEntry(today.rewardId)!} /><span className={`badge ${catalogEntry(today.rewardId)!.kind}`}>{catalogEntry(today.rewardId)!.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span><h2>{catalogEntry(today.rewardId)!.name}</h2><p>A new friend for your ocean.</p></div> : <div className="reward-reveal"><span className="big-symbol" aria-hidden="true">🏅</span><h2>Ocean Explorer badge</h2><p>Your collection is complete. Keep exploring for the joy of learning.</p></div>}
+          {today?.rewardId && catalogEntry(today.rewardId) ? <div className="reward-reveal"><SharkImage shark={catalogEntry(today.rewardId)!} /><span className={`badge ${catalogEntry(today.rewardId)!.kind}`}>{catalogEntry(today.rewardId)!.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span><h2>{catalogEntry(today.rewardId)!.name}</h2><span className="special-badge">✦ Special badge: {catalogEntry(today.rewardId)!.specialBadge}</span><p>A new friend for your ocean.</p></div> : <div className="reward-reveal"><span className="big-symbol" aria-hidden="true">🏅</span><h2>Ocean Explorer badge</h2><p>Your collection is complete. Keep exploring for the joy of learning.</p></div>}
           <div className="button-row"><button className="button primary" onClick={() => go("collection")}>Open my album →</button><button className="button soft" onClick={() => go("home")}>Back to my ocean</button></div>
         </section>}
         {screen === "parents" && <Parents save={save} date={date} busy={busy} persist={persist} headingRef={heading} setError={setError} refreshOffline={refreshOffline} offline={offline} />}
@@ -291,6 +291,7 @@ function SharkDetail({ shark, back, headingRef }: { shark: Shark; back: () => vo
       <div className="detail-image"><SharkImage shark={shark} /></div>
       <div>
         <span className={`badge ${shark.kind}`}>{shark.kind === "real" ? "◉ Real species" : "✦ Fantasy · imaginary shark"}</span>
+        <span className="special-badge detail-special-badge">✦ Special badge: {shark.specialBadge}</span>
         <h1 ref={headingRef} tabIndex={-1}>{shark.name}</h1>
         {shark.scientificName && <p className="scientific">{shark.scientificName}</p>}
         <dl><dt>{shark.kind === "real" ? "Where it lives" : "Make-believe home"}</dt><dd>{shark.habitat}</dd><dt>{shark.kind === "real" ? "Approximate adult size" : "Imaginary size"}</dt><dd>{shark.size}</dd></dl>

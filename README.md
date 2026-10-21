@@ -40,7 +40,7 @@ Open `http://localhost:4173/Sharklication/`. Development mode does not install a
 
 ## Collection and photo rights
 
-**Current unlockable catalog: 26 real species and 12 fantasy sharks (38 total).**
+**Current unlockable catalog: 26 real species and 12 fantasy sharks (38 total).** Every shark has a unique, trait-inspired collectible badge, revealed when it is discovered.
 
 Real species: whale shark (*Rhincodon typus*), epaulette shark (*Hemiscyllium ocellatum*), blacktip reef shark (*Carcharhinus melanopterus*), whitetip reef shark (*Triaenodon obesus*), bonnethead (*Sphyrna tiburo*) and leopard shark (*Triakis semifasciata*).
 

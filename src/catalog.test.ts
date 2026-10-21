@@ -5,6 +5,7 @@ it("provides substantial offline stories and properly separated real-species fac
   expect(CATALOG.filter((s) => s.kind === "real")).toHaveLength(26);
   expect(CATALOG.filter((s) => s.kind === "fantasy")).toHaveLength(12);
   for (const shark of CATALOG) {
+    expect(shark.specialBadge.trim()).not.toBe("");
     expect(shark.description.length).toBeGreaterThanOrEqual(2);
     expect(shark.description.every((p) => p.length >= 80)).toBe(true);
     if (shark.kind === "real") {
@@ -18,6 +19,7 @@ it("provides substantial offline stories and properly separated real-species fac
     }
     expect(new Set(shark.facts).size).toBe(shark.facts.length);
   }
+  expect(new Set(CATALOG.map((shark) => shark.specialBadge)).size).toBe(CATALOG.length);
 });
 
 it("adds twenty photographed species without replacing the original eighteen entries", () => {

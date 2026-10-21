@@ -123,3 +123,4 @@
 @media(max-width:520px){.activity-launch{display:grid;grid-template-columns:90px minmax(0,1fr)}.activity-body h2{font-size:1.35rem}.activity-habitat{padding:18px}.nav-icon{width:27px;height:27px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .reduce-motion *,.reduce-motion *:before,.reduce-motion *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.special-badge{display:table;margin:9px 0 0;border:1px solid #edd694;background:#fff7dc;color:#79591a;border-radius:99px;padding:5px 9px;font-size:.65rem;font-weight:800;line-height:1.35}.detail-special-badge{font-size:.8rem;padding:8px 12px}.reward-reveal>.special-badge{margin:12px auto}
