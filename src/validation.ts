@@ -122,7 +122,7 @@ export function validateBackup(value: unknown): SaveEnvelope {
   return save;
 }
 export function migrateSave(value: unknown): SaveEnvelope {
-  // Additive catalog updates preserve the persisted order and append new entries.
+  // Keep legacy rewardOrder data intact for backup compatibility while adding new catalog IDs.
   const save = validateBackup(value);
   const missing = CATALOG.map((s) => s.id).filter((id) => !save.rewardOrder.includes(id));
   return upgradeSampling({ ...save, rewardOrder: [...save.rewardOrder, ...missing] });

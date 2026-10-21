@@ -11,12 +11,12 @@ import { migrateSave, parseBackup, validateBackup } from "./validation";
 const date = "2026-10-20";
 const time = new Date("2026-10-20T12:00:00Z");
 const initial = () => createInitialSave(time, seededRandom(9));
-function finish(save: SaveEnvelope, activity: ActivityId, day = date) {
+function finish(save: SaveEnvelope, activity: ActivityId, day = date, random = Math.random) {
   let next = startActivity(save, day, activity, `${activity}-${day}`, seededRandom(4));
   while (!getRun(next, day, activity)?.complete) {
     const q = currentQuestion(getRun(next, day, activity)!)!;
     next = submitAnswer(next, day, activity, q.id, q.a * q.b, time);
-    next = advance(next, day, activity, time);
+    next = advance(next, day, activity, time, false, undefined, random);
   }
   return next;
 }
@@ -219,6 +219,21 @@ describe("maths and adaptive selection", () => {
     expect(save.days[addDays(date, CATALOG.length)].rewardId).toBe("ocean-explorer");
     expect(validateBackup(save)).toEqual(save);
   });
+  it("chooses each daily discovery randomly from only the still-undiscovered sharks", () => {
+    let save = initial();
+    save = finish(save, "reef", date, () => 0);
+    save = finish(save, "feeding", date, () => 0);
+    save = finish(save, "dive", date, () => 1);
+    const first = save.days[date].rewardId!;
+    expect(first).toBe(CATALOG.at(-1)!.id);
+    const nextDate = addDays(date, 1);
+    save = finish(save, "reef", nextDate, () => 0);
+    save = finish(save, "feeding", nextDate, () => 0);
+    save = finish(save, "dive", nextDate, () => 0);
+    expect(save.days[nextDate].rewardId).toBe(CATALOG.find((shark) => shark.id !== first)!.id);
+    expect(save.collection.map((entry) => entry.sharkId)).toEqual([first, save.days[nextDate].rewardId]);
+    expect(validateBackup(save)).toEqual(save);
+  });
 });
 describe("backup validation and version boundaries", () => {
   it("keeps a legacy extra dive checkpoint intact without adding a new save field", () => {
@@ -274,7 +289,7 @@ describe("backup validation and version boundaries", () => {
     const originalIds = new Set(CATALOG.slice(0, 18).map((shark) => shark.id));
     legacy.rewardOrder = legacy.rewardOrder.filter((id) => originalIds.has(id));
     for (let day = 0; day < 18; day++) {
-      for (const activity of ACTIVITY_IDS) legacy = finish(legacy, activity, addDays("2026-09-01", day));
+      for (const activity of ACTIVITY_IDS) legacy = finish(legacy, activity, addDays("2026-09-01", day), () => 0);
     }
     expect(legacy.collection).toHaveLength(18);
     const migrated = parseBackup(JSON.stringify(legacy));
@@ -286,7 +301,7 @@ describe("backup validation and version boundaries", () => {
     expect(migrated.facts).toEqual(legacy.facts);
     expect(migrateSave(migrated)).toEqual(migrated);
     let next = migrated;
-    for (const activity of ACTIVITY_IDS) next = finish(next, activity, "2026-09-19");
+    for (const activity of ACTIVITY_IDS) next = finish(next, activity, "2026-09-19", () => 0);
     expect(next.collection).toHaveLength(19);
     expect(next.collection.at(-1)?.sharkId).toBe("great-white-shark");
     expect(validateBackup(next)).toEqual(next);

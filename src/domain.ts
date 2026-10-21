@@ -299,7 +299,7 @@ export function submitAnswer(save: SaveEnvelope, date: string, activity: Activit
   }
   return next;
 }
-export function advance(save: SaveEnvelope, date: string, activity: ActivityId, now: Date, extra = false, questionId?: string): SaveEnvelope {
+export function advance(save: SaveEnvelope, date: string, activity: ActivityId, now: Date, extra = false, questionId?: string, random = Math.random): SaveEnvelope {
   const next = structuredClone(save);
   const run = getRun(next, date, activity, extra);
   if (!run || run.complete || !currentQuestion(run)?.resolved || (questionId !== undefined && currentQuestion(run)?.id !== questionId)) return save;
@@ -316,7 +316,9 @@ export function advance(save: SaveEnvelope, date: string, activity: ActivityId, 
   const day = next.days[date];
   if (isDayComplete(day) && !day.completedAt) {
     day.completedAt = now.toISOString();
-    const shark = next.rewardOrder.find((id) => !next.collection.some((entry) => entry.sharkId === id));
+    const collected = new Set(next.collection.map((entry) => entry.sharkId));
+    const remaining = CATALOG.filter((entry) => !collected.has(entry.id));
+    const shark = remaining[Math.min(remaining.length - 1, Math.floor(random() * remaining.length))]?.id;
     if (shark) {
       day.rewardId = shark;
       next.collection.push({ sharkId: shark, unlockedAt: now.toISOString(), rewardDate: date });

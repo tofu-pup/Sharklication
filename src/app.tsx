@@ -175,7 +175,7 @@ export function App() {
   async function next(questionId: string) {
     if (!active || dayChanged()) return;
     const wasComplete = isDayComplete(current.current!.days[active.date]);
-    const result = await persist((s) => advance(s, active.date, active.activity, new Date(), active.extra, questionId));
+    const result = await persist((s) => advance(s, active.date, active.activity, new Date(), active.extra, questionId, Math.random));
     if (result && !active.extra && !wasComplete && isDayComplete(result.days[active.date])) go("celebrate");
   }
   async function hint() {
@@ -252,14 +252,14 @@ export function App() {
               const collected = save.collection.some((c) => c.sharkId === shark.id);
               return <button key={shark.id} disabled={!collected} className={`shark-card ${collected ? "" : "locked"}`} onClick={() => setSelected(shark)}>
                 {collected ? <SharkImage shark={shark} /> : <div className="locked-art" aria-hidden="true">?</div>}
-                <span className={`badge ${shark.kind}`}>{shark.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span>{collected && <span className="special-badge">✦ {shark.specialBadge}</span>}<h3>{collected ? shark.name : "A mystery friend"}</h3><small>{collected ? "Meet this shark →" : "Complete a daily expedition to discover"}</small>
+                <span className={`badge ${shark.kind}`}>{shark.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span>{collected && <CollectibleBadge shark={shark} />}<h3>{collected ? shark.name : "A mystery friend"}</h3><small>{collected ? "Meet this shark →" : "Complete a daily expedition to discover"}</small>
               </button>;
             })}</div>
           </>}
         </section>}
         {screen === "celebrate" && <section className="celebration section">
           <span className="eyebrow">THREE STARS. ONE BRILLIANT EXPLORER.</span><div className="celebration-stars" aria-hidden="true">★ ★ ★</div><h1 ref={heading} tabIndex={-1}>Fin-tastic work, {save.profile.name}!</h1><p>Gobfrey says: “You kept exploring and finished all three adventures! Let's meet your new ocean friend.” Your treasure is already saved.</p>
-          {today?.rewardId && catalogEntry(today.rewardId) ? <div className="reward-reveal"><SharkImage shark={catalogEntry(today.rewardId)!} /><span className={`badge ${catalogEntry(today.rewardId)!.kind}`}>{catalogEntry(today.rewardId)!.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span><h2>{catalogEntry(today.rewardId)!.name}</h2><span className="special-badge">✦ Special badge: {catalogEntry(today.rewardId)!.specialBadge}</span><p>A new friend for your ocean.</p></div> : <div className="reward-reveal"><span className="big-symbol" aria-hidden="true">🏅</span><h2>Ocean Explorer badge</h2><p>Your collection is complete. Keep exploring for the joy of learning.</p></div>}
+          {today?.rewardId && catalogEntry(today.rewardId) ? <div className="reward-reveal"><SharkImage shark={catalogEntry(today.rewardId)!} /><span className={`badge ${catalogEntry(today.rewardId)!.kind}`}>{catalogEntry(today.rewardId)!.kind === "real" ? "◉ Real species" : "✦ Fantasy"}</span><h2>{catalogEntry(today.rewardId)!.name}</h2><CollectibleBadge shark={catalogEntry(today.rewardId)!} /><p>A new friend for your ocean.</p></div> : <div className="reward-reveal"><span className="big-symbol" aria-hidden="true">🏅</span><h2>Ocean Explorer badge</h2><p>Your collection is complete. Keep exploring for the joy of learning.</p></div>}
           <div className="button-row"><button className="button primary" onClick={() => go("collection")}>Open my album →</button><button className="button soft" onClick={() => go("home")}>Back to my ocean</button></div>
         </section>}
         {screen === "parents" && <Parents save={save} date={date} busy={busy} persist={persist} headingRef={heading} setError={setError} refreshOffline={refreshOffline} offline={offline} />}
@@ -280,6 +280,9 @@ function SharkImage({ shark }: { shark: Shark }) {
   if (!shark.photo || failed) return <div className="photo-unavailable" role="status">Photo unavailable. {shark.name}'s photograph could not load. Reconnect or retry offline preparation in Parent port.</div>;
   return <img src={asset(shark.photo.localPath)} alt={`Photograph of ${shark.name} (${shark.scientificName})`} loading="lazy" onError={() => setFailed(true)} />;
 }
+function CollectibleBadge({ shark }: { shark: Shark }) {
+  return <span className="collectible-badge"><span aria-hidden="true">✦</span>{shark.specialBadge}</span>;
+}
 function Attribution({ shark }: { shark: Shark }) {
   const photo = shark.photo;
   return photo ? <div className="attribution"><p>Photograph: {photo.creator}. <a href={photo.sourcePageUrl} target="_blank" rel="noreferrer">Original source ↗</a> · <a href={photo.licenseUrl} target="_blank" rel="noreferrer">{photo.licenseId} ↗</a></p><p>{photo.modifications}</p></div> : null;
@@ -291,7 +294,7 @@ function SharkDetail({ shark, back, headingRef }: { shark: Shark; back: () => vo
       <div className="detail-image"><SharkImage shark={shark} /></div>
       <div>
         <span className={`badge ${shark.kind}`}>{shark.kind === "real" ? "◉ Real species" : "✦ Fantasy · imaginary shark"}</span>
-        <span className="special-badge detail-special-badge">✦ Special badge: {shark.specialBadge}</span>
+        <CollectibleBadge shark={shark} />
         <h1 ref={headingRef} tabIndex={-1}>{shark.name}</h1>
         {shark.scientificName && <p className="scientific">{shark.scientificName}</p>}
         <dl><dt>{shark.kind === "real" ? "Where it lives" : "Make-believe home"}</dt><dd>{shark.habitat}</dd><dt>{shark.kind === "real" ? "Approximate adult size" : "Imaginary size"}</dt><dd>{shark.size}</dd></dl>

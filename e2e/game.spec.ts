@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import type { ActivityId, SaveEnvelope } from "../src/domain";
+const catalog: Array<{ id: string; name: string; scientificName?: string; specialBadge: string; kind: string }> = JSON.parse(readFileSync(new URL("../src/data/sharks.json", import.meta.url), "utf8"));
 
 async function saved(page: Page): Promise<SaveEnvelope> {
   return page.evaluate(async () => {
@@ -49,14 +50,25 @@ async function finishDay(page: Page) {
     await page.getByRole("button", { name: /^Back to my ocean/ }).click();
   }
 }
+async function onlyCollectedShark(page: Page) {
+  const save = await saved(page);
+  return catalog.find((shark) => shark.id === save.collection[0].sharkId)!;
+}
 test("expanded album preserves older discovery order and opens every new species offline", async ({ page, context }, testInfo) => {
     test.slow();
     await welcome(page);
     await finishDay(page);
-    const content: Array<{ id: string; name: string; scientificName?: string; specialBadge: string }> = JSON.parse(readFileSync(new URL("../src/data/sharks.json", import.meta.url), "utf8"));
+    const content = catalog;
     const original = await saved(page);
     const legacyIds = new Set(content.slice(0, 18).map((shark) => shark.id));
     const legacy = structuredClone(original);
+    if (!legacyIds.has(legacy.collection[0].sharkId)) {
+      const previous = legacy.collection[0].sharkId;
+      const replacement = content.find((shark) => shark.kind === "real" && legacyIds.has(shark.id))!;
+      legacy.collection[0].sharkId = replacement.id;
+      legacy.days[legacy.collection[0].rewardDate].rewardId = replacement.id;
+      expect(legacy.days[legacy.collection[0].rewardDate].rewardId).not.toBe(previous);
+    }
     legacy.rewardOrder = legacy.rewardOrder.filter((id) => legacyIds.has(id));
     const restore = async (fixture: SaveEnvelope) => {
       await page.getByRole("button", { name: "Open parent settings" }).click();
@@ -68,7 +80,7 @@ test("expanded album preserves older discovery order and opens every new species
     const expanded = await saved(page);
     expect(expanded.rewardOrder.slice(0, 18)).toEqual(legacy.rewardOrder);
     expect(expanded.rewardOrder).toHaveLength(38);
-    expect(expanded.collection).toEqual(original.collection);
+    expect(expanded.collection).toEqual(legacy.collection);
     expect(expanded.attempts).toEqual(original.attempts);
     const today = Object.keys(original.days)[0], additions = content.slice(18);
     expect(additions).toHaveLength(20);
@@ -98,7 +110,7 @@ test("expanded album preserves older discovery order and opens every new species
     for (const shark of additions) {
       await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: shark.name, exact: true }) }).click();
       await expect(page.getByRole("heading", { name: `Meet ${shark.name}`, exact: true })).toBeVisible();
-      await expect(page.locator(".detail-special-badge")).toContainText(shark.specialBadge);
+      await expect(page.locator(".collectible-badge")).toContainText(shark.specialBadge);
       await expect(page.locator(".shark-facts li")).toHaveCount(15);
       await expect(page.locator(".shark-story > p:not(.wildlife-note)")).toHaveCount(2);
       const photo = page.getByRole("img", { name: `Photograph of ${shark.name} (${shark.scientificName})`, exact: true });
@@ -131,15 +143,15 @@ test("complete all activities in a chosen order, reload mid-task, and issue one 
   await expect(page.getByText("3 of 3 stars")).toBeVisible();
   await expect(page.locator(".activity-habitat [data-resident]")).toHaveCount(0);
   await page.getByRole("button", { name: /See today's discovery/ }).click();
-  await expect(page.getByRole("heading", { name: "Whale shark", exact: true })).toBeVisible();
+  const discovered = await onlyCollectedShark(page);
+  await expect(page.getByRole("heading", { name: discovered.name, exact: true })).toBeVisible();
   expect((await saved(page)).collection).toHaveLength(1);
   await page.getByRole("button", { name: /Open my album/ }).click();
-  await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: "Whale shark", exact: true }) }).click();
-  await expect(page.getByText("Rhincodon typus", { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Meet Whale shark" })).toBeVisible();
-  await expect(page.locator(".shark-facts li")).toHaveCount(15);
-  await expect(page.locator(".shark-story")).toContainText("largest living fish");
-  await expect(page.getByRole("link", { name: /CC BY-SA 2.5/ })).toBeVisible();
+  await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: discovered.name, exact: true }) }).click();
+  await expect(page.getByRole("heading", { name: `Meet ${discovered.name}` })).toBeVisible();
+  await expect(page.locator(".collectible-badge")).toContainText(discovered.specialBadge);
+  await expect(page.locator(".shark-facts li")).toHaveCount(discovered.kind === "real" ? 15 : 8);
+  if (discovered.scientificName) await expect(page.getByText(discovered.scientificName, { exact: true })).toBeVisible();
 });
 test("wrong answers teach, reconstruction is possible, and supported success is not independent", async ({ page }) => {
   await welcome(page);
@@ -194,9 +206,11 @@ test("production subpath works offline, including photographs, progress and stan
   await page.reload();
   expect((await saved(page)).collection).toHaveLength(1);
   await page.getByRole("button", { name: /Shark album/ }).click();
-  await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: "Whale shark", exact: true }) }).click();
-  await expect(page.locator(".shark-story")).toContainText("biggest fish on Earth");
-  await expect(page.locator(".shark-facts li")).toHaveCount(15);
+  const discovered = await onlyCollectedShark(page);
+  await page.locator(".shark-card").filter({ has: page.getByRole("heading", { name: discovered.name, exact: true }) }).click();
+  await expect(page.locator(".shark-story")).toContainText("Meet");
+  await expect(page.locator(".collectible-badge")).toContainText(discovered.specialBadge);
+  await expect(page.locator(".shark-facts li")).toHaveCount(discovered.kind === "real" ? 15 : 8);
 });
 test("backup round trip requires confirmation and invalid imports leave progress untouched", async ({ page }) => {
   await welcome(page);
